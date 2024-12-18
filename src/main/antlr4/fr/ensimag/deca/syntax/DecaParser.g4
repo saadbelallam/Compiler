@@ -181,7 +181,7 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
-            $tree = new Assign($e.tree,$e2.tree);
+            $tree = new Assign((AbstractLValue) $e.tree,$e2.tree);
         }
       | /* epsilon */ {
             assert($e.tree != null);
