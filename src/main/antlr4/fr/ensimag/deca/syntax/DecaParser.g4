@@ -37,6 +37,9 @@ options {
 
 prog returns[AbstractProgram tree]
     : list_classes main EOF {
+            if ($list_classes.tree == null) {
+                $list_classes.tree = new ListDeclClass();
+            }
             assert($list_classes.tree != null);
             assert($main.tree != null);
             $tree = new Program($list_classes.tree, $main.tree);
@@ -397,8 +400,8 @@ ident returns[AbstractIdentifier tree]
 
 /****     Class related rules     ****/
 
-list_classes returns[ListDeclClass tree]
-    :
+list_classes returns[ListDeclClass tree] 
+    :  
       (c1=class_decl {
         }
       )*
