@@ -90,13 +90,13 @@ FLOAT : FLOATDEC | FLOATHEX;
 fragment STRING_CAR : ~["\\\r\n] ;
 
 // Caractère de formatage
-EOL : '\r' | '\n';
+EOL : '\n' -> skip;
 
 
 // String
 STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
-
+COMMENT :  ('//' .*? '\n' | '/*' .*? '*/' ) -> skip;
 
 
 // Ignore spaces, tabs, newlines and whitespaces
