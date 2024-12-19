@@ -43,34 +43,104 @@ public class CompilerOptions {
 
     
     public void parseArgs(String[] args) throws CLIException {
-        // A FAIRE : parcourir args pour positionner les options correctement.
         Logger logger = Logger.getRootLogger();
-        // map command-line debug option to log4j's level.
-        switch (getDebug()) {
-        case QUIET: break; // keep default
-        case INFO:
-            logger.setLevel(Level.INFO); break;
-        case DEBUG:
-            logger.setLevel(Level.DEBUG); break;
-        case TRACE:
-            logger.setLevel(Level.TRACE); break;
-        default:
-            logger.setLevel(Level.ALL); break;
+    
+        for (int i = 0; i < args.length; i++) {
+            switch (args[i]) {
+                case "-b":
+                    printBanner = true; // Active l'option pour afficher la bannière
+                    break;
+    
+                case "-p":
+                    // Active l'option pour s'arrêter après le parsing
+                    if (parallel) {
+                        throw new CLIException("Les options -p et -P ne peuvent pas être utilisées ensemble.");
+                    }
+                    break;
+    
+                case "-v":
+                    // Active l'option pour s'arrêter après la vérification
+                    if (parallel) {
+                        throw new CLIException("Les options -v et -P ne peuvent pas être utilisées ensemble.");
+                    }
+                    break;
+    
+                case "-n":
+                    // Supprime les vérifications à l'exécution
+                    break;
+    
+                case "-r":
+                    // Gère l'option pour limiter les registres
+                    if (i + 1 < args.length) {
+                        try {
+                            int nbRegisters = Integer.parseInt(args[++i]);
+                            if (nbRegisters < 4 || nbRegisters > 16) {
+                                throw new CLIException("Le nombre de registres doit être entre 4 et 16 inclus.");
+                            }
+                        } catch (NumberFormatException e) {
+                            throw new CLIException("L'option -r doit être suivie d'un nombre entre 4 et 16.");
+                        }
+                    } else {
+                        throw new CLIException("L'option -r doit être suivie d'un argument.");
+                    }
+                    break;
+    
+                case "-d":
+                    // Active ou augmente le niveau de debug
+                    debug++;
+                    break;
+    
+                case "-P":
+                    // Active la compilation parallèle
+                    if (parallel) {
+                        throw new CLIException("L'option -P ne peut être utilisée qu'une seule fois.");
+                    }
+                    parallel = true;
+                    break;
+    
+                default:
+                    if (args[i].startsWith("-")) {
+                        throw new CLIException("Option non reconnue : " + args[i]);
+                    } else {
+                        // Traite les fichiers source
+                        File sourceFile = new File(args[i]);
+                        if (!sourceFile.exists() || !sourceFile.isFile()) {
+                            throw new CLIException("Fichier source introuvable ou invalide : " + args[i]);
+                        }
+                        sourceFiles.add(sourceFile);
+                    }
+                    break;
+            }
+        }
+    
+        // Vérifie qu'au moins un fichier source a été fourni
+        if (sourceFiles.isEmpty() && !printBanner) {
+            throw new CLIException("Aucun fichier source spécifié.");
+        }
+    
+        // Mappe l'option de debug à Log4j
+        switch (debug) {
+            case QUIET:
+                logger.setLevel(Level.OFF);
+                break;
+            case INFO:
+                logger.setLevel(Level.INFO);
+                break;
+            case DEBUG:
+                logger.setLevel(Level.DEBUG);
+                break;
+            case TRACE:
+                logger.setLevel(Level.TRACE);
+                break;
+            default:
+                logger.setLevel(Level.ALL);
+                break;
         }
         logger.info("Application-wide trace level set to " + logger.getLevel());
-
-        boolean assertsEnabled = false;
-        assert assertsEnabled = true; // Intentional side effect!!!
-        if (assertsEnabled) {
-            logger.info("Java assertions enabled");
-        } else {
-            logger.info("Java assertions disabled");
-        }
-
-        throw new UnsupportedOperationException("not yet implemented");
     }
-
+    
     protected void displayUsage() {
         throw new UnsupportedOperationException("not yet implemented");
     }
+
 }

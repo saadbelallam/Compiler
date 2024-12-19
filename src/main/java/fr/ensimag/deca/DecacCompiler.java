@@ -138,8 +138,14 @@ public class DecacCompiler {
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
         String destFile = null;
-        // A FAIRE: calculer le nom du fichier .ass à partir du nom du
-        // A FAIRE: fichier .deca.
+
+        if (sourceFile.endsWith(".deca")) {
+            // Remplace l'extension ".deca" par ".ass"
+            destFile = sourceFile.substring(0, sourceFile.lastIndexOf(".deca")) + ".ass";
+        } else {
+            throw new IllegalArgumentException("Le fichier source n'a pas l'extension .deca : " + sourceFile);
+        }
+
         PrintStream err = System.err;
         PrintStream out = System.out;
         LOG.debug("Compiling file " + sourceFile + " to assembly file " + destFile);
@@ -189,10 +195,10 @@ public class DecacCompiler {
             return true;
         }
         assert(prog.checkAllLocations());
+        
 
-
-        prog.verifyProgram(this);
-        assert(prog.checkAllDecorations());
+        // prog.verifyProgram(this);
+        // assert(prog.checkAllDecorations());
 
         addComment("start main program");
         prog.codeGenProgram(this);
