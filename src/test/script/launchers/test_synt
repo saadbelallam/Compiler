@@ -19,7 +19,7 @@ fi
 for file in "$INPUT_DIR"/*.deca; do
   # Vérification si le fichier existe (utile si le pattern *.deca ne trouve rien)
   if [ -f "$file" ]; then
-    echo "Traitement du fichier : $file\n"
+    echo "\n\n Traitement du fichier : $file\n"
     java -enableassertions -cp "$CP" fr.ensimag.deca.syntax.ManualTestSynt "$file"
   else
     echo "Aucun fichier .deca trouvé dans $INPUT_DIR"
@@ -38,7 +38,7 @@ fi
 
 for file in "$INPUT_DIR"/*.deca; do
   if [ -f "$file" ]; then
-    echo "Traitement du fichier : $file\n"
+    echo "\n\n Traitement du fichier : $file\n"
     java -enableassertions -cp "$CP" fr.ensimag.deca.syntax.ManualTestSynt "$file"
   else
     echo "Aucun fichier .deca trouvé dans $INPUT_DIR"
