@@ -1,0 +1,7 @@
+// An empty println will not print anything
+
+
+
+{
+    println("");
+}
