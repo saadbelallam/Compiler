@@ -25,9 +25,12 @@ public class DecacMain {
             options.displayUsage();
             System.exit(1);
         }
+
         if (options.getPrintBanner()) {
-            throw new UnsupportedOperationException("decac -b not yet implemented");
+            System.out.println("\n equipe gl24 \n");
+            System.exit(0);
         }
+
         if (options.getSourceFiles().isEmpty()) {
             throw new UnsupportedOperationException("decac without argument not yet implemented");
         }
