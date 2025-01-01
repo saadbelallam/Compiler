@@ -87,10 +87,10 @@ fragment FLOATHEX : ('0x' + '0X') NUMHEX '.' ('P' | 'p') SIGN NUM ('F' | 'f' | '
 FLOAT : FLOATDEC | FLOATHEX;
 // fragment STRING_CAR contient tous les carctères
 // à l’exception des caractères '"', '\' et de EOL
-fragment STRING_CAR : ~["\\\r\n] ;
+fragment STRING_CAR : ~('"'|'\r'|'\n'|'\\') ;
 
-// Caractère de formatage
-EOL : '\n' -> skip;
+// End of line (EOL)
+fragment EOL: '\\' ('n'|'t'|'r');
 
 
 // String
@@ -100,11 +100,4 @@ COMMENT :  ('//' .*? '\n' | '/*' .*? '*/' ) -> skip;
 
 
 // Ignore spaces, tabs, newlines and whitespaces
-WS  :   ( ' '
-        | '\t'
-        | '\r'
-        | '\n'
-        ) {
-              skip(); // avoid producing a token
-          }
-    ;
+WS : (' '|'\t'|'\r'|'\n') -> skip;
