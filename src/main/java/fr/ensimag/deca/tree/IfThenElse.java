@@ -29,7 +29,24 @@ public class IfThenElse extends AbstractInst {
         this.thenBranch = thenBranch;
         this.elseBranch = elseBranch;
     }
+    //Getters pour le parser
     
+    // Getter pour la condition
+    public AbstractExpr getCondition() {
+        return condition;
+    }
+
+    // Getter pour la branche "then"
+    public ListInst getThenBranch() {
+        return thenBranch;
+    }
+
+    // Getter pour la branche "else"
+    public ListInst getElseBranch() {
+        return elseBranch;
+    }
+
+
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
