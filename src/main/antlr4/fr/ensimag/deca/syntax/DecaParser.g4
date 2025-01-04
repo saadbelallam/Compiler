@@ -26,9 +26,10 @@ options {
 @header {
     import fr.ensimag.deca.tree.*;
     import java.io.PrintStream;
+    import fr.ensimag.deca.tools.SymbolTable;
 }
 
-@members {
+@members {   
     @Override
     protected AbstractProgram parseProgram() {
         return prog().tree;
@@ -81,8 +82,10 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
+        assert($dv1.tree != null);
         $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
+            assert($dv2.tree != null);
             $l.add($dv2.tree);
         }
       )*
@@ -92,6 +95,7 @@ decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
         }
     : i=ident {
+        assert($i.tree != null);
         $tree = new DeclVar($t, $i.tree, new NoInitialization());
         setLocation($tree, $i.start);
         }
