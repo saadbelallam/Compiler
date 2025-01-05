@@ -30,23 +30,21 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
             throw new ContextualError("Right operand must be of type int or float", this.getRightOperand().getLocation());
         }
         if (type1.isFloat() || type2.isFloat()) {
-            Type newType = type1;
             // si gauche int et droite float: convertir gauche en float
             if (type1.isInt()) {
                 this.setLeftOperand(new ConvFloat(this.getLeftOperand()));
-                newType = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+                this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
             }
             // si droite int et gauche float: convertir droite en float
             if (type2.isInt()) {
                 this.setRightOperand(new ConvFloat(this.getRightOperand()));
-                newType = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+                this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
             }
-            this.setType(newType);
-            return newType;
+
         }
-    
-        this.setType(type1);
-        return type1;
+        Type type = compiler.environmentType.BOOLEAN    ;
+        this.setType(type);
+        return type;
     }
     
 

@@ -179,7 +179,6 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
         TypeDefinition typeDef = compiler.environmentType.defOfType(this.name);
-
         if (typeDef == null) {
             throw new ContextualError("Type " + getName() + " is not defined", getLocation());
         }
@@ -225,4 +224,9 @@ public class Identifier extends AbstractIdentifier {
         }
     }
 
-}
+    @Override
+    public String toString() {
+        return name.toString();
+    }
+
+} 
