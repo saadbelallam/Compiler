@@ -42,7 +42,6 @@ WHILE       : 'while';
 
 // hado ghi zrbte 3lihom bach ymchiw les erreurs mn l parser
 // Symboles composés
-EQ      : '==';
 NEQ     : '!=';
 GEQ     : '>=';
 LEQ     : '<=';
@@ -66,7 +65,7 @@ OBRACE  : '{';
 CBRACE  : '}';
 EXCLAM  : '!';
 SEMI    : ';';
-EQEQ    : '===';
+EQEQ    : '==';
 
 //Identificateurs
 fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
@@ -77,13 +76,13 @@ INT : '0' | POSITIVE_DIGIT DIGIT*;
 
 // Lttéraux flottants
 fragment NUM : DIGIT+;
-fragment SIGN:  '+' | '-' | ' ';
+fragment SIGN:  '+' | '-' | ;
 fragment EXP : ('E' | 'e') SIGN NUM;
 fragment DEC : NUM '.' NUM;
-fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f' | ' ');
+fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f' | );
 fragment DIGITHEX : '0'  ..  '9' | 'A' .. 'F' | 'a' .. 'f';
 fragment NUMHEX : DIGITHEX+;
-fragment FLOATHEX : ('0x' + '0X') NUMHEX '.' ('P' | 'p') SIGN NUM ('F' | 'f' | ' ');
+fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' ('P' | 'p') SIGN NUM ('F' | 'f' | );
 FLOAT : FLOATDEC | FLOATHEX;
 // fragment STRING_CAR contient tous les carctères
 // à l’exception des caractères '"', '\' et de EOL
