@@ -14,9 +14,6 @@ options {
 
 // Deca lexer rules.
 
-// lexer pour langage Hello-world
-// permet l'affichage des chaînes de caractères
-// Bzzaf zaydine hna ghi bach n7yde les erreurs f le parser
 
 // Mots réservés
 ASM         : 'asm';
@@ -40,51 +37,60 @@ THIS        : 'this';
 TRUE        : 'true';
 WHILE       : 'while';
 
-// hado ghi zrbte 3lihom bach ymchiw les erreurs mn l parser
-// Symboles composés
-EQ      : '==';
+// Opérateurs comparatifs
+EQEQ     : '==';
 NEQ     : '!=';
 GEQ     : '>=';
 LEQ     : '<=';
+LT      : '<';
+GT      : '>';
+
+// Opérateurs logiques
 AND     : '&&';
 OR      : '||';
 
-// Symboles simples
-LT      : '<';
-GT      : '>';
+// Assignation
 EQUALS  : '=';
+
+// Opérateurs arithmétiques
 PLUS    : '+';
 MINUS   : '-';
 TIMES   : '*';
 SLASH   : '/';
 PERCENT : '%';
-DOT     : '.';
+
+// Symboles divers
 COMMA   : ',';
-OPARENT  : '(';
-CPARENT  : ')';
+DOT     : '.';
+OPARENT : '(';
+CPARENT : ')';
 OBRACE  : '{';
 CBRACE  : '}';
 EXCLAM  : '!';
 SEMI    : ';';
-EQEQ    : '===';
 
-//Identificateurs
+
+// Identificateurs
 fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
 fragment DIGIT : '0' .. '9';
 fragment POSITIVE_DIGIT : '1' .. '9';
 IDENT : (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
 INT : '0' | POSITIVE_DIGIT DIGIT*;
 
-// Lttéraux flottants
+// Littéraux flottants
 fragment NUM : DIGIT+;
-fragment SIGN:  '+' | '-' | ' ';
-fragment EXP : ('E' | 'e') SIGN NUM;
+fragment SIGN : '+' | '-';
+fragment EXP : ('E' | 'e') SIGN? NUM;
 fragment DEC : NUM '.' NUM;
-fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f' | ' ');
-fragment DIGITHEX : '0'  ..  '9' | 'A' .. 'F' | 'a' .. 'f';
+fragment FLOATDEC : DEC (EXP)? ('F' | 'f')?;
+fragment DIGITHEX : '0' .. '9' | 'A' .. 'F' | 'a' .. 'f';
 fragment NUMHEX : DIGITHEX+;
-fragment FLOATHEX : ('0x' + '0X') NUMHEX '.' ('P' | 'p') SIGN NUM ('F' | 'f' | ' ');
+fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
+
+// Définition principale pour les flottants
 FLOAT : FLOATDEC | FLOATHEX;
+
+
 // fragment STRING_CAR contient tous les carctères
 // à l’exception des caractères '"', '\' et de EOL
 fragment STRING_CAR : ~('"'|'\r'|'\n'|'\\') ;
