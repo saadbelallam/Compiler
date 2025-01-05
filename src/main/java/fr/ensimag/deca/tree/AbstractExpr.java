@@ -78,19 +78,27 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param expectedType corresponds to the "type1" attribute            
      * @return this with an additional ConvFloat if needed...
      */
-    public AbstractExpr verifyRValue(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass, 
-            Type expectedType)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,  Type expectedType) throws ContextualError {
+        // throw new UnsupportedOperationException("not yet implemented");
+        Type type = this.verifyExpr(compiler, localEnv, currentClass);
+        
+        if (!type.sameType(expectedType)) {
+            if (type.isInt() && expectedType.isFloat()) {
+                ConvFloat convFloat = new ConvFloat(this);
+                convFloat.verifyExpr(compiler, localEnv, currentClass);
+                return (AbstractExpr)convFloat;
+            }
+            throw new ContextualError("Type mismatch: expected " + expectedType + " but found " + type, this.getLocation());
+        }
+        
+        return this;
     }
     
     
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        // throw new UnsupportedOperationException("not yet implemented");
+        this.verifyExpr(compiler, localEnv, currentClass);
     }
 
     /**
@@ -103,9 +111,13 @@ public abstract class AbstractExpr extends AbstractInst {
      *            Definition of the class containing the expression, or null in
      *            the main program.
      */
-    void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // throw new UnsupportedOperationException("not yet implemented");
+        Type conditionType = this.verifyExpr(compiler, localEnv, currentClass);
+
+        if (!conditionType.isBoolean()) {
+            throw new ContextualError("Condition must be of type boolean, found: " + conditionType, this.getLocation());
+        }
     }
 
     /**

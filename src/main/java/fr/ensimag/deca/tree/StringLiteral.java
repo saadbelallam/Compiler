@@ -1,4 +1,5 @@
 package fr.ensimag.deca.tree;
+import fr.ensimag.deca.context.ExpDefinition; //ligne rajouté
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
@@ -6,6 +7,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
@@ -32,10 +34,19 @@ public class StringLiteral extends AbstractStringLiteral {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        Type stringType = compiler.environmentType.STRING;
+
+        if (stringType == null || !stringType.isString()) {
+            throw new ContextualError("Type 'String' is not defined in the current environment", getLocation());
+        }
+
+        this.setType(stringType);
+        return stringType;
     }
+
+    
+
 
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {

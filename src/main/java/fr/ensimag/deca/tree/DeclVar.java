@@ -1,11 +1,16 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -30,10 +35,30 @@ public class DeclVar extends AbstractDeclVar {
     }
 
     @Override
-    protected void verifyDeclVar(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
+    protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // Étape 1 : Vérification du type
+        Type varType = this.type.verifyType(compiler);
+        
+        // Étape 2 : Vérifier que le type n'est pas void
+        if (varType.isVoid()) {
+            throw new ContextualError("Variable cannot have type void", this.getLocation());
+        }
+
+        // Étape 3 : Vérification de l'initialisation
+        if (this.initialization != null) {
+            this.initialization.verifyInitialization(compiler, varType, localEnv, currentClass);
+        }
+
+        // Étape 4 : Mise à jour de l'environnement
+        Symbol name = this.varName.getName();
+        VariableDefinition varDef = new VariableDefinition(varType, this.getLocation());
+        try {
+            localEnv.declare(name, varDef);
+        } catch (DoubleDefException e) {
+            throw new ContextualError("Variable " + name + " is already defined ", this.getLocation());
+        }
     }
+
 
     
     @Override

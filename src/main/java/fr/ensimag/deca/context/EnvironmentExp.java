@@ -1,6 +1,9 @@
 package fr.ensimag.deca.context;
+import java.util.Map;
+import java.util.HashMap;
 
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 
 /**
  * Dictionary associating identifier's ExpDefinition to their names.
@@ -25,11 +28,22 @@ public class EnvironmentExp {
     // d'empilement).
 
     EnvironmentExp parentEnvironment;
+    private final Map<Symbol, ExpDefinition> currentEnvironment;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
+        this.currentEnvironment = new HashMap<>();
     }
 
+    public EnvironmentExp getParent() {
+        return parentEnvironment;
+    }
+
+    public Map<Symbol, ExpDefinition> getCurrent() {
+        return currentEnvironment;
+    }
+
+    
     public static class DoubleDefException extends Exception {
         private static final long serialVersionUID = -2733379901827316441L;
     }
@@ -39,7 +53,14 @@ public class EnvironmentExp {
      * symbol is undefined.
      */
     public ExpDefinition get(Symbol key) {
-        throw new UnsupportedOperationException("not yet implemented");
+        ExpDefinition def = currentEnvironment.get(key);
+        if (def != null) {
+            return def;
+        }
+        if (parentEnvironment != null) {
+            return parentEnvironment.get(key);
+        }
+        return null;
     }
 
     /**
@@ -58,7 +79,15 @@ public class EnvironmentExp {
      *
      */
     public void declare(Symbol name, ExpDefinition def) throws DoubleDefException {
-        throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
+        if (currentEnvironment.containsKey(name)) {
+            throw new DoubleDefException();
+        }
+        currentEnvironment.put(name, def);
     }
 
+    @Override
+    public String toString() {
+        return "EnvironmentExp : " + currentEnvironment + " parent : " + parentEnvironment;
+    }
 }
