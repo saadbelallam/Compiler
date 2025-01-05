@@ -25,6 +25,6 @@ public class IntType extends Type {
         // throw new UnsupportedOperationException("not yet implemented");
         return otherType.isInt();
     }
-
+    
 
 }
