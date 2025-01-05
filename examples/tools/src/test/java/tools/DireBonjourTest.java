@@ -14,8 +14,8 @@ public class DireBonjourTest {
 
         // A FAIRE : tester aussi direBonjour.getOtherMessage()
         // A FAIRE : il suffit de décommenter les lignes suivantes.
-        // assertEquals("Au revoir", direBonjour.getOtherMessage());
-        // assertEquals("Bonjour\nAu revoir", direBonjour.getBothMessages());
+        assertEquals("Au revoir", direBonjour.getOtherMessage());
+        assertEquals("Bonjour\nAu revoir", direBonjour.getBothMessages());
     }
 
 }
