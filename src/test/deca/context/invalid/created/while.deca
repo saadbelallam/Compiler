@@ -1,0 +1,15 @@
+// Description:
+//    Teste une boucle while avec une condition non booléenne (42).
+//    Doit générer une erreur de type.
+//
+// Résultats:
+//    Erreur : Condition must be of type boolean, found: int
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    while (42) {
+        println(42);
+    }
+}

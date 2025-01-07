@@ -1,0 +1,14 @@
+// Description:
+//    Déclare une variable entière (int) et tente d'y affecter une valeur flottante 3.14.
+//    Doit générer une erreur de type.
+//
+// Résultats:
+//    Erreur : Type mismatch: expected int but found float.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a;
+    a = 3.14;
+}
