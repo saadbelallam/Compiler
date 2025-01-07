@@ -4,6 +4,10 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -34,11 +38,40 @@ public class Main extends AbstractMain {
         // LOG.debug("verify Main: end");
     }
     
+    //Calcule de la taille de la pile 
+    private int getMaxStackSize() {
+        //à compléter
+        int globalVariables = declVariables.getNombreVariables();
+        return globalVariables;
+    }
 
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
         // A FAIRE: traiter les déclarations de variables.
+        System.out.println("début_main");
         compiler.addComment("Beginning of main instructions:");
+        //taille de la pile
+        // Génération du code pour vérifier la taille de la pile
+        int maxStackSize = getMaxStackSize();
+        System.out.println("Génération du code pour vérifier la taille de la pile");
+
+        compiler.addInstruction(new TSTO(new ImmediateInteger(maxStackSize)));
+        System.out.println("TSTO");
+        
+        // Initialisation des managers
+        compiler.initializeManagers(maxStackSize);
+        System.out.println("Initialisation des managers");
+
+        // Ajout de l'espace pour les variables globales
+        compiler.addInstruction(new ADDSP(declVariables.getNombreVariables()));
+        System.out.println("Ajout de l'espace pour les variables globales");
+
+        // Génération du code pour les variables globals
+        for (AbstractDeclVar declVar : declVariables.getList()) {
+            System.out.println("codeGenDeclVar");
+            declVar.codeGenDeclVar(compiler);
+        }   
+        //génération de code pour les instructions 
         insts.codeGenListInst(compiler);
     }
 

@@ -37,4 +37,9 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         }
     }
 
+    //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
+    public int getNombreVariables() {
+        return this.getList().size();
+    }
+
 }

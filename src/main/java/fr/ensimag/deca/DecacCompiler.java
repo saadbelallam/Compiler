@@ -1,5 +1,7 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.codegen.StackManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -160,11 +162,11 @@ public class DecacCompiler {
             LOG.debug("stack overflow", e);
             err.println("Stack overflow while compiling file " + sourceFile + ".");
             return true;
-        } catch (Exception e) {
-            LOG.fatal("Exception raised while compiling file " + sourceFile
-                    + ":", e);
-            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
-            return true;
+        //} catch (Exception e) {
+        //    LOG.fatal("Exception raised while compiling file " + sourceFile
+        //            + ":", e);
+        //    err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+        //    return true;
         } catch (AssertionError e) {
             LOG.fatal("Assertion failed while compiling file " + sourceFile
                     + ":", e);
@@ -196,8 +198,8 @@ public class DecacCompiler {
         assert(prog.checkAllLocations());
         
 
-        // prog.verifyProgram(this);
-        // assert(prog.checkAllDecorations());
+        prog.verifyProgram(this);
+        assert(prog.checkAllDecorations());
 
         addComment("start main program");
         prog.codeGenProgram(this);
@@ -246,5 +248,27 @@ public class DecacCompiler {
         parser.setDecacCompiler(this);
         return parser.parseProgramAndManageErrors(err);
     }
+    
+
+    //initialisation des managers
+    private RegisterManager registerManager;
+    private StackManager stackManager;
+
+    public RegisterManager getRegisterManager() {
+        return registerManager;
+    }
+
+    public StackManager getStackManager() {
+        return stackManager;
+    }
+
+    public void initializeManagers(int maxStackSize) {
+    if (registerManager == null) {
+        registerManager = new RegisterManager(15);
+    }
+    if (stackManager == null) {
+        stackManager = new StackManager(maxStackSize);
+    }
+}
 
 }
