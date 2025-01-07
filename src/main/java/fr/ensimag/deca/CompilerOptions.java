@@ -36,10 +36,25 @@ public class CompilerOptions {
         return Collections.unmodifiableList(sourceFiles);
     }
 
+    public boolean getParse() {
+        return parse;
+    }
+
+    public boolean getVerify() {
+        return verify;
+    }
+
+    public boolean getNoCheck() {
+        return noCheck;
+    }
+
     private int debug = 0;
     private boolean parallel = false;
     private boolean printBanner = false;
     private List<File> sourceFiles = new ArrayList<File>();
+    private boolean parse = false;
+    private boolean verify = false;
+    private boolean noCheck = false;
 
     
     public void parseArgs(String[] args) throws CLIException {
@@ -48,17 +63,29 @@ public class CompilerOptions {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-b":
+                    if (args.length > 1) {
+                        throw new CLIException("Option -b incompatible avec d'autres options");
+                    }
                     printBanner = true;
                     break;
     
-                // case "-p":
-                //     break;
+                case "-p":
+                    if (this.verify) {
+                        throw new CLIException("Option -p incompatible avec -v");
+                    }
+                    this.parse = true;
+                    break;
     
-                // case "-v":
-                //     break;
+                case "-v":
+                    if (this.parse) {
+                        throw new CLIException("Option -v incompatible avec -p");
+                    }
+                    this.verify = true;
+                    break;
     
-                // case "-n":
-                //     break;
+                case "-n":
+                    noCheck = true;
+                    break;
     
                 // case "-r":
                 //     break;
@@ -66,8 +93,9 @@ public class CompilerOptions {
                 // case "-d":
                 //     break;
     
-                // case "-P":
-                //     break;
+                case "-P":
+                    parallel = true;
+                    break;
     
                 default:
                     // Traite les fichiers source
@@ -103,6 +131,37 @@ public class CompilerOptions {
     
     protected void displayUsage() {
         // throw new UnsupportedOperationException("not yet implemented");
+        System.out.println("=========================================================");
+        System.out.println("|                      decac                             |");
+        System.out.println("=========================================================");
+        System.out.println("| Utilisation :                                          |");
+        System.out.println("|     decac [options] <fichier_source_1> ...             |");
+        System.out.println("|                                                        |");
+        System.out.println("| Options disponibles :                                  |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -b       Affiche une bannière indiquant le nom        |");
+        System.out.println("|           de l'équipe.                                 |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -p       Arrête decac après l'étape de construction   |");
+        System.out.println("|           de l'arbre et affiche la décompilation.      |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -v       Arrête decac après l'étape de vérification.  |");
+        System.out.println("|           Ne produit aucune sortie en l'absence        |");
+        System.out.println("|           d'erreur.                                    |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -n       Supprime les tests à l'exécution             |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -r X     Limite les registres disponibles à R0 ...    |");
+        System.out.println("|           R{X-1}, avec 4 <= X <= 16.                   |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -d       Active les traces de debug. Répéter cette    |");
+        System.out.println("|           option pour obtenir plus de traces.          |");
+        System.out.println("|                                                        |");
+        System.out.println("|  -P       Compile plusieurs fichiers en parallèle.     |");
+        System.out.println("|           Permet d'accélérer la compilation.           |");
+        System.out.println("|                                                        |");
+        System.out.println("=========================================================");
+        System.exit(0);
     }
 
 }
