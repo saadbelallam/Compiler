@@ -131,7 +131,9 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     // AbstractExpr codegen
-    public abstract void codeGenExpr(DecacCompiler compiler, GPRegister register);
+    public void codeGenExpr(DecacCompiler compiler, GPRegister register){
+        throw new UnsupportedOperationException("not yet implemented");
+    }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
