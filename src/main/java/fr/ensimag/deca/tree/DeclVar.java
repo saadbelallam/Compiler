@@ -99,7 +99,6 @@ public class DeclVar extends AbstractDeclVar {
             } else {
                 compiler.addInstruction(new LOAD(new ImmediateInteger(0), (GPRegister) tempRegister)); // Valeur par défaut 0
                 System.out.println("LOAD");
-            
             }
     
             // On détermine l'adresse en mémoire de la variable
@@ -110,15 +109,16 @@ public class DeclVar extends AbstractDeclVar {
 
 
             // On stocke cette adresse dans la définition de la variable
-            //à compléter
-
+            VariableDefinition varDef = (VariableDefinition) varName.getDefinition();
+            varDef.setOperand(adress);
+            
             // On stocke la valeur dans l'emplacement mémoire correspondant
             compiler.addInstruction(new STORE(tempRegister, adress)); // Sauvegarde de la valeur dans la pile
             System.out.println("Store");
             
         } finally {
             // Libération du registre utilisé
-            //registerManager.releaseRegister(tempRegister);
+            registerManager.releaseRegister(tempRegister);
             System.out.println("finaly");
         }
     }

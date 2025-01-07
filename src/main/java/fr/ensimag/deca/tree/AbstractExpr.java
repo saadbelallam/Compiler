@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -9,6 +10,10 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -127,7 +132,24 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+         if (this instanceof AbstractIdentifier) {
+        AbstractIdentifier identifier = (AbstractIdentifier) this;
+        // la déf de l'identifiant
+        VariableDefinition varDef = (VariableDefinition) identifier.getDefinition();
+        // On charge la valeur de l'identifiant dans R1
+        compiler.addInstruction(new LOAD(varDef.getOperand(), GPRegister.R1));
+        //On affiche la valeur
+        Type type = identifier.getType();
+        if (type.isInt()) {
+            compiler.addInstruction(new WINT());
+        } else if (type.isFloat()) {
+            compiler.addInstruction(new WFLOAT());
+        } else {
+            throw new UnsupportedOperationException("Unsupported type for printing: " + type);
+        }
+    } else {
+        throw new UnsupportedOperationException("codeGenPrint not implemented for this expression type");
+    }
     }
 
     // AbstractExpr codegen
