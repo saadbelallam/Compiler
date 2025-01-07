@@ -67,6 +67,8 @@ public class DeclVar extends AbstractDeclVar {
         // Étape 4 : Mise à jour de l'environnement
         Symbol name = this.varName.getName();
         VariableDefinition varDef = new VariableDefinition(varType, this.getLocation());
+        varName.setType(varType);
+        varName.setDefinition(varDef);
         try {
             localEnv.declare(name, varDef);
         } catch (DoubleDefException e) {
