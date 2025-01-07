@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.RegisterManager;
@@ -44,6 +45,12 @@ public class DeclVar extends AbstractDeclVar {
 
     @Override
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // Étape 0 : Déclaration de type string (?)
+        if (this.type.toString().equals("string")) {
+            compiler.environmentType.declareType(compiler.createSymbol("string"), 
+                                                new TypeDefinition(compiler.environmentType.STRING, this.getLocation()));
+        }
+
         // Étape 1 : Vérification du type
         Type varType = this.type.verifyType(compiler);
         

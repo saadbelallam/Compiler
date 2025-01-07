@@ -7,5 +7,7 @@ CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_F
 
 exec java -enableassertions -cp "$CP" fr.ensimag.deca.context.ManualTestContext "$@"
 
+<<<<<<< HEAD
 
-
+=======
+>>>>>>> fef4f4ac2c4014390789362685cb19dd795b5c11

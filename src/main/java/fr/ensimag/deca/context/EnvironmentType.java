@@ -37,6 +37,7 @@ public class EnvironmentType {
 
         Symbol stringSymb = compiler.createSymbol("string");
         STRING = new StringType(stringSymb);
+        // envTypes.put(stringSymb, new TypeDefinition(STRING, Location.BUILTIN));
         // not added to envTypes, it's not visible for the user.
         
     }
@@ -45,6 +46,10 @@ public class EnvironmentType {
 
     public TypeDefinition defOfType(Symbol s) {
         return envTypes.get(s);
+    }
+
+    public void declareType(Symbol name, TypeDefinition type) {
+        envTypes.put(name, type);
     }
 
     public final VoidType    VOID;
