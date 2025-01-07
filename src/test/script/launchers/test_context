@@ -5,41 +5,7 @@ CP_FILE="$DECAC_HOME"/target/generated-sources/classpath.txt
 
 CP="$DECAC_HOME"/target/test-classes/:"$DECAC_HOME"/target/classes/:$(cat "$CP_FILE")
 
-# le répertoire contenant les fichiers d'entrée
-INPUT_DIR="$DECAC_HOME"/src/test/deca/context/invalid/provided
+exec java -enableassertions -cp "$CP" fr.ensimag.deca.context.ManualTestContext "$@"
 
-# Vérification d'existance
-if [ ! -d "$INPUT_DIR" ]; then
-  echo "Le répertoire $INPUT_DIR n'existe pas."
-  exit 1
-fi
 
-# Parcours des fichiers dans le répertoire
-for file in "$INPUT_DIR"/*.deca; do
-  # Vérification si le fichier existe (utile si le pattern *.deca ne trouve rien)
-  if [ -f "$file" ]; then
-    echo "\n\n Traitement du fichier : $file\n"
-    java -enableassertions -cp "$CP" fr.ensimag.deca.syntax.ManualTestContext "$file"
-  else
-    echo "Aucun fichier .deca trouvé dans $INPUT_DIR"
-    exit 1
-  fi
-done
 
-# De meme pour valid
-INPUT_DIR="$DECAC_HOME"/src/test/deca/context/valid/provided
-
-if [ ! -d "$INPUT_DIR" ]; then
-  echo "Le répertoire $INPUT_DIR n'existe pas."
-  exit 1
-fi
-
-for file in "$INPUT_DIR"/*.deca; do
-  if [ -f "$file" ]; then
-    echo "\n\n Traitement du fichier : $file\n"
-    java -enableassertions -cp "$CP" fr.ensimag.deca.syntax.ManualTestContext "$file"
-  else
-    echo "Aucun fichier .deca trouvé dans $INPUT_DIR"
-    exit 1
-  fi
-done
