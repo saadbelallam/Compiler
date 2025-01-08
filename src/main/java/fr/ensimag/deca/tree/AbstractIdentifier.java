@@ -1,16 +1,16 @@
 package fr.ensimag.deca.tree;
-
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
-import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  *
@@ -85,7 +85,7 @@ public abstract class AbstractIdentifier extends AbstractLValue {
     public abstract void setDefinition(Definition definition);
 
 
-
+     private RegisterOffset memoryLocation;
     /**
      * Implements non-terminal "type" of [SyntaxeContextuelle] in the 3 passes
      * @param compiler contains "env_types" attribute
@@ -93,4 +93,20 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      *         (corresponds to the "type" attribute)
      */
     public abstract Type verifyType(DecacCompiler compiler) throws ContextualError;
+    
+    
+    public abstract void  codeGenIdent(DecacCompiler comp , DAddr adress);
+    
+   
+    
+    @Override
+    public RegisterOffset getMemoryLocation() {
+        return memoryLocation;
+    }
+
+    public void setMemoryLocation(RegisterOffset location) {
+        this.memoryLocation = location;
+    }
+
+    
 }

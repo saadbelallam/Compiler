@@ -35,11 +35,15 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
         for (AbstractDeclVar declVar : getList()) {
             declVar.verifyDeclVar(compiler, localEnv, currentClass);
         }
-    }
-
+    }     
     //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
     public int getNombreVariables() {
         return this.getList().size();
     }
 
-}
+    
+    public void codeGenListVar(DecacCompiler compiler){
+        for(AbstractDeclVar variable : this.getList()){
+            variable.codeGenVar(compiler);
+        }
+}}

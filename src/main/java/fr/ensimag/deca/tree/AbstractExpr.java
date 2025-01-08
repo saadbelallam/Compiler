@@ -1,22 +1,21 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.VariableDefinition;
+import java.io.PrintStream;
+
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
-
-import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
-
 /**
  * Expression, i.e. anything that has a value.
  *
@@ -132,36 +131,42 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-         if (this instanceof AbstractIdentifier) {
-        AbstractIdentifier identifier = (AbstractIdentifier) this;
-        // la déf de l'identifiant
-        VariableDefinition varDef = (VariableDefinition) identifier.getDefinition();
-        // On charge la valeur de l'identifiant dans R1
-        compiler.addInstruction(new LOAD(varDef.getOperand(), GPRegister.R1));
-        //On affiche la valeur
-        Type type = identifier.getType();
-        if (type.isInt()) {
+    // 1. First get a temporary register for the value
+    GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); // Use R1
+    
+    // 2. Generate code to compute the value into the register
+    this.codeGenVal(compiler, tmpReg);
+    
+    // 3. Print based on type
+    switch (this.getType().toString()) {
+        case "int":
             compiler.addInstruction(new WINT());
-        } else if (type.isFloat()) {
+            break;
+        case "float":
             compiler.addInstruction(new WFLOAT());
-        } else {
-            throw new UnsupportedOperationException("Unsupported type for printing: " + type);
-        }
-    } else {
-        throw new UnsupportedOperationException("codeGenPrint not implemented for this expression type");
+            break;
+        default:
+            throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
     }
-    }
+    
+}
 
-    // AbstractExpr codegen
-    public void codeGenExpr(DecacCompiler compiler, GPRegister register){
-        throw new UnsupportedOperationException("not yet implemented");
-    }
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         throw new UnsupportedOperationException("not yet implemented");
     }
     
+    public GPRegister codeGenValue(DecacCompiler compiler){
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+    // In AbstractExpr class
+    public  void codeGenVal(DecacCompiler compiler, GPRegister reg){
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+    
+ 
 
     @Override
     protected void decompileInst(IndentPrintStream s) {
@@ -179,4 +184,16 @@ public abstract class AbstractExpr extends AbstractInst {
             s.println();
         }
     }
+
+    public DVal getVal(DecacCompiler compiler){
+        return null;
+    }
+     
+
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel,boolean isWhileOrIf) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+    
+   
+
 }

@@ -1,17 +1,16 @@
 package fr.ensimag.deca.tree;
-import fr.ensimag.deca.context.ExpDefinition; //ligne rajouté
+import java.io.PrintStream; //ligne rajouté
 
-import fr.ensimag.deca.context.Type;
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
-import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
 
 /**
  * String literal

@@ -1,18 +1,13 @@
 package fr.ensimag.deca.tree;
-
-import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.VariableDefinition;
-import fr.ensimag.ima.pseudocode.DAddr;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
-import net.bytebuddy.implementation.bytecode.member.FieldAccess;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * Assignment, i.e. lvalue = expr.
@@ -35,52 +30,61 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        // throw new UnsupportedOperationException("not yet implemented");
         Type type = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         getRightOperand().verifyRValue(compiler, localEnv, currentClass, type);
+        
+        // Set the definition on the left operand if it's an identifier
+        if (getLeftOperand() instanceof AbstractIdentifier) {
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            ident.setDefinition(localEnv.get(ident.getName()));
+        }
+        
         setType(type);
         return type;
-    }
+}
+
 
 
     @Override
     protected String getOperatorName() {
         return "=";
     }
-
+    
     @Override
-    public void codeGenInst(DecacCompiler compiler) {
-        // Gestion des registres
-        RegisterManager registerManager = compiler.getRegisterManager();
-        GPRegister tempRegister = (GPRegister) registerManager.getRegister();
-
-        try {
-            getRightOperand().codeGenExpr(compiler, tempRegister);
-        }catch (Exception e)  {
-            registerManager.releaseRegister(tempRegister);
-            getRightOperand().codeGenInst(compiler);
-        }
-
-        try{
-        // Cas de AbstractIdentifier
+    protected void codeGenInst(DecacCompiler compiler) {
+        // Generate right operand value first
+        GPRegister reg = compiler.getMangerR().allocateRegister();
+        getRightOperand().codeGenVal(compiler, reg);
+        
+        // For left operand, check if it's an identifier
         if (getLeftOperand() instanceof AbstractIdentifier) {
-            AbstractIdentifier identifier = (AbstractIdentifier) getLeftOperand();
-            VariableDefinition varDef = (VariableDefinition) identifier.getDefinition();
-            DAddr operand = varDef.getOperand();
-
-            // On stocke la valeur calculée dans l'adresse mémoire
-            compiler.addInstruction(new STORE(tempRegister, operand));
+            //System.err.println("getLeftOperand() is = " + getLeftOperand().getExpDefinition().getOperand());
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            DAddr addr = ident.getExpDefinition().getOperand();
+            compiler.addInstruction(new STORE(reg, addr));
         } else {
-            throw new UnsupportedOperationException("Left operand incompatibe");
+            throw new UnsupportedOperationException("Left operand must be an identifier");
         }
-        System.out.println("Assign");
-
-    } finally {
-        // Libération du registre
-        registerManager.releaseRegister(tempRegister);
-        }
-    }
-
 }
 
 
+
+    
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
+        // 1. Get memory location of left operand (variable)
+        System.err.println("Error1");
+        RegisterOffset varAddr = getLeftOperand().getMemoryLocation() ;
+        System.err.println("Error2");
+        
+        // 2. Generate code for right operand into dest register
+        getRightOperand().codeGenVal(compiler, dest);
+        System.err.println("Error3");
+         
+        // 3. Store result in variable's memory location
+        compiler.addInstruction(new STORE(dest, varAddr));
+    }
+
+   
+
+}

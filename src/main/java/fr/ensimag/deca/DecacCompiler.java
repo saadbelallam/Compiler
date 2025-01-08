@@ -10,7 +10,11 @@ import fr.ensimag.deca.tools.SymbolTable;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
+import fr.ensimag.deca.codegen.ManagerOfRegisters;
+import fr.ensimag.deca.codegen.ManagerOfLabel;
+import fr.ensimag.deca.codegen.ManagerOfMemory;
 import fr.ensimag.ima.pseudocode.AbstractLine;
+import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.Label;
@@ -123,6 +127,23 @@ public class DecacCompiler {
     private final IMAProgram program = new IMAProgram();
  
 
+    private final ManagerOfRegisters registerManger = new ManagerOfRegisters();
+    private final ManagerOfMemory memoryManger = new ManagerOfMemory();
+
+
+    private final ManagerOfLabel labelManger = new ManagerOfLabel();
+
+    public ManagerOfMemory getMangerM(){
+        return memoryManger;
+    }
+
+    public ManagerOfRegisters getMangerR(){
+        return registerManger;
+    }
+
+    public ManagerOfLabel getMangerL(){
+        return labelManger;
+    }
     /** The global environment for types (and the symbolTable) */
     public final SymbolTable symbolTable = new SymbolTable();
     public final EnvironmentType environmentType = new EnvironmentType(this);

@@ -1,6 +1,4 @@
 package fr.ensimag.deca.tree;
-
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -25,13 +23,9 @@ public abstract class AbstractDeclVar extends Tree {
      *      the synthetized attribute
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
-     */    
+     */ 
+    protected abstract void codeGenVar(DecacCompiler compiler);   
     protected abstract void verifyDeclVar(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
-    
-    /**
-     * @param compiler
-     */
-    protected abstract void codeGenDeclVar(DecacCompiler compiler);
 }

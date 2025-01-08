@@ -3,7 +3,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -44,16 +43,9 @@ public class Program extends AbstractProgram {
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
         // A FAIRE: compléter ce squelette très rudimentaire de code
-        System.out.println("début_prog");
         compiler.addComment("Main program");
-        System.out.println("allons-y vers main");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
-        // Ajout du gestionnaire d'erreur pour débordement de la pile
-        //compiler.addLabel(new Label("pile_pleine"));
-        //compiler.addInstruction(new WSTR("Erreur : Débordement de la pile."));
-        //compiler.addInstruction(new WNL());
-        //compiler.addInstruction(new ERROR());
     }
 
     @Override

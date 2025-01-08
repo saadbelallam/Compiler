@@ -1,14 +1,27 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
+import java.io.PrintStream;
+
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.TypeDefinition;
+import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+
 
 
 /**
@@ -191,7 +204,7 @@ public class Identifier extends AbstractIdentifier {
     
     
     private Definition definition;
-
+    
 
     @Override
     protected void iterChildren(TreeFunction f) {
@@ -223,7 +236,26 @@ public class Identifier extends AbstractIdentifier {
             s.println();
         }
     }
+    @Override 
+    public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
+    
 
+        DAddr address = getVariableDefinition().getOperand();
+        compiler.addInstruction(new LOAD(address, dest));
+}
+
+    @Override
+    public void codeGenIdent(DecacCompiler compiler, DAddr address) {
+        // Store the memory location for this identifier
+        
+        
+        // If this identifier has a definition, set its operand
+        if (this.getExpDefinition() != null) {
+            this.getExpDefinition().setOperand(address);
+            System.err.println("hellow" + this.getExpDefinition().getOperand());
+        }
+}   
+ 
     @Override
     public String toString() {
         return name.toString();

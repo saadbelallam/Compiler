@@ -1,25 +1,31 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
+import java.io.PrintStream;
+
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import java.io.PrintStream;
-import org.apache.commons.lang.Validate;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+
 
 /**
  * @author gl24
  * @date 01/01/2025
  */
 public class Initialization extends AbstractInitialization {
+    
+    private AbstractExpr expression;
 
     public AbstractExpr getExpression() {
         return expression;
     }
-
-    private AbstractExpr expression;
 
     public void setExpression(AbstractExpr expression) {
         Validate.notNull(expression);
@@ -53,4 +59,13 @@ public class Initialization extends AbstractInitialization {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         expression.prettyPrint(s, prefix, true);
     }
-}
+
+    @Override
+    public void codeGenInit(DecacCompiler compiler, GPRegister reg, DAddr address) {
+       
+        if (expression != null) {
+            expression.codeGenVal(compiler,reg);
+            compiler.addInstruction(new STORE(reg, address));
+        }
+    }}
+   

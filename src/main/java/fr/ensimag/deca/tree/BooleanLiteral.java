@@ -60,7 +60,7 @@ public class BooleanLiteral extends AbstractExpr {
     }
 
     @Override
-    public void codeGenExpr(DecacCompiler compiler, GPRegister register) {
+    public void codeGenVal(DecacCompiler compiler, GPRegister register) {
         // true <==> 1 et false <==> 0
         int value = this.getValue() ? 1 : 0;
         compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
