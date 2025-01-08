@@ -1,0 +1,21 @@
+; start main program
+; Main program
+; Beginning of main instructions:
+	LOAD #0, R2
+	STORE R2, 1(GB)
+	BRA while_cond_0
+while_start_1:
+	LOAD 1(GB), R2
+	LOAD #1, R3
+	ADD R3, R2
+	STORE R2, 1(GB)
+	LOAD 1(GB), R1
+	WINT
+	WNL
+while_cond_0:
+	LOAD 1(GB), R3
+	LOAD #5, R4
+	CMP R4, R3
+	BNE while_start_1
+	HALT
+; end main program
