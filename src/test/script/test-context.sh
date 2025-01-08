@@ -44,7 +44,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests contextuels invalides ---${RESET}"
 
 # Boucle sur tous les fichiers de test invalides
-for cas_de_test in src/test/deca/context/invalid/provided/*.deca; do
+for cas_de_test in src/test/deca/context/invalid/*/*.deca; do
     test_context_invalide "$cas_de_test"
 done
 
@@ -53,7 +53,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests contextuels valides ---${RESET}"
 
 # Boucle sur tous les fichiers de test valides
-for cas_de_test in src/test/deca/context/valid/provided/*.deca; do
+for cas_de_test in src/test/deca/context/valid/*/*.deca; do
     test_context_valid "$cas_de_test"
 done
 

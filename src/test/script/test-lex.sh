@@ -44,7 +44,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests lexicaux invalides ---${RESET}"
 
 # Boucle sur tous les fichiers de test invalides
-for cas_de_test in src/test/deca/lex/invalid/provided/*.deca; do
+for cas_de_test in src/test/deca/lex/invalid/*/*.deca; do
     test_lex_invalide "$cas_de_test"
 done
 
@@ -53,7 +53,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests lexicaux valides ---${RESET}"
 
 # Boucle sur tous les fichiers de test valides
-for cas_de_test in src/test/deca/lex/valid/provided/*.deca; do
+for cas_de_test in src/test/deca/lex/valid/*/*.deca; do
     test_lex_valid "$cas_de_test"
 done
 

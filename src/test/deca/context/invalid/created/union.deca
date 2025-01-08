@@ -1,0 +1,18 @@
+// Description:
+//    Déclare une variable entière (int) puis on l'affiche puis on redéclare une variable entière.
+//    Vérifie le traitement des erreurs pour l’utilisation d’une variable non initialisée.
+//
+// Résultats:
+//    Erreur : no viable alternative at input 'b'
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a;
+    a = 2;
+    println(a);
+    int b;
+    b = 3;
+    println(b);
+}

@@ -10,5 +10,5 @@
 {
     int a;
     a = readInt();
-    println(x);
+    println(a);
 }

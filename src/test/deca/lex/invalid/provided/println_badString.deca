@@ -1,0 +1,13 @@
+
+/*
+
+This file make sure we define correctly
+our input string, it's an invalide test.
+
+*/
+
+
+
+{
+    println("Unclosed string);
+}

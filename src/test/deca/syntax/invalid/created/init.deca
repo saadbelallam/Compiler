@@ -1,0 +1,13 @@
+// Description:
+//    Déclare une variable entière (int) d'une manière syntaxiquement fausse
+//
+// Resultats:
+//    Erreur : extraneous input 'x' expecting ';'
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int x x;
+    println(x);
+}

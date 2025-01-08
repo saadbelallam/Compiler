@@ -44,7 +44,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests de syntaxe invalides ---${RESET}"
 
 # Boucle sur tous les fichiers de test invalides
-for cas_de_test in src/test/deca/syntax/invalid/provided/*.deca; do
+for cas_de_test in src/test/deca/syntax/invalid/*/*.deca; do
     test_synt_invalide "$cas_de_test"
 done
 
@@ -54,7 +54,7 @@ echo ""
 echo -e "${YELLOW}--- Début des tests de syntaxe valides ---${RESET}"
 
 # Boucle sur tous les fichiers de test valides
-for cas_de_test in src/test/deca/syntax/valid/provided/*.deca; do
+for cas_de_test in src/test/deca/syntax/valid/*/*.deca; do
     test_synt_valid "$cas_de_test"
 done
 

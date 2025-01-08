@@ -1,0 +1,8 @@
+// test that there's no such a declaration ; Malformed string (error case)
+
+
+
+
+{
+    println("Special chars: \"\\\n!");
+}

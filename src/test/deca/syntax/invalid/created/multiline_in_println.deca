@@ -1,0 +1,14 @@
+
+/*
+
+This file test multiline 
+in println function , it's an invalide test.
+
+*/
+
+
+
+{
+    println("This is a
+    multiline string");
+}
