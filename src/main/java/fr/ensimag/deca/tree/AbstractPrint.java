@@ -36,11 +36,20 @@ public abstract class AbstractPrint extends AbstractInst {
     }
 
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass, Type returnType)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        for (AbstractExpr a : getArguments().getList()) {
+            // Vérification du type de chaque argument
+            a.verifyExpr(compiler, localEnv, currentClass);
+
+            Type type = a.getType();
+            // Accepte int, float, boolean et string
+            if (!type.isInt() && !type.isFloat() && !type.isBoolean() && !type.isString()) {
+                throw new ContextualError("Println can only print int, float, boolean or string", a.getLocation());
+            }
+
+        }
     }
+    
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {

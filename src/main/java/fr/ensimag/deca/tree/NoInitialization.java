@@ -18,10 +18,8 @@ import java.io.PrintStream;
 public class NoInitialization extends AbstractInitialization {
 
     @Override
-    protected void verifyInitialization(DecacCompiler compiler, Type t,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void verifyInitialization(DecacCompiler compiler, Type t, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // throw new UnsupportedOperationException("not yet implemented");
     }
 
 

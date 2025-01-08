@@ -31,9 +31,15 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
      * @param currentClass 
      *          corresponds to "class" attribute (null in the main bloc).
      */    
-    void verifyListDeclVariable(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
+    void verifyListDeclVariable(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        for (AbstractDeclVar declVar : getList()) {
+            declVar.verifyDeclVar(compiler, localEnv, currentClass);
+        }
     }
 
+    //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
+    public int getNombreVariables() {
+        return this.getList().size();
+    }
 
 }

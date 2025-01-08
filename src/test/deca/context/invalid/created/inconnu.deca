@@ -1,0 +1,13 @@
+// Description:
+//    Utilise une variable non déclarée a.
+//    Doit générer une erreur d'identificateur non déclaré.
+//
+// Résultats:
+//    Erreur : Variable a is not defined
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    a = 5;
+}

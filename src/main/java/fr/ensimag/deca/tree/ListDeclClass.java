@@ -25,8 +25,14 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
      * Pass 1 of [SyntaxeContextuelle]
      */
     void verifyListClass(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verify listClass: start");
-        throw new UnsupportedOperationException("not yet implemented");
+        // LOG.debug("verify listClass: start");
+    
+        // Parcours de la liste des classes déclarées
+        for (AbstractDeclClass declClass : getList()) {
+            // Appel de la vérification contextuelle pour chaque classe
+            declClass.verifyClass(compiler);
+        }
+    
         // LOG.debug("verify listClass: end");
     }
 

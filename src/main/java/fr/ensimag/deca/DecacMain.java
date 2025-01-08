@@ -27,7 +27,19 @@ public class DecacMain {
         }
 
         if (options.getPrintBanner()) {
-            System.out.println("\n equipe gl24 \n");
+            System.out.println("===============================================");
+            System.out.println("|                                             |");
+            System.out.println("|      [$]  Projet GL 2025 - ENSIMAG [$]      |");
+            System.out.println("|                                             |");
+            System.out.println("|    Groupe : GL24                            |");
+            System.out.println("|    Membres :                                |");
+            System.out.println("|      - BARKATOU Walid                       |");
+            System.out.println("|      - BELALLAM Saad                        |");
+            System.out.println("|      - BELQASMI Bachir                      |");
+            System.out.println("|      - OUAGGASS Yassine                     |");
+            System.out.println("|      - SANTOURA Hamza                       |");
+            System.out.println("|                                             |");
+            System.out.println("===============================================");
             System.exit(0);
         }
 
