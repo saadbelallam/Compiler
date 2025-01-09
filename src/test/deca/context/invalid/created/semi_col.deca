@@ -1,0 +1,14 @@
+// Description:
+//    Syntaxe
+//
+// Resultats:
+//    Erreur détectée : "missing ';'"
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a
+    a = 42;
+    println(a);
+}
