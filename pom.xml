@@ -238,11 +238,20 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
-           
                     
                     
-                
-		    <execution>
+                    <execution>
+                        <id>test-lex</id>
+                        <configuration>
+                            <executable>./src/test/script/test-lex.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    
+                    <execution>
                         <id>test-synt</id>
                         <configuration>
                             <executable>./src/test/script/test-synt.sh</executable>
@@ -253,7 +262,7 @@
                         </goals>
                     </execution>
                     
-        	    <execution>
+                    <execution>
                         <id>test-context</id>
                         <configuration>
                             <executable>./src/test/script/test-context.sh</executable>
@@ -264,17 +273,37 @@
                         </goals>
                     </execution>
                     
-        	    <execution>
-                        <id>test-lex</id>
+                    
+                    <execution>
+                        <id>basic-gencode</id>
                         <configuration>
-                            <executable>./src/test/script/test-lex.sh</executable>
+                            <executable>./src/test/script/basic-gencode.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                    </execution> 
-                    
+                    </execution>
+                    <execution>
+                        <id>basic-decac</id>
+                        <configuration>
+                            <executable>./src/test/script/basic-decac.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>common-tests</id>
+                        <configuration>
+                            <executable>./src/test/script/common-tests.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -498,3 +527,4 @@
     <url>https://projet-gl.pages.ensimag.fr/</url>
     <description>Compilateur développé dans le cadre du Projet Génie Logiciel de l'Ensimag.</description>
 </project>
+
