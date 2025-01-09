@@ -38,6 +38,11 @@ public class IfThenElse extends AbstractInst {
         Validate.notNull(elseBranch);
         this.elseBranch = elseBranch;
     }
+
+    public void setElseBranch(AbstractInst elseBranch) {
+        Validate.notNull(elseBranch);
+        this.elseBranch.add(elseBranch);
+    }
     // Getter pour la condition
     public AbstractExpr getCondition() {
         return condition;
@@ -64,30 +69,31 @@ public class IfThenElse extends AbstractInst {
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         Label endLabel = new Label("endif." + compiler.getMangerL().newLabel());
-        Label nextLabel = new Label("else." + compiler.getMangerL().newLabel());
+        Label elseLabel = new Label("else." + compiler.getMangerL().newLabel());
         
-        // Generate code for condition that branches to else if false
-        condition.codeGenCondition(compiler, nextLabel, false);
+        // Generate code for condition
+        condition.codeGenCondition(compiler, elseLabel, false);
         
         // Generate then branch code
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         
         // Generate else branch code
-        compiler.addLabel(nextLabel);
-        
-        // Check if elseBranch contains another IfThenElse (else-if case)
-        if (!elseBranch.isEmpty() && elseBranch.getList().get(0) instanceof IfThenElse) {
-            // Let the nested if-then-else handle its own code generation
-            elseBranch.codeGenListInst(compiler);
-        } else {
-            // Regular else branch
-            elseBranch.codeGenListInst(compiler);
-        }
+        compiler.addLabel(elseLabel);
+        elseBranch.codeGenListInst(compiler);
         
         // End of if-then-else
         compiler.addLabel(endLabel);
     }
+
+
+    
+    public void codeGenListInst(DecacCompiler compiler) {
+        codeGenInst(compiler);
+    }
+
+
+
 
 
     @Override
