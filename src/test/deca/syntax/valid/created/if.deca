@@ -1,0 +1,18 @@
+// Description:
+//    Vérifie une condition et affiche un message selon le résultat.
+//
+// Resultats:
+//    Positif
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int num;
+    num = 4;
+    if (num > 0) {
+        println("Positif");
+    } else {
+        println("Inférieur ou égal à 0");
+    }
+}

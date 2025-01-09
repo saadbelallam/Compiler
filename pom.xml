@@ -238,36 +238,43 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>basic-gencode</id>
+           
+                    
+                    
+                
+		    <execution>
+                        <id>test-synt</id>
                         <configuration>
-                            <executable>./src/test/script/basic-gencode.sh</executable>
+                            <executable>./src/test/script/test-synt.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>basic-decac</id>
+                    
+        	    <execution>
+                        <id>test-context</id>
                         <configuration>
-                            <executable>./src/test/script/basic-decac.sh</executable>
+                            <executable>./src/test/script/test-context.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>common-tests</id>
+                    
+        	    <execution>
+                        <id>test-lex</id>
                         <configuration>
-                            <executable>./src/test/script/common-tests.sh</executable>
+                            <executable>./src/test/script/test-lex.sh</executable>
                         </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
-                    </execution>
+                    </execution> 
+                    
                 </executions>
             </plugin>
 
