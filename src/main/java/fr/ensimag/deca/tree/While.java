@@ -56,7 +56,7 @@ public class While extends AbstractInst {
         
     } */
 
-    @Override
+    /* @Override
     protected void codeGenInst(DecacCompiler compiler) {
 
         Label whileTest = new Label("while_test." + compiler.getMangerL().newLabel());
@@ -66,7 +66,7 @@ public class While extends AbstractInst {
         compiler.addLabel(whileTest);
         
         // Generate code for condition and branch if false
-        condition.codeGenCondition(compiler, whileEnd,false);
+        condition.codeGenCondition(compiler, whileEnd, false);
         
         // Generate code for loop body
         body.codeGenListInst(compiler);
@@ -75,6 +75,29 @@ public class While extends AbstractInst {
         compiler.addInstruction(new BRA(whileTest));
         
         // Add end label
+        compiler.addLabel(whileEnd);
+    }
+ */ 
+   @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+       
+        Label whileTest = new Label("while_test_" + compiler.getMangerL().newLabel());
+        Label whileBody = new Label("while_body_" + compiler.getMangerL().newLabel());
+        Label whileEnd = new Label("while_end_" + compiler.getMangerL().newLabel());
+        
+        // Jump to test condition first
+        compiler.addInstruction(new BRA(whileTest));
+        
+        // Generate code for while body
+        compiler.addLabel(whileBody);
+        body.codeGenListInst(compiler);
+        
+        // Test condition
+        compiler.addLabel(whileTest);
+        condition.codeGenCondition(compiler, whileEnd, false);
+        compiler.addInstruction(new BRA(whileBody));
+        
+        // End of while
         compiler.addLabel(whileEnd);
     }
 

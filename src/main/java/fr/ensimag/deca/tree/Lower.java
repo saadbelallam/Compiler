@@ -23,8 +23,9 @@ public class Lower extends AbstractOpIneq {
     }
 
 
+
     @Override
-    protected void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
+    public  void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
         compiler.addInstruction(new SLT(register));
     }
     

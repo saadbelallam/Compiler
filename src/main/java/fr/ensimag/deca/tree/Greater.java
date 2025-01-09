@@ -22,8 +22,9 @@ public class Greater extends AbstractOpIneq {
         return ">";
     }
 
+    
     @Override
-    protected void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
+    public void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
         compiler.addInstruction(new SGT(register));
     }
 
