@@ -1,0 +1,14 @@
+// Description:
+//    Déclare une variable entière (int), affecte 40 rajoute 2  et affiche le résultat.
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    float a;
+    a = 40 + 2;
+    println(a);
+}

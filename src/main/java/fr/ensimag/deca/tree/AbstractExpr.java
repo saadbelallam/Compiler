@@ -98,7 +98,7 @@ public abstract class AbstractExpr extends AbstractInst {
             if (type.isInt() && expectedType.isFloat()) {
                 ConvFloat convFloat = new ConvFloat(this);
                 convFloat.verifyExpr(compiler, localEnv, currentClass);
-                return (AbstractExpr)convFloat;
+                return convFloat;
             }
             throw new ContextualError("Type mismatch: expected " + expectedType + " but found " + type, this.getLocation());
         }

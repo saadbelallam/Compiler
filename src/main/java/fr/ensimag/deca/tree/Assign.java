@@ -31,14 +31,7 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         Type type = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
-        //getRightOperand().verifyRValue(compiler, localEnv, currentClass, type);
         this.setRightOperand(getRightOperand().verifyRValue(compiler, localEnv, currentClass, type));
-        // Set the definition on the left operand if it's an identifier
-        if (getLeftOperand() instanceof AbstractIdentifier) {
-            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
-            ident.setDefinition(localEnv.get(ident.getName()));
-        }
-        
         setType(type);
         return type;
 }

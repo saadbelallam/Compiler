@@ -238,6 +238,42 @@
                             <goal>exec</goal>
                         </goals>
                     </execution>
+                    
+                    
+                    <execution>
+                        <id>test-lex</id>
+                        <configuration>
+                            <executable>./src/test/script/test-lex.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    
+                    <execution>
+                        <id>test-synt</id>
+                        <configuration>
+                            <executable>./src/test/script/test-synt.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    
+                    <execution>
+                        <id>test-context</id>
+                        <configuration>
+                            <executable>./src/test/script/test-context.sh</executable>
+                        </configuration>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    
+                    
                     <execution>
                         <id>basic-gencode</id>
                         <configuration>
@@ -491,3 +527,4 @@
     <url>https://projet-gl.pages.ensimag.fr/</url>
     <description>Compilateur développé dans le cadre du Projet Génie Logiciel de l'Ensimag.</description>
 </project>
+

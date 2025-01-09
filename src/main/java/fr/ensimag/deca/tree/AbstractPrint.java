@@ -9,6 +9,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -64,7 +66,16 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        throw new UnsupportedOperationException("not yet implemented");
+        s.print("print" + getSuffix());
+
+        if (getPrintHex()) {
+            s.print("x(");
+        } else {
+            s.print("(");
+        }
+        
+        arguments.decompile(s);
+        s.print(");");
     }
 
     @Override

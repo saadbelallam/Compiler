@@ -1,0 +1,14 @@
+// Description:
+//    Lit un entier donné par un utilisateur.
+//
+// Resultats:
+//    (Dépend de l'entrée utilisateur)
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a;
+    a = readInt();
+    println(a);
+}
