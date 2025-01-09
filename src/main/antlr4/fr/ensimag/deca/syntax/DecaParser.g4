@@ -153,6 +153,7 @@ inst returns[AbstractInst tree]
     | if_then_else {
             assert($if_then_else.tree != null);
             $tree = $if_then_else.tree;
+            setLocation($tree, $if_then_else.start);
         }
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
@@ -182,12 +183,10 @@ if_then_else returns[IfThenElse tree]
             assert($elsif_cond.tree != null);
             assert($elsif_li.tree != null);
             // Create a new ListInst for the else branch containing the nested if
-            ListInst elseBranch = new ListInst();
             IfThenElse nestedIf = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
             setLocation(nestedIf, $elsif);
-            elseBranch.add(nestedIf);
-            // Set the else branch of the main if
-            $tree.setElseBranch(elseBranch);
+            $tree.setElseBranch(nestedIf);
+            $tree = nestedIf;
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
