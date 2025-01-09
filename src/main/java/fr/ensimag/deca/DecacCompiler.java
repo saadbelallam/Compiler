@@ -183,11 +183,11 @@ public class DecacCompiler {
             LOG.debug("stack overflow", e);
             err.println("Stack overflow while compiling file " + sourceFile + ".");
             return true;
-        //} catch (Exception e) {
-        //    LOG.fatal("Exception raised while compiling file " + sourceFile
-        //            + ":", e);
-        //    err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
-        //    return true;
+        } catch (Exception e) {
+           LOG.fatal("Exception raised while compiling file " + sourceFile
+                   + ":", e);
+           err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
+           return true;
         } catch (AssertionError e) {
             LOG.fatal("Assertion failed while compiling file " + sourceFile
                     + ":", e);
