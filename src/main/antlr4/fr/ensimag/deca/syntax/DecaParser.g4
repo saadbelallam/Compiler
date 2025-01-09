@@ -167,6 +167,8 @@ inst returns[AbstractInst tree]
         }
     ;
 
+
+// add the setLocation(.)
 if_then_else returns[IfThenElse tree]
 @init {
 }
@@ -174,19 +176,28 @@ if_then_else returns[IfThenElse tree]
             assert($condition.tree != null);
             assert($li_if.tree != null);
             $tree = new IfThenElse($condition.tree, $li_if.tree, new ListInst());
+            setLocation($tree, $if1);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-        assert($elsif_cond.tree != null);
-        assert($elsif_li.tree != null);
-        $tree = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
+            assert($elsif_cond.tree != null);
+            assert($elsif_li.tree != null);
+            // Create a new ListInst for the else branch containing the nested if
+            ListInst elseBranch = new ListInst();
+            IfThenElse nestedIf = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
+            setLocation(nestedIf, $elsif);
+            elseBranch.add(nestedIf);
+            // Set the else branch of the main if
+            $tree.setElseBranch(elseBranch);
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
-        assert($li_else.tree != null);
-        $tree = new IfThenElse($tree.getCondition(), $tree.getThenBranch(), $li_else.tree);
+            assert($li_else.tree != null);
+            $tree.setElseBranch($li_else.tree);
+            setLocation($tree, $if1);
         }
       )?
     ;
+
 
 list_expr returns[ListExpr tree]
 @init   {
@@ -334,6 +345,7 @@ sum_expr returns[AbstractExpr tree]
             $tree = new Minus($e1.tree,$e2.tree);
             setLocation($tree, $MINUS);
         }
+    
     ;
 
 mult_expr returns[AbstractExpr tree]

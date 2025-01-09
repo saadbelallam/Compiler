@@ -1,0 +1,19 @@
+{
+    // Initial variables
+    int a = 8;
+    int b = 4;
+    int sum = 2;
+    
+
+
+    if ((a > 5 || b > 3) && sum < 1) {
+        println(a);
+    }
+    else if(sum%2 == 0 && true){
+        println(a);
+    }
+    else{
+        println(sum);
+    }    
+   
+}

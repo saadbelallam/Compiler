@@ -5,6 +5,7 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 /**
  *
@@ -43,6 +44,24 @@ public class NotEquals extends AbstractOpExactCmp {
         // Free registers
         compiler.getMangerR().freeRegister(leftReg);
         compiler.getMangerR().freeRegister(rightReg);
+    }
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        GPRegister rightReg = compiler.getMangerR().allocateRegister();
+        
+        try {
+            getLeftOperand().codeGenVal(compiler, destReg);
+            getRightOperand().codeGenVal(compiler, rightReg);
+            
+            
+            compiler.addInstruction(new CMP(rightReg, destReg));
+            // Set result based on comparison (SNE = Set if Not Equal)
+            // l'inverse dyal Equals
+            compiler.addInstruction(new SNE(destReg));
+        } finally {
+            compiler.getMangerR().freeRegister(rightReg);
+        }
 }
+
 
 }

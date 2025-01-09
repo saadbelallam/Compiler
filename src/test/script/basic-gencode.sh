@@ -20,8 +20,8 @@ if [ ! -f ./src/test/deca/codegen/valid/provided/cond0.ass ]; then
     echo "Fichier cond0.ass non généré."
     exit 1
 fi
-
-resultat=$(ima ./src/test/deca/codegen/valid/provided/cond0.ass) || exit 1
+#pay attention i changed this here bcz i work with : it gonna work  for u too  
+resultat=$(ima-x86_64-Linux ./src/test/deca/codegen/valid/provided/cond0.ass) || exit 1
 rm -f ./src/test/deca/codegen/valid/provided/cond0.ass
 
 # On code en dur la valeur attendue.

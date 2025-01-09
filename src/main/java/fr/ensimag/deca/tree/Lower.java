@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SLT;
+
 
 /**
  *
@@ -18,4 +22,10 @@ public class Lower extends AbstractOpIneq {
         return "<";
     }
 
+
+    @Override
+    protected void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
+        compiler.addInstruction(new SLT(register));
+    }
+    
 }

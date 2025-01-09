@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
@@ -23,40 +24,41 @@ public class Or extends AbstractOpBool {
     }
 
     @Override
-    public void codeGenInst(DecacCompiler compiler) {
-        Label trueLabel = new Label("true_" + compiler.getMangerL().newLabel());
-        Label endLabel = new Label("end_" + compiler.getMangerL().newLabel());
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        Label endLabel = new Label("end.bool." + compiler.getMangerL().newLabel());
+        Label shortCircuitLabel = new Label("short_circuit." + compiler.getMangerL().newLabel());
         
-        // Evaluate left operandù
-        getLeftOperand().codeGenCondition(compiler, trueLabel, false) ;       
-        // Evaluate right operand
-        getRightOperand().codeGenCondition(compiler, trueLabel, false);
+        // Evaluate left operand
+
+        System.err.println("ERROR Im HERE and my leftOp is "+ getLeftOperand() + "My right OP is " + getRightOperand());
+        getLeftOperand().codeGenVal(compiler, destReg);
         
-        // If we get here, both conditions were false
-        GPRegister tmpReg = compiler.getMangerR().allocateRegister();
-        compiler.addInstruction(new LOAD(0, tmpReg));
+        // Branch based on left operand
+        branchInstruction(compiler, shortCircuitLabel);
+        
+        // Evaluate right operand if needed
+        System.err.println("ERROR Im HERE ");
+
+        getRightOperand().codeGenVal(compiler, destReg);
         compiler.addInstruction(new BRA(endLabel));
+        System.err.println("i went iwout  ");
         
-        // True case
-        compiler.addLabel(trueLabel);
-        compiler.addInstruction(new LOAD(1, tmpReg));
+        compiler.addLabel(shortCircuitLabel);
+        // valeur de ShortCiruitValue O pour AND , and 1 for Or  
+        compiler.addInstruction(new LOAD(getShortCircuitValue(), destReg));
         
-        compiler.addLabel(endLabel);
-    }
+        compiler.addLabel(endLabel);}
+    
+
 
     @Override
-    public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
-        if (jump) {
-            // Jump if either operand is true
-            getLeftOperand().codeGenCondition(compiler, label, false);
-            getRightOperand().codeGenCondition(compiler, label, false);
-        } else {
-            // Jump if both operands are false
-            Label nextTest = new Label("or_next_" + compiler.getMangerL().newLabel());
-            getLeftOperand().codeGenCondition(compiler, nextTest, true);
-            compiler.addInstruction(new BRA(label));
-            compiler.addLabel(nextTest);
-            getRightOperand().codeGenCondition(compiler, label, true);
-        }
+    protected void branchInstruction(DecacCompiler compiler, Label label) {
+        compiler.addInstruction(new BNE(label));
+    }
+    
+    @Override
+    protected int getShortCircuitValue() {
+        return 1;    
+        
     }
 }

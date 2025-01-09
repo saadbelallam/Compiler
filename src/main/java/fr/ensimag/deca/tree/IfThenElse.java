@@ -33,8 +33,11 @@ public class IfThenElse extends AbstractInst {
         this.thenBranch = thenBranch;
         this.elseBranch = elseBranch;
     }
-    //Getters pour le parser
     
+    public void setElseBranch(ListInst elseBranch) {
+        Validate.notNull(elseBranch);
+        this.elseBranch = elseBranch;
+    }
     // Getter pour la condition
     public AbstractExpr getCondition() {
         return condition;
@@ -60,22 +63,32 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        Label falseLabel = new Label("else_" + compiler.getMangerL().newLabel());
-        Label endLabel = new Label("endif_" + compiler.getMangerL().newLabel());
+        Label endLabel = new Label("endif." + compiler.getMangerL().newLabel());
+        Label nextLabel = new Label("else." + compiler.getMangerL().newLabel());
         
-        // Generate condition code
-        condition.codeGenCondition(compiler, falseLabel,false);
+        // Generate code for condition that branches to else if false
+        condition.codeGenCondition(compiler, nextLabel, false);
         
-        // Generate then branch
+        // Generate then branch code
         thenBranch.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(endLabel));
         
-        // Generate else branch
-        compiler.addLabel(falseLabel);
-        elseBranch.codeGenListInst(compiler);
+        // Generate else branch code
+        compiler.addLabel(nextLabel);
         
+        // Check if elseBranch contains another IfThenElse (else-if case)
+        if (!elseBranch.isEmpty() && elseBranch.getList().get(0) instanceof IfThenElse) {
+            // Let the nested if-then-else handle its own code generation
+            elseBranch.codeGenListInst(compiler);
+        } else {
+            // Regular else branch
+            elseBranch.codeGenListInst(compiler);
+        }
+        
+        // End of if-then-else
         compiler.addLabel(endLabel);
-}
+    }
+
 
     @Override
     public void decompile(IndentPrintStream s) {

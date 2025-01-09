@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+
 
 /**
  *
@@ -12,5 +16,23 @@ public abstract class AbstractOpIneq extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
+
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister register) {
+        GPRegister tempReg = compiler.getMangerR().allocateRegister();
+        try {
+            //System.err.println("I'm AbstractyOpineq and : " + getLeftOperand());
+            //System.err.println("I'm AbstractyOpineq and : " + getRightOperand());
+            getLeftOperand().codeGenVal(compiler, register);
+            getRightOperand().codeGenVal(compiler, tempReg);
+            compiler.addInstruction(new CMP(tempReg, register));
+            generateSpecificComparison(compiler, register);
+        } finally {
+            compiler.getMangerR().freeRegister(tempReg);
+        }
+    }
+    
+
+    protected abstract void generateSpecificComparison(DecacCompiler compiler, GPRegister register);
 
 }

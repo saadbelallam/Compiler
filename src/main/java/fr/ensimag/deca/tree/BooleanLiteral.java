@@ -1,17 +1,18 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
+import java.io.PrintStream;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-
-import java.io.PrintStream;
 
 /**
  *
@@ -62,8 +63,15 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister register) {
         // true <==> 1 et false <==> 0
-        int value = this.getValue() ? 1 : 0;
-        compiler.addInstruction(new LOAD(new ImmediateInteger(value), register));
+        compiler.addInstruction(new LOAD(new ImmediateInteger(this.getValue() ? 1 : 0), register));
+    }
+
+    @Override
+    public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
+        if (value == jump) {
+            // If value matches the jump condition, branch to label
+            compiler.addInstruction(new BRA(label));
+        }
     }
 
 }

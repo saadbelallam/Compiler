@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SGT;
+
 
 /**
  *
@@ -17,5 +21,12 @@ public class Greater extends AbstractOpIneq {
     protected String getOperatorName() {
         return ">";
     }
+
+    @Override
+    protected void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
+        compiler.addInstruction(new SGT(register));
+    }
+
+    
 
 }

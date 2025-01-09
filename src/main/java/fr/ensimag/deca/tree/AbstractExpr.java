@@ -13,9 +13,16 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 /**
  * Expression, i.e. anything that has a value.
  *
@@ -131,31 +138,43 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-    // 1. First get a temporary register for the value
-    GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); // Use R1
-    
-    // 2. Generate code to compute the value into the register
-    this.codeGenVal(compiler, tmpReg);
-    
-    // 3. Print based on type
-    switch (this.getType().toString()) {
-        case "int":
-            compiler.addInstruction(new WINT());
-            break;
-        case "float":
-            compiler.addInstruction(new WFLOAT());
-            break;
-        default:
-            throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
-    }
-    
+         GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        this.codeGenVal(compiler, tmpReg);
+        // 3. Print based on type
+        switch (this.getType().toString()) {
+            case "int":
+                compiler.addInstruction(new WINT());
+                break;
+            case "float":
+                compiler.addInstruction(new WFLOAT());
+                break;
+            case "boolean":
+                // For boolean, we typically print "true" or "false"
+                Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
+                Label falseLabel = new Label("print_false_" + compiler.getMangerL().newLabel());
+                
+                // Compare with 0 (false)
+                compiler.addInstruction(new CMP(0, tmpReg));
+                compiler.addInstruction(new BEQ(falseLabel));
+                
+                compiler.addInstruction(new WSTR(new ImmediateString("true")));
+                compiler.addInstruction(new BRA(endLabel));
+
+                compiler.addLabel(falseLabel);
+                compiler.addInstruction(new WSTR(new ImmediateString("false")));
+                
+                compiler.addLabel(endLabel);
+                break;
+            default:
+                throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
+        }
 }
 
 
-    @Override
+    /* @Override
     protected void codeGenInst(DecacCompiler compiler) {
         throw new UnsupportedOperationException("not yet implemented");
-    }
+    } */
     
     public GPRegister codeGenValue(DecacCompiler compiler){
         throw new UnsupportedOperationException("not yet implemented");
@@ -190,10 +209,38 @@ public abstract class AbstractExpr extends AbstractInst {
     }
      
 
-    public void codeGenCondition(DecacCompiler compiler, Label falseLabel,boolean isWhileOrIf) {
-        throw new UnsupportedOperationException("not yet implemented");
+    public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
+        // Get R1 as temporary register
+        GPRegister reg = compiler.getMangerR().getScratchRegister(1);
+        
+        // Generate code to evaluate expression into reg
+        this.codeGenVal(compiler, reg);
+        
+        // Compare result with 0
+        compiler.addInstruction(new CMP(new ImmediateInteger(0), reg));
+        
+        // Branch based on jump parameter
+        if (jump) {
+            // Branch if not equal to 0 (condition is true)
+            compiler.addInstruction(new BNE(label));
+        } else {
+            // Branch if equal to 0 (condition is false)
+            compiler.addInstruction(new BEQ(label));
+        }
     }
-    
-   
+
+
+    @Override
+    protected void codeGenInst(DecacCompiler compiler){
+        // Get a temporary register
+        GPRegister reg = compiler.getMangerR().allocateRegister();
+        
+        // Generate code for the expression
+        this.codeGenVal(compiler, reg);
+        
+        // Note: The result is computed but discarded since it's not used
+        // This matches the semantics of an expression statement
+    }
+
 
 }
