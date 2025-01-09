@@ -1,0 +1,14 @@
+// Description:
+//    Déclare une variable entière (int), affecte 42 et affiche le résultat.
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a;
+    a = 42;
+    println(a);
+}
