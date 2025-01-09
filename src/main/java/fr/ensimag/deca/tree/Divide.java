@@ -2,10 +2,13 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BLE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 
@@ -28,36 +31,40 @@ public class Divide extends AbstractOpArith {
 
 
    @Override 
-   public void codeGenVal(DecacCompiler compiler, GPRegister register) {
-    // Allocate temporary register for left operand
+public void codeGenVal(DecacCompiler compiler, GPRegister register) {
     GPRegister tempReg = compiler.getMangerR().allocateRegister();
     
     try {
-        // Evaluate left operand (numerator)
+        // Evaluate operands
         getLeftOperand().codeGenVal(compiler, register);
-        
-        // Evaluate right operand (denominator)
         getRightOperand().codeGenVal(compiler, tempReg);
         
-        // Check for division by zero
-        compiler.addInstruction(new CMP(0, tempReg));
         Label divByZeroError = new Label("div_by_zero_error");
-        compiler.addInstruction(new BEQ(divByZeroError));
         
         if (getType().isFloat()) {
-            // Float division
+            
+            float EPSILON = 1e-6f;  
+            compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), compiler.getMangerR().getScratchRegister(0)));
+            compiler.addInstruction(new CMP(compiler.getMangerR().getScratchRegister(0), tempReg));
+            compiler.addInstruction(new BLE(divByZeroError)); 
+        } else {
+            
+            compiler.addInstruction(new CMP(0, tempReg));
+            compiler.addInstruction(new BEQ(divByZeroError));
+        }
+
+        if (getType().isFloat()) {
             compiler.addInstruction(new DIV(tempReg, register));
         } else {
-            // Integer division
             compiler.addInstruction(new QUO(tempReg, register));
         }
         
         // Add error handling label
         compiler.addLabel(divByZeroError);
-        // Here you can add error handling code for division by zero
+        // Add error handling code here
         
     } finally {
-        // Free the temporary register
         compiler.getMangerR().freeRegister(tempReg);
     }
-}}
+}
+}
