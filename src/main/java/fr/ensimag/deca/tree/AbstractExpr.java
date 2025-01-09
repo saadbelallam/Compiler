@@ -211,7 +211,7 @@ public abstract class AbstractExpr extends AbstractInst {
 
     public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
         // Get R1 as temporary register
-        GPRegister reg = compiler.getMangerR().getScratchRegister(1);
+        GPRegister reg = compiler.getMangerR().allocateRegister();
         
         // Generate code to evaluate expression into reg
         this.codeGenVal(compiler, reg);

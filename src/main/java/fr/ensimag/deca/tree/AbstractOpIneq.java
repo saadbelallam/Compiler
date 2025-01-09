@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 
@@ -31,6 +32,15 @@ public abstract class AbstractOpIneq extends AbstractOpCmp {
             compiler.getMangerR().freeRegister(tempReg);
         }
     }
+
+    @Override
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
+       
+        getLeftOperand().codeGenCondition(compiler, falseLabel,jump);
+       
+        getRightOperand().codeGenCondition(compiler, falseLabel,jump);
+    }
+
     
 
     protected abstract void generateSpecificComparison(DecacCompiler compiler, GPRegister register);

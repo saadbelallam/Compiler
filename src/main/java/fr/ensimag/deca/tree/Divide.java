@@ -53,6 +53,7 @@ public void codeGenVal(DecacCompiler compiler, GPRegister register) {
             compiler.addInstruction(new BEQ(divByZeroError));
         }
 
+
         if (getType().isFloat()) {
             compiler.addInstruction(new DIV(tempReg, register));
         } else {

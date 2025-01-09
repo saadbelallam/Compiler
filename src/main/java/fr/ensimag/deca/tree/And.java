@@ -46,6 +46,13 @@ public class And extends AbstractOpBool {
         
         compiler.addLabel(endLabel);}
     
+    @Override
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
+       
+        getLeftOperand().codeGenCondition(compiler, falseLabel,jump);
+       
+        getRightOperand().codeGenCondition(compiler, falseLabel,jump);
+    }
 
     @Override
     protected void branchInstruction(DecacCompiler compiler, Label label) {
