@@ -1,10 +1,12 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.OPP;
 
 /**
  * @author gl24
@@ -33,4 +35,11 @@ public class UnaryMinus extends AbstractUnaryExpr {
         return "-";
     }
 
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg){
+        // calculate the value of the operand
+        getOperand().codeGenVal(compiler, destReg);
+        //calculate the opp
+        compiler.addInstruction(new OPP(destReg,destReg));
+    }
 }

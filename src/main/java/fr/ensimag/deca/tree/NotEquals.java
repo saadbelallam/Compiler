@@ -2,8 +2,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
-import fr.ensimag.ima.pseudocode.instructions.SNE;
 
 /**
  *
@@ -46,29 +47,23 @@ public class NotEquals extends AbstractOpExactCmp {
 
    @Override
     public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
-       
-        getLeftOperand().codeGenCondition(compiler, falseLabel,jump);
-       
-        getRightOperand().codeGenCondition(compiler, falseLabel,jump);
-    }
-
-    @Override
-    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        GPRegister leftReg = compiler.getMangerR().allocateRegister();
         GPRegister rightReg = compiler.getMangerR().allocateRegister();
-        
+       
         try {
-            getLeftOperand().codeGenVal(compiler, destReg);
+            getLeftOperand().codeGenVal(compiler, leftReg);
             getRightOperand().codeGenVal(compiler, rightReg);
             
             
-            compiler.addInstruction(new CMP(rightReg, destReg));
-            // Set result based on comparison (SNE = Set if Not Equal)
-            // l'inverse dyal Equals
-            compiler.addInstruction(new SNE(destReg));
+            compiler.addInstruction(new CMP(rightReg, leftReg));
+            //compiler.addInstruction(jump ? new BNE(falseLabel) : new BEQ(falseLabel));
+            compiler.addInstruction(jump ? new BNE(falseLabel) : new BEQ(falseLabel));
         } finally {
             compiler.getMangerR().freeRegister(rightReg);
-        }
-}
+            compiler.getMangerR().freeRegister(leftReg);
+            
+        }}
+    
 
 
 }

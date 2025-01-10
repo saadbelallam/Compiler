@@ -210,12 +210,15 @@ public abstract class AbstractExpr extends AbstractInst {
      
 
     public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
-        // Get R1 as temporary register
+        
         GPRegister reg = compiler.getMangerR().allocateRegister();
         
-        // Generate code to evaluate expression into reg
-        this.codeGenVal(compiler, reg);
+        // Generate code to evaluate expression into reg (to compute the expression's bool results)
+        this.codeGenVal(compiler, reg); 
         
+
+       // rebuild the way it hadnles codeGenCond its also CodeGenVal ?
+    
         // Compare result with 0
         compiler.addInstruction(new CMP(new ImmediateInteger(0), reg));
         
@@ -226,7 +229,7 @@ public abstract class AbstractExpr extends AbstractInst {
         } else {
             // Branch if equal to 0 (condition is false)
             compiler.addInstruction(new BEQ(label));
-        }
+        }   
     }
 
 

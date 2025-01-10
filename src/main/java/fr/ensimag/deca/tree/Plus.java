@@ -23,36 +23,34 @@ public class Plus extends AbstractOpArith {
 
     
     @Override
-     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         // Case where e2 is undefined and n=MAX
-        if (getRightOperand().getType().isVoid() && compiler.getMangerR().getnbOfUsedRegisiters() == 14)  {
+        if (getRightOperand().getType().isVoid() && compiler.getMangerR().getnbOfUsedRegisiters() == 14) {
             getLeftOperand().codeGenVal(compiler, destReg);
             // Save result
             compiler.addInstruction(new PUSH(destReg));
             // Generate code for right operand
-            GPRegister Rn = Register.getR(14);
+            GPRegister Rn = Register.getR(0);
             getRightOperand().codeGenVal(compiler, Rn);
+            
             // Restore saved value
             compiler.addInstruction(new POP(destReg));
-            // Perform subtraction
+            // Perform addition
             compiler.addInstruction(new ADD(Rn, destReg));
         } 
-        // Normal case
         else {
-            // Generate code for left operand
             getLeftOperand().codeGenVal(compiler, destReg);
-            // Generate code for right operand in next register
+ 
             GPRegister rightReg = compiler.getMangerR().allocateRegister();
             getRightOperand().codeGenVal(compiler, rightReg);
-            // Perform addition
+           
+            // addition
             compiler.addInstruction(new ADD(rightReg, destReg));
-            // Free the right register
             compiler.getMangerR().freeRegister(rightReg);
         }
-    }
+    }}
 
 
 
 
     
-}

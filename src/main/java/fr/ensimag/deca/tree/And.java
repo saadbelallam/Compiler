@@ -4,9 +4,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 /**
  *
@@ -24,35 +22,45 @@ public class And extends AbstractOpBool {
         return "&&";
     }
 
+    @Override
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean isWhileOrIf) {
+        if (isWhileOrIf) {
+        // Generate code for first condition
+        // If first condition is false, jump directly to falseLabel
+        Label endLabel = new Label("E_Fin_" + compiler.getMangerL().newLabel());
+        getLeftOperand().codeGenCondition(compiler, endLabel, false);
+        
+        // If we get here, first condition was true
+        // Evaluate second condition
+        getRightOperand().codeGenCondition(compiler, falseLabel, true);
+        compiler.addLabel(endLabel);
+
+
+        } else {
+
+             getLeftOperand().codeGenCondition(compiler, falseLabel, false);
+            getRightOperand().codeGenCondition(compiler, falseLabel, false);
+        }
+    }
 
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        Label endLabel = new Label("end.bool." + compiler.getMangerL().newLabel());
-        Label shortCircuitLabel = new Label("short_circuit." + compiler.getMangerL().newLabel());
+        Label endLabel = new Label("and_end_" + compiler.getMangerL().newLabel());
         
-        // Evaluate left operand
+        // Evaluate first operand
         getLeftOperand().codeGenVal(compiler, destReg);
         
-        // Branch based on left operand
-        branchInstruction(compiler, shortCircuitLabel);
+        // If first operand is false (0), skip second operand
+        compiler.addInstruction(new CMP(0, destReg));
+        compiler.addInstruction(new BEQ(endLabel));
         
-        // Evaluate right operand if needed
+        // Evaluate second operand if first was true
         getRightOperand().codeGenVal(compiler, destReg);
-        compiler.addInstruction(new BRA(endLabel));
         
-        compiler.addLabel(shortCircuitLabel);
-        // valeur de ShortCiruitValue O pour AND , and 1 for Or  
-        compiler.addInstruction(new LOAD(getShortCircuitValue(), destReg));
-        
-        compiler.addLabel(endLabel);}
-    
-    @Override
-    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
-       
-        getLeftOperand().codeGenCondition(compiler, falseLabel,jump);
-       
-        getRightOperand().codeGenCondition(compiler, falseLabel,jump);
-    }
+        // Result is now in destReg
+        compiler.addLabel(endLabel);
+    }   
+
 
     @Override
     protected void branchInstruction(DecacCompiler compiler, Label label) {
@@ -63,5 +71,6 @@ public class And extends AbstractOpBool {
     @Override
     protected int getShortCircuitValue() {
         return 0; 
-    }
+    } 
+   
 }
