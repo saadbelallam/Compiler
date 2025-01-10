@@ -1,0 +1,38 @@
+// Resultats :
+
+/* 
+
+Condition 1: False
+Condition 2: False
+Condition 3: True
+Simplified Test Completed!
+ 
+ */
+
+{
+    boolean A = true;
+    boolean B = false;
+    boolean C = true;
+    int x = 10;
+    int y = 5;
+
+    if (A && (B || !C)) {
+        println("Condition 1: True");
+    } else {
+        println("Condition 1: False");
+    }
+
+    if ((x > y) && !(B || C)) {
+        println("Condition 2: True");
+    } else {
+        println("Condition 2: False");
+    }
+
+    if (!(x < y) && (A || C)) {
+        println("Condition 3: True");
+    } else {
+        println("Condition 3: False");
+    }
+
+    println("Simplified Test Completed!");
+}
