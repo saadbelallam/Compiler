@@ -1,0 +1,13 @@
+// Description:
+//    Incompatibilité des types dans une opération.
+//
+// Résultats:
+//    Ligne 10 : Addition avec un opérande de type incompatible.
+//
+// Historique:
+//    Créé le 10/01/2025.
+
+{
+    // Doit être refusé.
+    "CR" + 7;
+}
