@@ -112,8 +112,9 @@ public class CompilerOptions {
                         break;
                         }
     
-                    // case "-d":
-                    //     break;
+                    case "-d":
+                        debug++;
+                        break;
                     
                     case "-P":
                         parallel = true;
