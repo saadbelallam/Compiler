@@ -6,7 +6,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.REM;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
  *
@@ -40,20 +42,23 @@ public class Modulo extends AbstractOpArith {
 
      @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        
-        GPRegister rightReg = compiler.getMangerR().allocateRegister();
-        
-        try {
-            
+        //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
+        if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters()){
+            // méthode de l'algorithe voir la classe 
+            // ManagerOfRegisters
+            compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
+            compiler.addInstruction(new REM(Register.getR(0), destReg));
+        }
+        // Cad n < Max
+        else {
+            // Generation du code pour left
             getLeftOperand().codeGenVal(compiler, destReg);
-            
-            // Generate code for right operand into rightReg
+            // Generation du code pour right dans le registre n+1
+            GPRegister rightReg = compiler.getMangerR().allocateRegister();
             getRightOperand().codeGenVal(compiler, rightReg);
-            
-            // Compute remainder directly using REM instruction
+            // Opération 
             compiler.addInstruction(new REM(rightReg, destReg));
-            
-        } finally {
+            // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }
     }

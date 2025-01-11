@@ -54,83 +54,93 @@ public class DecacCompiler {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
-    }
-
-    /**
-     * Source file associated with this compiler instance.
-     */
-    public File getSource() {
-        return source;
-    }
-
-    /**
-     * Compilation options (e.g. when to stop compilation, number of registers
-     * to use, ...).
-     */
-    public CompilerOptions getCompilerOptions() {
-        return compilerOptions;
-    }
-
-    /**
-     * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#add(fr.ensimag.ima.pseudocode.AbstractLine)
-     */
-    public void add(AbstractLine line) {
-        program.add(line);
-    }
-
-    /**
-     * @see fr.ensimag.ima.pseudocode.IMAProgram#addComment(java.lang.String)
-     */
-    public void addComment(String comment) {
-        program.addComment(comment);
-    }
-
-    /**
-     * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addLabel(fr.ensimag.ima.pseudocode.Label)
-     */
-    public void addLabel(Label label) {
-        program.addLabel(label);
-    }
-
-    /**
-     * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction)
-     */
-    public void addInstruction(Instruction instruction) {
-        program.addInstruction(instruction);
-    }
-
-    /**
-     * @see
-     * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
-     * java.lang.String)
-     */
-    public void addInstruction(Instruction instruction, String comment) {
-        program.addInstruction(instruction, comment);
-    }
-    
-    /**
-     * @see 
-     * fr.ensimag.ima.pseudocode.IMAProgram#display()
-     */
-    public String displayIMAProgram() {
-        return program.display();
-    }
-    
-    private final CompilerOptions compilerOptions;
-    private final File source;
-    /**
-     * The main program. Every instruction generated will eventually end up here.
-     */
-    private final IMAProgram program = new IMAProgram();
- 
-
-    private final ManagerOfRegisters registerManger = new ManagerOfRegisters();
+        this.maxRegisters = compilerOptions.getMaxReg() -1 ;
+        this.registerManger = new ManagerOfRegisters(this.maxRegisters);
+                System.out.println(maxRegisters);
+            }
+        
+            /**
+             * Source file associated with this compiler instance.
+             */
+            public File getSource() {
+                return source;
+            }
+        
+            /**
+             * Compilation options (e.g. when to stop compilation, number of registers
+             * to use, ...).
+             */
+            public CompilerOptions getCompilerOptions() {
+                return compilerOptions;
+            }
+        
+            /**
+             * @see
+             * fr.ensimag.ima.pseudocode.IMAProgram#add(fr.ensimag.ima.pseudocode.AbstractLine)
+             */
+            public void add(AbstractLine line) {
+                program.add(line);
+            }
+        
+            /**
+             * @see fr.ensimag.ima.pseudocode.IMAProgram#addComment(java.lang.String)
+             */
+            public void addComment(String comment) {
+                program.addComment(comment);
+            }
+        
+            /**
+             * @see
+             * fr.ensimag.ima.pseudocode.IMAProgram#addLabel(fr.ensimag.ima.pseudocode.Label)
+             */
+            public void addLabel(Label label) {
+                program.addLabel(label);
+            }
+        
+            /**
+             * @see
+             * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction)
+             */
+            public void addInstruction(Instruction instruction) {
+                program.addInstruction(instruction);
+            }
+        
+            /**
+             * @see
+             * fr.ensimag.ima.pseudocode.IMAProgram#addInstruction(fr.ensimag.ima.pseudocode.Instruction,
+             * java.lang.String)
+             */
+            public void addInstruction(Instruction instruction, String comment) {
+                program.addInstruction(instruction, comment);
+            }
+            
+            /**
+             * @see 
+             * fr.ensimag.ima.pseudocode.IMAProgram#display()
+             */
+            public String displayIMAProgram() {
+                return program.display();
+            }
+            
+            private final CompilerOptions compilerOptions;
+            private final File source;
+            /**
+             * The main program. Every instruction generated will eventually end up here.
+             */
+            private final IMAProgram program = new IMAProgram();
+         
+        
+            /**
+             * Gestion des registres
+             */
+            
+            public int maxRegisters;
+            public int getMaxRegisters() {
+                return maxRegisters;
+            }
+            
+    private ManagerOfRegisters registerManger;
     private final ManagerOfMemory memoryManger = new ManagerOfMemory();
-
-
     private final ManagerOfLabel labelManger = new ManagerOfLabel();
 
     public ManagerOfMemory getMangerM(){
@@ -144,6 +154,9 @@ public class DecacCompiler {
     public ManagerOfLabel getMangerL(){
         return labelManger;
     }
+
+    
+
     /** The global environment for types (and the symbolTable) */
     public final SymbolTable symbolTable = new SymbolTable();
     public final EnvironmentType environmentType = new EnvironmentType(this);

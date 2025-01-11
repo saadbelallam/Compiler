@@ -20,91 +20,113 @@ public class CompilerOptions {
     public static final int INFO  = 1;
     public static final int DEBUG = 2;
     public static final int TRACE = 3;
-    public int getDebug() {
-        return debug;
-    }
+    private int maxReg = 16;
+    
+        public int getDebug() {
+            return debug;
+        }
+    
+        public boolean getParallel() {
+            return parallel;
+        }
+    
+        public boolean getPrintBanner() {
+            return printBanner;
+        }
+        
+        public List<File> getSourceFiles() {
+            return Collections.unmodifiableList(sourceFiles);
+        }
+    
+        public boolean getParse() {
+            return parse;
+        }
+    
+        public boolean getVerify() {
+            return verify;
+        }
+    
+        public boolean getNoCheck() {
+            return noCheck;
+        }
 
-    public boolean getParallel() {
-        return parallel;
-    }
-
-    public boolean getPrintBanner() {
-        return printBanner;
-    }
+        public int getMaxReg(){
+            return maxReg;
+        }
     
-    public List<File> getSourceFiles() {
-        return Collections.unmodifiableList(sourceFiles);
-    }
-
-    public boolean getParse() {
-        return parse;
-    }
-
-    public boolean getVerify() {
-        return verify;
-    }
-
-    public boolean getNoCheck() {
-        return noCheck;
-    }
-
-    private int debug = 0;
-    private boolean parallel = false;
-    private boolean printBanner = false;
-    private List<File> sourceFiles = new ArrayList<File>();
-    private boolean parse = false;
-    private boolean verify = false;
-    private boolean noCheck = false;
-
+        private int debug = 0;
+        private boolean parallel = false;
+        private boolean printBanner = false;
+        private List<File> sourceFiles = new ArrayList<File>();
+        private boolean parse = false;
+        private boolean verify = false;
+        private boolean noCheck = false;
     
-    public void parseArgs(String[] args) throws CLIException {
-        Logger logger = Logger.getRootLogger();
+        
+        public void parseArgs(String[] args) throws CLIException {
+            Logger logger = Logger.getRootLogger();
+        
+            for (int i = 0; i < args.length; i++) {
+                switch (args[i]) {
+                    case "-b":
+                        if (args.length > 1) {
+                            throw new CLIException("Option -b incompatible avec d'autres options");
+                        }
+                        printBanner = true;
+                        break;
+        
+                    case "-p":
+                        if (this.verify) {
+                            throw new CLIException("Option -p incompatible avec -v");
+                        }
+                        this.parse = true;
+                        break;
+        
+                    case "-v":
+                        if (this.parse) {
+                            throw new CLIException("Option -v incompatible avec -p");
+                        }
+                        this.verify = true;
+                        break;
+        
+                    case "-n":
+                        noCheck = true;
+                        break;
+                    
+                        //-r X (registers) : limite les registres banalisés disponibles à R0 ... R{X-1}, avec 4 <= X <= 16
     
-        for (int i = 0; i < args.length; i++) {
-            switch (args[i]) {
-                case "-b":
-                    if (args.length > 1) {
-                        throw new CLIException("Option -b incompatible avec d'autres options");
-                    }
-                    printBanner = true;
-                    break;
+                    case "-r":
+                        if (args[i].equals("-r")) {
+                            if (i + 1 < args.length) {
+                                try {
+                                    maxReg = Integer.parseInt(args[++i]);
+                                if (maxReg < 4 || maxReg > 16) {
+                                    throw new CLIException("Valeur pour -r invalide : " + maxReg);
+                                }
+                            } catch (NumberFormatException e) {
+                                throw new CLIException("Valeur pour -r invalide : " + args[i]);
+                            }
+                        } else {
+                            throw new CLIException("Option -r nécessite une valeur.");
+                        }
+                        break;
+                        }
     
-                case "-p":
-                    if (this.verify) {
-                        throw new CLIException("Option -p incompatible avec -v");
-                    }
-                    this.parse = true;
-                    break;
-    
-                case "-v":
-                    if (this.parse) {
-                        throw new CLIException("Option -v incompatible avec -p");
-                    }
-                    this.verify = true;
-                    break;
-    
-                case "-n":
-                    noCheck = true;
-                    break;
-    
-                // case "-r":
-                //     break;
-    
-                // case "-d":
-                //     break;
-    
-                case "-P":
-                    parallel = true;
-                    break;
-    
-                default:
-                    // Traite les fichiers source
-                    File sourceFile = new File(args[i]);
-                    if (!sourceFile.exists() || !sourceFile.isFile()) {
-                        throw new CLIException("Fichier source introuvable ou invalide : " + args[i]);
-                    }
-                    sourceFiles.add(sourceFile);
-                    break;
+                    // case "-d":
+                    //     break;
+                    
+                    case "-P":
+                        parallel = true;
+                        break;
+                    
+                    default:
+                        // Traite les fichiers source
+                        File sourceFile = new File(args[i]);
+                        if (!sourceFile.exists() || !sourceFile.isFile()) {
+                            throw new CLIException("Fichier source introuvable ou invalide : " + args[i]);
+                        }
+                        sourceFiles.add(sourceFile);
+                        break;
             }
         }
 
