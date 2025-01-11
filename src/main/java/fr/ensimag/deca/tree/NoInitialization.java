@@ -60,4 +60,10 @@ public class NoInitialization extends AbstractInitialization {
         compiler.addInstruction(new STORE(AllocatedR,regOf));
     }
 
+    @Override
+    public Type getType() {
+        return null;
+    }
+
+
 }

@@ -3,6 +3,8 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.SEQ;
 /**
@@ -43,7 +45,7 @@ public class Equals extends AbstractOpExactCmp {
         compiler.getMangerR().freeRegister(rightReg);} */
     
 
-    @Override
+    /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
        
         GPRegister rightReg = compiler.getMangerR().allocateRegister();
@@ -58,16 +60,53 @@ public class Equals extends AbstractOpExactCmp {
         } finally {
             compiler.getMangerR().freeRegister(rightReg);
         }
-    }
-
+    } */
 
 
     @Override
     public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
+        GPRegister leftReg = compiler.getMangerR().allocateRegister();
+        GPRegister rightReg = compiler.getMangerR().allocateRegister();
+        
+        try {
+            // Generate code for operands
+            getLeftOperand().codeGenVal(compiler, leftReg);
+            getRightOperand().codeGenVal(compiler, rightReg);
+            
+            // Compare and branch if not equal
+            compiler.addInstruction(new CMP(rightReg, leftReg));
+            compiler.addInstruction(jump ? new BEQ(falseLabel) : new BNE(falseLabel));
+        } finally {
+            compiler.getMangerR().freeRegister(leftReg);
+            compiler.getMangerR().freeRegister(rightReg);
+        }
+    }
+    
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        GPRegister rightReg = compiler.getMangerR().allocateRegister();
+        
+        try {
+            // Generate code for operands
+            getLeftOperand().codeGenVal(compiler, destReg);
+            getRightOperand().codeGenVal(compiler, rightReg);
+            
+            // Compare values
+            compiler.addInstruction(new CMP(rightReg, destReg));
+            compiler.addInstruction(new SEQ(destReg));  // Set if Equal
+        } finally {
+            compiler.getMangerR().freeRegister(rightReg);
+        }
+    }
+
+
+
+   /*  @Override
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
         getLeftOperand().codeGenCondition(compiler, falseLabel,jump);
         getRightOperand().codeGenCondition(compiler, falseLabel,jump);
         
-    }
+    } */
     }
 
     

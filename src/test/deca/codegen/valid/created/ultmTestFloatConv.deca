@@ -1,0 +1,60 @@
+// Test program for float conversions
+{
+    // All variable declarations at the top
+    float f1;
+    float f2;
+    float f3;
+    float f4;
+    float f5;
+    float f6;
+    float f7;
+    float f8;
+    float f9;
+    int x;
+
+    // Test 1: Direct initialization of float with int
+    f1 = 5;
+    println("Test 1 - Float from int literal: ", f1);
+    
+    // Test 2: Initialization with arithmetic
+    f2 = 10 + 3;
+    println("Test 2 - Float from int arithmetic: ", f2);
+    
+    // Test 3: Mixed float and int operations
+    f3 = 7.5;
+    f4 = f3 + 2;
+    println("Test 3 - Mixed addition: ", f4);
+    
+    // Test 4: Multiple conversions
+    f5 = 3 * 2 + 1;
+    println("Test 4 - Multiple int operations: ", f5);
+    
+    // Test 5: Division with ints to float
+    f6 = 5 / 2;
+    println("Test 5 - Int division to float: ", f6);
+    
+    // Test 6: Complex expression
+    x = 3;
+    f7 = x * 2 + 1.5;
+    println("Test 6 - Complex expression: ", f7);
+    
+    // Test 7: Assignment
+    f8 = 42;
+    println("Test 7 - Assignment: ", f8);
+    
+    // Test 8: Chained operations
+    f9 = 1 + 2 + 3 + 4.5;
+    println("Test 8 - Chained operations: ", f9);
+    
+    // Print newline for readability
+    println("");
+    println("Expected results:");
+    println("Test 1 should be: 5.0");
+    println("Test 2 should be: 13.0");
+    println("Test 3 should be: 9.5");
+    println("Test 4 should be: 7.0");
+    println("Test 5 should be: 2.5");
+    println("Test 6 should be: 7.5");
+    println("Test 7 should be: 42.0");
+    println("Test 8 should be: 10.5");
+}

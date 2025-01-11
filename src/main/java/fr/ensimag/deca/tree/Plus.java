@@ -41,6 +41,6 @@ public class Plus extends AbstractOpArith {
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }
-    }
-    
+     }
 }
+    

@@ -55,6 +55,7 @@ public class Assign extends AbstractBinaryExpr {
             AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
             DAddr addr = ident.getExpDefinition().getOperand();
             compiler.addInstruction(new STORE(reg, addr));
+            compiler.getMangerR().freeRegister(reg);
         } else {
             throw new UnsupportedOperationException("Left operand must be an identifier");
         }

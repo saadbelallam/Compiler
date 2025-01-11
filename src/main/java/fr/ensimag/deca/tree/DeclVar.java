@@ -16,6 +16,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * @author gl24
@@ -73,18 +74,25 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void codeGenVar(DecacCompiler compiler) {
         RegisterOffset address = compiler.getMangerM().allocateVariable();
-        
-        if (varName.getExpDefinition() == null) {
-            VariableDefinition varDef = new VariableDefinition(type.getType(), getLocation());
-            varName.setDefinition(varDef);
-        }   
         varName.getExpDefinition().setOperand(address);
         
-        // Use allocated register instead of scratch
-        GPRegister reg = compiler.getMangerR().allocateRegister();
-        initialization.codeGenInit(compiler, reg, address);
-        compiler.getMangerR().freeRegister(reg);
-    }
+        if (initialization instanceof Initialization) {
+            AbstractExpr initExpr = ((Initialization) initialization).getExpression();
+            
+            // Add explicit conversion if initializing float with int
+            if (type.getType().isFloat() && initExpr.getType().isInt()) {
+                initExpr = new ConvFloat(initExpr);
+            }
+            
+            GPRegister reg = compiler.getMangerR().allocateRegister();
+            try {
+                // Use the potentially converted expression
+                initExpr.codeGenVal(compiler, reg);
+                compiler.addInstruction(new STORE(reg, address));
+            } finally {
+                compiler.getMangerR().freeRegister(reg);
+            }
+        }}
 
 
 

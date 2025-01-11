@@ -30,6 +30,6 @@ public abstract class AbstractInitialization extends Tree {
 
     protected abstract void codeGenInit(DecacCompiler compiler,GPRegister register, DAddr adress);
 
-   
+    public abstract Type getType();
 
 }

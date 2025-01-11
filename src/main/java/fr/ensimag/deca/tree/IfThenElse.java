@@ -69,21 +69,27 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        Label endLabel = new Label("endif." + compiler.getMangerL().newLabel());
-        Label nextLabel = new Label("else." + compiler.getMangerL().newLabel());
+        // Create labels for else and end blocks
+        Label elseLabel = new Label("E_Sinon." + compiler.getMangerL().newLabel());
+        Label endLabel = new Label("E_Fin." + compiler.getMangerL().newLabel());
         
-        // Generate code for condition that branches to else if false
-        condition.codeGenCondition(compiler, nextLabel, false);
-
-        // Generate then branch code
+        // Generate code for condition with false branch to else label
+        // Using faux (false) as specified in the rules
+        condition.codeGenCondition(compiler, elseLabel, false);
+        
+        // Generate code for then branch
         thenBranch.codeGenListInst(compiler);
+        
+        // Skip else branch when then branch completes
         compiler.addInstruction(new BRA(endLabel));
-
-        // Generate else branch code
-        compiler.addLabel(nextLabel);
-        elseBranch.codeGenListInst(compiler);
-
-        // End of if-then-else
+        
+        // Generate else label and branch
+        compiler.addLabel(elseLabel);
+        if (elseBranch != null) {
+            elseBranch.codeGenListInst(compiler);
+        }
+        
+        // End label
         compiler.addLabel(endLabel);
     }
 

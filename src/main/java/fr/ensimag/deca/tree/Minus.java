@@ -2,9 +2,6 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 
@@ -23,7 +20,7 @@ public class Minus extends AbstractOpArith {
         return "-";
     }
 
-    @Override
+   @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
         if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters()-1){
@@ -36,15 +33,14 @@ public class Minus extends AbstractOpArith {
         else {
             // Generation du code pour left
             getLeftOperand().codeGenVal(compiler, destReg);
-            // Generation du code pour right dans le registre n+1
+            // Generate code for right operand in next register
             GPRegister rightReg = compiler.getMangerR().allocateRegister();
             getRightOperand().codeGenVal(compiler, rightReg);
-            // Opération 
+            // Perform subtraction
             compiler.addInstruction(new SUB(rightReg, destReg));
-            // libération du rightReg
+            // Free the right register
             compiler.getMangerR().freeRegister(rightReg);
         }
     }
-
     
 }

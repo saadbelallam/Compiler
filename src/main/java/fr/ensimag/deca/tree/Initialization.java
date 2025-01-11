@@ -61,13 +61,26 @@ public class Initialization extends AbstractInitialization {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         expression.prettyPrint(s, prefix, true);
     }
+    
+    @Override
+    public Type getType() {
+        return expression.getType();
+    }
 
     @Override
     public void codeGenInit(DecacCompiler compiler, GPRegister reg, DAddr address) {
-       
         if (expression != null) {
-            expression.codeGenVal(compiler,reg);
+            // Check if we need float conversion
+            if (expression.getType().isInt() && getType().isFloat()) {
+                System.err.println("I'm here");
+                // Create a ConvFloat wrapper around the expression
+                ConvFloat convFloat = new ConvFloat(expression);
+                convFloat.codeGenVal(compiler, reg);
+            } else {
+                expression.codeGenVal(compiler, reg);
+            }
             compiler.addInstruction(new STORE(reg, address));
         }
-    }}
+    }
+}
    

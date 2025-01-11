@@ -35,11 +35,12 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        // First generate code for the operand (int value)
-        getOperand().codeGenVal(compiler, destReg);
         
-        // Convert the integer in destReg to float using FLOAT instruction
-        compiler.addInstruction(new FLOAT(destReg, destReg));
-    }
+       
+            getOperand().codeGenVal(compiler, destReg);
+            compiler.addInstruction(new FLOAT(destReg, destReg));
+    
+}
+
 
 }
