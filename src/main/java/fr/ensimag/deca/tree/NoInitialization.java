@@ -53,12 +53,6 @@ public class NoInitialization extends AbstractInitialization {
         // leaf node => nothing to do
     }
 
-    @Override
-    protected  void codeGenInit(DecacCompiler compiler,GPRegister AllocatedR ,DAddr regOf){
-        
-        compiler.addInstruction(new LOAD(new ImmediateInteger(0), AllocatedR));
-        compiler.addInstruction(new STORE(AllocatedR,regOf));
-    }
 
     @Override
     public Type getType() {

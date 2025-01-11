@@ -5,7 +5,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 /**
  *
@@ -33,9 +36,26 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
         return type1;
     }
 
-
-    protected abstract void branchInstruction(DecacCompiler compiler, Label label);
-    
-    protected abstract int getShortCircuitValue();
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        // Create labels for control flow
+        Label falseLabel = new Label("bool_false_" + compiler.getMangerL().newLabel());
+        Label endLabel = new Label("bool_end_" + compiler.getMangerL().newLabel());
+        
+        // Load true (1) by default
+        compiler.addInstruction(new LOAD(1, destReg));
+        
+        // Use codeGenCondition - if condition is false, jump to falseLabel
+        codeGenCondition(compiler, falseLabel, false);
+        
+        // Skip the false case if condition was true
+        compiler.addInstruction(new BRA(endLabel));
+        
+        // False case - load 0
+        compiler.addLabel(falseLabel);
+        compiler.addInstruction(new LOAD(0, destReg));
+        
+        compiler.addLabel(endLabel);
+    }
     
 }

@@ -44,7 +44,7 @@ public class Main extends AbstractMain {
         // A FAIRE: traiter les déclarations de variables.
         // faut calculer le nombre d'emplacement mémoire
         //on met 20 provisoirement
-        compiler.addInstruction(new TSTO(new ImmediateInteger(20)));;
+        compiler.addInstruction(new TSTO(new ImmediateInteger(20)));
         compiler.addInstruction(new ADDSP(20));
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenListVar(compiler);
