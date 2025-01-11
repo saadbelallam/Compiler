@@ -4,19 +4,27 @@ import java.util.Stack;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.tree.AbstractExpr;
 
 public class ManagerOfRegisters {
     private static final int FIRST_REG = 2;
-    private static final int LAST_REG = 15;
+    private int maxReg;
     private Stack<GPRegister> registerStack;
     private boolean[] usedRegisters;
     private int nbOfUsedRegisiters = 0;
+    
 
-    public ManagerOfRegisters() {
+    public ManagerOfRegisters(int maxReg) {
+        this.maxReg = maxReg;
+        //System.out.println("Manager: "+this.maxReg);
         this.registerStack = new Stack<>();
-        this.usedRegisters = new boolean[LAST_REG + 1];
+        this.usedRegisters = new boolean[maxReg + 1];
         // Initialize register stack with available registers (R15 to R2)
-        for (int i = LAST_REG; i >= FIRST_REG; i--) {
+        for (int i = maxReg; i >= FIRST_REG; i--) {
             registerStack.push(Register.getR(i));
         }
     }
@@ -33,7 +41,7 @@ public class ManagerOfRegisters {
 
     public void freeRegister(GPRegister register) {
         int regNum = register.getNumber();
-        if (regNum >= FIRST_REG && regNum <= LAST_REG && usedRegisters[regNum]) {
+        if (regNum >= FIRST_REG && regNum <= maxReg && usedRegisters[regNum]) {
             usedRegisters[regNum] = false;
             nbOfUsedRegisiters--;
             registerStack.push(register);
@@ -53,6 +61,19 @@ public class ManagerOfRegisters {
 
     public int getnbOfUsedRegisiters(){
         return nbOfUsedRegisiters;
+    }
+
+    public void MaxRegCase(DecacCompiler compiler,AbstractExpr leftOperand, AbstractExpr rightOperand, GPRegister destReg) {
+        //<codeExp( e1 , n) >
+        leftOperand.codeGenVal(compiler, destReg);
+        // PUSH Rn ; sauvegarde
+        compiler.addInstruction(new PUSH(destReg));
+        //<codeExp( e2 , n) >
+        rightOperand.codeGenVal(compiler,destReg);
+        //LOAD Rn, R0
+        compiler.addInstruction(new LOAD(destReg,Register.getR(0)));
+        // POP Rn ; restauration
+        compiler.addInstruction(new POP(destReg));
     }
 
 }

@@ -9,6 +9,9 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
 /**
  * @author gl24
  * @date 01/01/2025
@@ -39,6 +42,10 @@ public class Main extends AbstractMain {
     @Override
     protected void codeGenMain(DecacCompiler compiler) {
         // A FAIRE: traiter les déclarations de variables.
+        // faut calculer le nombre d'emplacement mémoire
+        //on met 20 provisoirement
+        compiler.addInstruction(new TSTO(new ImmediateInteger(20)));;
+        compiler.addInstruction(new ADDSP(20));
         compiler.addComment("Beginning of main instructions:");
         declVariables.codeGenListVar(compiler);
         insts.codeGenListInst(compiler);

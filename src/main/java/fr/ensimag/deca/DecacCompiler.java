@@ -54,10 +54,13 @@ public class DecacCompiler {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+        if(compilerOptions != null){
         this.maxRegisters = compilerOptions.getMaxReg() -1 ;
         this.registerManger = new ManagerOfRegisters(this.maxRegisters);
-                System.out.println(maxRegisters);
-            }
+        }else{
+            System.out.println("compilerOptions est null");
+        }
+        }
         
             /**
              * Source file associated with this compiler instance.
@@ -288,27 +291,5 @@ public class DecacCompiler {
         parser.setDecacCompiler(this);
         return parser.parseProgramAndManageErrors(err);
     }
-    
-
-    //initialisation des managers
-    private RegisterManager registerManager;
-    private StackManager stackManager;
-
-    public RegisterManager getRegisterManager() {
-        return registerManager;
-    }
-
-    public StackManager getStackManager() {
-        return stackManager;
-    }
-
-    public void initializeManagers(int maxStackSize) {
-    if (registerManager == null) {
-        registerManager = new RegisterManager(15);
-    }
-    if (stackManager == null) {
-        stackManager = new StackManager(maxStackSize);
-    }
-}
 
 }

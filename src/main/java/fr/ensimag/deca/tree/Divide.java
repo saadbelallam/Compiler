@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -28,41 +29,59 @@ public class Divide extends AbstractOpArith {
 
 
    @Override 
-public void codeGenVal(DecacCompiler compiler, GPRegister register) {
-    GPRegister tempReg = compiler.getMangerR().allocateRegister();
-    
-    try {
-        // Evaluate operands
-        getLeftOperand().codeGenVal(compiler, register);
-        getRightOperand().codeGenVal(compiler, tempReg);
-        // I commented it out because it caused a multiple definition error.
-        //Label divByZeroError = new Label("div_by_zero_error");
-        
+    public void codeGenVal(DecacCompiler compiler, GPRegister register) {
+        // Vérification si on est dans le cas n = MAX
+    if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters() - 1) {
+        // Cas où les registres sont saturés
+        compiler.getMangerR().MaxRegCase(compiler, getLeftOperand(), getRightOperand(), register);
+
+        // Vérification de la division par zéro (float ou int)
         if (getType().isFloat()) {
-            
-            float EPSILON = 1e-6f;  
-            compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), compiler.getMangerR().getScratchRegister(0)));
-            compiler.addInstruction(new CMP(compiler.getMangerR().getScratchRegister(0), tempReg));
-            //compiler.addInstruction(new BLE(divByZeroError)); 
+            float EPSILON = 1e-6f;
+            compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), Register.getR(1)));
+            compiler.addInstruction(new CMP(Register.getR(1), Register.getR(0)));
+            //manque label
         } else {
-            
-            compiler.addInstruction(new CMP(0, tempReg));
-            //compiler.addInstruction(new BEQ(divByZeroError));
+            compiler.addInstruction(new CMP(0, Register.getR(0)));
+            // Manque label
         }
 
-
+        //la division
         if (getType().isFloat()) {
-            compiler.addInstruction(new DIV(tempReg, register));
+            compiler.addInstruction(new DIV(Register.getR(0), register));
         } else {
-            compiler.addInstruction(new QUO(tempReg, register));
+            compiler.addInstruction(new QUO(Register.getR(0), register));
         }
-        
-        // Add error handling label
-        //compiler.addLabel(divByZeroError);
-        // Add error handling code here
-        
-    } finally {
-        compiler.getMangerR().freeRegister(tempReg);
+    } else {
+        // Cas normal
+        GPRegister tempReg = compiler.getMangerR().allocateRegister();
+
+        try {
+            // Evaluation de right et left
+            getLeftOperand().codeGenVal(compiler, register);
+            getRightOperand().codeGenVal(compiler, tempReg);
+
+            // Vérification de la division par zéro (float ou int)
+            if (getType().isFloat()) {
+                float EPSILON = 1e-6f;
+                compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), compiler.getMangerR().getScratchRegister(0)));
+                compiler.addInstruction(new CMP(compiler.getMangerR().getScratchRegister(0), tempReg));
+                // Manque label
+            } else {
+                compiler.addInstruction(new CMP(0, tempReg));
+                // Manque label
+            }
+
+            //la division
+            if (getType().isFloat()) {
+                compiler.addInstruction(new DIV(tempReg, register));
+            } else {
+                compiler.addInstruction(new QUO(tempReg, register));
+            }
+        } finally {
+            // Libération du registre temporaire
+            compiler.getMangerR().freeRegister(tempReg);
+        }
     }
-}
+    }
 }

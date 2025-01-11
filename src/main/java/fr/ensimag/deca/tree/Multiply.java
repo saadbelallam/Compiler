@@ -27,10 +27,10 @@ public class Multiply extends AbstractOpArith {
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
-        System.out.println("MaxRegisters()" + compiler.getMaxRegisters());
-        System.out.println("nbOfUsedRegisiters" + compiler.getMangerR().getnbOfUsedRegisiters());
+        //System.out.println("MaxRegisters()" + compiler.getMaxRegisters());
+        //System.out.println("nbOfUsedRegisiters" + compiler.getMangerR().getnbOfUsedRegisiters());
         if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters() - 1){
-            System.out.print("entré mult:" + destReg);
+            //System.out.print("entré mult:" + destReg);
             // méthode de l'algorithe voir la classe 
             // ManagerOfRegisters
             compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
@@ -38,7 +38,7 @@ public class Multiply extends AbstractOpArith {
         }
         // Cad n < Max
         else {
-            System.out.print("entré else mult:" + destReg);
+            //System.out.print("entré else mult:" + destReg);
             // Generation du code pour left
             getLeftOperand().codeGenVal(compiler, destReg);
             // Generation du code pour right dans le registre n+1
