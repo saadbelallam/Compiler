@@ -1,0 +1,9 @@
+// Description:
+//    Teste la couverture de RULE_main et RULE_block avec un bloc vide.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    // Bloc vide pour tester RULE_main et RULE_block
+}

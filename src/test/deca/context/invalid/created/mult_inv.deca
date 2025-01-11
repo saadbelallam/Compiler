@@ -1,0 +1,17 @@
+// Description:
+//    Incompatibilité des types dans une opération.
+//
+// Résultats:
+//    Ligne 10 : Multiplication avec un opérande de type incompatible.
+//
+// Historique:
+//    Créé le 10/01/2025.
+
+{
+    int x;
+    float y;
+    x = 5;
+
+    // Doit être refusé.
+    y = x * "sept";
+}

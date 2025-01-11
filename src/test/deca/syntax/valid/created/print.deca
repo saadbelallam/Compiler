@@ -1,0 +1,12 @@
+// Description:
+//    Teste les différents prints.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    print("Hello, Deca!");         // Instruction PRINT
+    println("New Line");           // Instruction PRINTLN
+    printx("Hexadecimal Test");    // Instruction PRINTX
+    printlnx("Hexadecimal Line");  // Instruction PRINTLNX
+}

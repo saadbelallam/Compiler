@@ -1,0 +1,10 @@
+// Description:
+//    Teste la couverture de RULE_decl_var_set et RULE_list_decl.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    int a = 10, b = 20, c; // Déclaration valide avec une variable non initialisée
+    float x = 3.14, y =;   // Erreur : déclaration incomplète
+}

@@ -104,6 +104,12 @@ STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 COMMENT :  ('//' .*? '\n' | '/*' .*? '*/' ) -> skip;
 
+// include
+fragment FILENAME : (LETTER | DIGIT | DOT | MINUS | '_' )+;
+INCLUDE : '#include' (' ')* '"' FILENAME '"' {
+   doInclude(getText());
+};
+
 
 // Ignore spaces, tabs, newlines and whitespaces
 WS : (' '|'\t'|'\r'|'\n') -> skip;

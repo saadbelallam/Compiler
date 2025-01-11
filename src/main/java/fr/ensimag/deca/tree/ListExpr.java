@@ -21,6 +21,9 @@ public class ListExpr extends TreeList<AbstractExpr> {
         // throw new UnsupportedOperationException("Not yet implemented");
         for (AbstractExpr expr : getList()) {
             expr.decompile(s);
+            if (getList().indexOf(expr) != getList().size() - 1) {
+                s.print(", ");
+            }
         }
     }
 }

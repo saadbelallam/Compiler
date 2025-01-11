@@ -1,0 +1,17 @@
+// Description:
+//    Teste plusieurs alternatives pour RULE_inst.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    if (true) { 
+        print("Condition true");
+    } else {
+        println("Condition false");
+    }
+
+    while (false) {
+        println("This won't execute");
+    }
+}
