@@ -1,0 +1,108 @@
+; start main program
+; Main program
+	TSTO #20
+	ADDSP #20
+; Beginning of main instructions:
+	LOAD #5, R2
+	FLOAT R2, R2
+	STORE R2, 1(GB)
+	WSTR "Test 1 - Float from int literal: "
+	LOAD 1(GB), R1
+	WFLOAT
+	WNL
+	LOAD #10, R2
+	LOAD #3, R3
+	ADD R3, R2
+	FLOAT R2, R2
+	STORE R2, 2(GB)
+	WSTR "Test 2 - Float from int arithmetic: "
+	LOAD 2(GB), R1
+	WFLOAT
+	WNL
+	LOAD #0x1.ep2, R2
+	STORE R2, 3(GB)
+	LOAD 3(GB), R2
+	LOAD #2, R3
+	FLOAT R3, R3
+	ADD R3, R2
+	STORE R2, 4(GB)
+	WSTR "Test 3 - Mixed addition: "
+	LOAD 4(GB), R1
+	WFLOAT
+	WNL
+	LOAD #3, R2
+	LOAD #2, R3
+	MUL R3, R2
+	LOAD #1, R3
+	ADD R3, R2
+	FLOAT R2, R2
+	STORE R2, 5(GB)
+	WSTR "Test 4 - Multiple int operations: "
+	LOAD 5(GB), R1
+	WFLOAT
+	WNL
+	LOAD #5, R2
+	LOAD #2, R3
+	CMP #0, R3
+	QUO R3, R2
+	FLOAT R2, R2
+	STORE R2, 6(GB)
+	WSTR "Test 5 - Int division to float: "
+	LOAD 6(GB), R1
+	WFLOAT
+	WNL
+	LOAD #3, R2
+	STORE R2, 10(GB)
+	LOAD 10(GB), R2
+	LOAD #2, R3
+	MUL R3, R2
+	FLOAT R2, R2
+	LOAD #0x1.8p0, R3
+	ADD R3, R2
+	STORE R2, 7(GB)
+	WSTR "Test 6 - Complex expression: "
+	LOAD 7(GB), R1
+	WFLOAT
+	WNL
+	LOAD #42, R2
+	FLOAT R2, R2
+	STORE R2, 8(GB)
+	WSTR "Test 7 - Assignment: "
+	LOAD 8(GB), R1
+	WFLOAT
+	WNL
+	LOAD #1, R2
+	LOAD #2, R3
+	ADD R3, R2
+	LOAD #3, R3
+	ADD R3, R2
+	FLOAT R2, R2
+	LOAD #0x1.2p2, R3
+	ADD R3, R2
+	STORE R2, 9(GB)
+	WSTR "Test 8 - Chained operations: "
+	LOAD 9(GB), R1
+	WFLOAT
+	WNL
+	WSTR ""
+	WNL
+	WSTR "Expected results:"
+	WNL
+	WSTR "Test 1 should be: 5.0"
+	WNL
+	WSTR "Test 2 should be: 13.0"
+	WNL
+	WSTR "Test 3 should be: 9.5"
+	WNL
+	WSTR "Test 4 should be: 7.0"
+	WNL
+	WSTR "Test 5 should be: 2.5"
+	WNL
+	WSTR "Test 6 should be: 7.5"
+	WNL
+	WSTR "Test 7 should be: 42.0"
+	WNL
+	WSTR "Test 8 should be: 10.5"
+	WNL
+	HALT
+; end main program

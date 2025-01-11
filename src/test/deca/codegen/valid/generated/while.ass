@@ -1,0 +1,25 @@
+; start main program
+; Main program
+	TSTO #20
+	ADDSP #20
+; Beginning of main instructions:
+	LOAD #0, R2
+	STORE R2, 1(GB)
+	BRA while_test_0
+while_body_1:
+	LOAD 1(GB), R1
+	WINT
+	WNL
+	LOAD 1(GB), R2
+	LOAD #1, R3
+	ADD R3, R2
+	STORE R2, 1(GB)
+while_test_0:
+	LOAD 1(GB), R2
+	LOAD #11, R3
+	CMP R3, R2
+	BGT while_end_2
+	BRA while_body_1
+while_end_2:
+	HALT
+; end main program
