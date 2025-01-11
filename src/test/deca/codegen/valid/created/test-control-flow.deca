@@ -1,0 +1,103 @@
+// Results :
+//Test 1.1 passed
+//x:4 y:10 - Condition true
+//x:3 y:9 - Condition true
+//Counter should be 5:5
+//Test 3 passed
+//Test 4.1
+//Counter after break:6
+//Nested loops total should be 9:9
+
+{
+    // All variable declarations at the top
+    boolean a;
+    boolean b;
+    boolean c;
+    boolean d;
+    boolean result;
+    boolean shouldBreak;
+    int x;
+    int y;
+    int counter;
+    int total;
+    
+    // Initialize variables
+    a = true;
+    b = false;
+    x = 5;
+    y = 10;
+    
+    // Test 1: Nested if-then-else with boolean expressions
+    if (a && !b) {
+        if (x < y && y > 0) {
+            println("Test 1.1 passed");
+        } else {
+            println("Test 1.1 failed");
+        }
+    } else if (x > y || b) {
+        println("Test 1.2 failed");
+    }
+
+    // Test 2: While loop with compound conditions
+    counter = 0;
+    while (x > 0 && y > 5) {
+        counter = counter + 1;
+        x = x - 1;
+        
+        // Test assignment of boolean expressions
+        result = (x >= 3) && (y > 7);
+        if (result) {
+            println("x:", x, " y:", y, " - Condition true");
+        }
+        
+        y = y - 1;
+    }
+    println("Counter should be 5:", counter);
+
+    // Test 3: Short-circuit evaluation
+    x = 1;
+    if (x == 0 && y/x == 0) { // Should not cause division by zero
+        println("Test 3 failed");
+    } else {
+        println("Test 3 passed");
+    }
+
+    // Test 4: Complex boolean expressions
+    c = true;
+    d = false;
+    if ((a && b) || (c && !d)) {
+        if (x <= y && y != 10) {
+            println("Test 4.1");
+        } else if (x >= 0 || y <= 20) {
+            println("Test 4.2");
+        }
+    }
+
+    // Test 5: While with break condition
+    x = 10;
+    counter = 0;
+    while (x > 0) {
+        x = x - 1;
+        counter = counter + 1;
+        
+        shouldBreak = x < 5 && counter > 3;
+        if (shouldBreak) {
+            x = 0; // Simulate break
+        }
+    }
+    println("Counter after break: ", counter);
+
+    // Test 6: Nested while loops
+    x = 3;
+    y = 3;
+    total = 0;
+    while (x > 0) {
+        y = 3;
+        while (y > 0) {
+            total = total + 1;
+            y = y - 1;
+        }
+        x = x - 1;
+    }
+    println("Nested loops total should be 9: ", total);
+}
