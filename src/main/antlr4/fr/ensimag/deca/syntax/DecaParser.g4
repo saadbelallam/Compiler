@@ -453,12 +453,20 @@ type returns[AbstractIdentifier tree]
 
 literal returns[AbstractExpr tree]
     : INT {
-        $tree = new IntLiteral(Integer.parseInt($INT.text));
-        setLocation($tree, $INT);
+        try {
+            $tree = new IntLiteral(Integer.parseInt($INT.text));
+            setLocation($tree, $INT);
+        } catch (NumberFormatException e) {
+            throw new DecaNumberFormatException(this, $ctx);
+        }
         }
     | fd=FLOAT {
-        $tree = new FloatLiteral(Float.parseFloat($fd.text));
-        setLocation($tree, $fd);
+        try {
+            $tree = new FloatLiteral(Float.parseFloat($fd.text));
+            setLocation($tree, $fd);
+        } catch (IllegalArgumentException e) {
+            throw new DecaNumberFormatException(this, $ctx);
+        }
         }
     | STRING {
         String text = $STRING.text.substring(1, $STRING.text.length() - 1);
