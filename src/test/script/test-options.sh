@@ -28,6 +28,21 @@ fi
 echo -e "${YELLOW}--- Début des tests des options ---${RESET}"
 echo ""
 
+# qlqs cas particuliers
+decac abc.deca > /dev/null 2>&1
+decac -r src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -r 3 src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -r a src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -v src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -p src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -v -p src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -p -v a src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+
+decac > /dev/null 2>&1
+echo -e "${GREEN}[PASS] Résultat correct pour decac ${RESET}"
+
+
+
 
 decac -b > /dev/null 2>&1
 echo -e "${GREEN}[PASS] Résultat correct pour decac -b ${RESET}"
@@ -55,6 +70,27 @@ for file in "$directory"/*.deca; do
 done
 echo -e "${GREEN}[PASS] Résultat correct pour decac -v ${RESET}"
 
+# Parcourir tous les fichiers .deca dans le répertoire
+for file in "$directory"/*.deca; do
+  # Vérifier si le fichier existe (en cas de répertoire vide)
+  if [ ! -e "$file" ]; then
+    exit 1
+  fi
+
+  decac -d "$file" > /dev/null 2>&1
+done
+echo -e "${GREEN}[PASS] Résultat correct pour decac -d ${RESET}"
+
+# Parcourir tous les fichiers .deca dans le répertoire
+for file in "$directory"/*.deca; do
+  # Vérifier si le fichier existe (en cas de répertoire vide)
+  if [ ! -e "$file" ]; then
+    exit 1
+  fi
+
+  decac -d -d "$file" > /dev/null 2>&1
+done
+echo -e "${GREEN}[PASS] Résultat correct pour decac -d -d ${RESET}"
 
 # Parcourir tous les fichiers .deca dans le répertoire
 for file in "$directory"/*.deca; do

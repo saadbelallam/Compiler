@@ -240,11 +240,11 @@ public class DecacCompiler {
             LOG.info("Parsing failed");
             return true;
         }
-        if (compilerOptions.getParse()) {
+        if (getCompilerOptions().getParse()) {
             prog.decompile(out);
             return false;
         }
-        if (compilerOptions.getVerify()) {
+        if (getCompilerOptions().getVerify()) {
             prog.verifyProgram(this);
             return false;
         }

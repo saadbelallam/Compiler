@@ -1,0 +1,20 @@
+// Description:
+//    Teste les différents prints.
+//
+// Historique:
+//    créé le 06/01/2025
+
+{
+    print("Hello, Deca!");         // Instruction PRINT
+    println("New Line");           // Instruction PRINTLN
+    printx(" ");
+    printlnx("  ");
+    printx(2.0);    // Instruction PRINTX
+    printlnx(2.0);  // Instruction PRINTLNX
+    printx(2);
+    printlnx(2); 
+    print(false);
+    println(false);
+    printx(true);
+    printlnx(true); 
+}
