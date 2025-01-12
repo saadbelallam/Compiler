@@ -35,14 +35,14 @@ public class EnvironmentType {
         BOOLEAN = new BooleanType(booleanSymb);
         envTypes.put(booleanSymb, new TypeDefinition(BOOLEAN, Location.BUILTIN));
 
-        Symbol nullSymb = compiler.createSymbol("boolean");
-        NULL = new NullType(nullSymb);
-        envTypes.put(nullSymb, new TypeDefinition(null, Location.BUILTIN));
-
         Symbol stringSymb = compiler.createSymbol("string");
         STRING = new StringType(stringSymb);
         // envTypes.put(stringSymb, new TypeDefinition(STRING, Location.BUILTIN));
         // not added to envTypes, it's not visible for the user.
+
+        Symbol nullSymb = compiler.createSymbol("null");
+        NULL = new NullType(nullSymb);
+        envTypes.put(nullSymb, new TypeDefinition(NULL, Location.BUILTIN));
         
     }
 
