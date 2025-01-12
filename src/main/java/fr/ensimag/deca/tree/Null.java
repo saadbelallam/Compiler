@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 /**
@@ -26,8 +27,8 @@ public class Null extends AbstractExpr {
 
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister register) {
-        // Generate code to load `null` into the provided register
-        compiler.addInstruction(new LOAD(0, register)); // Assuming `null` is represented as 0
+        // Generate code to load #null into the provided register
+        compiler.addInstruction(new LOAD(new NullOperand(), register));
     }
 
     @Override
