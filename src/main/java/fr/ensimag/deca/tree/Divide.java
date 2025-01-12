@@ -3,7 +3,9 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -36,26 +38,27 @@ public class Divide extends AbstractOpArith {
         compiler.getMangerR().MaxRegCase(compiler, getLeftOperand(), getRightOperand(), register);
 
         // Vérification de la division par zéro (float ou int)
-        if (getType().isFloat()) {
-            float EPSILON = 1e-6f;
-            compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), Register.getR(1)));
-            compiler.addInstruction(new CMP(Register.getR(1), Register.getR(0)));
-            //manque label
-        } else {
-            compiler.addInstruction(new CMP(0, Register.getR(0)));
-            // Manque label
-        }
+        //if (getType().isFloat()) {
+        //    float EPSILON = 1e-6f;
+        //    compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), Register.getR(1)));
+        //    compiler.addInstruction(new CMP(Register.getR(1), Register.getR(0)));
+        //    //manque label
+        //} else {
+        //    compiler.addInstruction(new CMP(0, Register.getR(0)));
+        //    // Manque label
+        //}
+        //Pas besoin de CMP
 
         //la division
         if (getType().isFloat()) {
             compiler.addInstruction(new DIV(Register.getR(0), register));
+            //OV error handling for float
+            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
             
         } else {
             compiler.addInstruction(new QUO(Register.getR(0), register));
         }
 
-        //OV error handling for float
-        addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
             
     } else {
         // Cas normal
@@ -69,24 +72,30 @@ public class Divide extends AbstractOpArith {
             getRightOperand().codeGenVal(compiler, tempReg);
 
             // Vérification de la division par zéro (float ou int)
-            if (getType().isFloat()) {
-                float EPSILON = 1e-6f;
-                compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), compiler.getMangerR().getScratchRegister(0)));
-                compiler.addInstruction(new CMP(compiler.getMangerR().getScratchRegister(0), tempReg));
-                // Manque label
-            } else {
-                compiler.addInstruction(new CMP(0, tempReg));
-                // Manque label
-            }
+            //if (getType().isFloat()) {
+            //    float EPSILON = 1e-6f;
+            //    compiler.addInstruction(new LOAD(new ImmediateFloat(EPSILON), compiler.getMangerR().getScratchRegister(0)));
+            //    compiler.addInstruction(new CMP(compiler.getMangerR().getScratchRegister(0), tempReg));
+            //    // Manque label
+            //} else {
+            //    compiler.addInstruction(new CMP(0, tempReg));
+            //    // Manque label
+            //}
+
 
             //la division
             if (getType().isFloat()) {
                 compiler.addInstruction(new DIV(tempReg, register));
+                //OV error handling for float
+                addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
             } else {
                 compiler.addInstruction(new QUO(tempReg, register));
             }
-            //OV error handling for float
-            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+
+            // Gérer la division par zéro directement via OV
+            Label divByZeroError = compiler.getMangerL().getDivByZLabel();
+            addBOVinstruction(compiler, divByZeroError);
+            
         } finally {
             // Libération du registre temporaire
             compiler.addComment("release R" + tempReg.getNumber());

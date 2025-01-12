@@ -6,7 +6,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.REM;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
 
@@ -61,6 +63,9 @@ public class Modulo extends AbstractOpArith {
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }
+        // Gérer la division par zéro directement via OV
+        Label divByZeroError = compiler.getMangerL().getDivByZLabel();
+        addBOVinstruction(compiler, divByZeroError);
     }
     }
 
