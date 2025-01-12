@@ -7,6 +7,6 @@
 {
     print("Hello, Deca!");         // Instruction PRINT
     println("New Line");           // Instruction PRINTLN
-    printx("Hexadecimal Test");    // Instruction PRINTX
-    printlnx("Hexadecimal Line");  // Instruction PRINTLNX
+    printx(2.0);    // Instruction PRINTX
+    printlnx(2.0);  // Instruction PRINTLNX
 }
