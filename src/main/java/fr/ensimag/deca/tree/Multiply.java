@@ -1,7 +1,7 @@
 package fr.ensimag.deca.tree;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.MUL;
 
 
@@ -21,7 +21,7 @@ public class Multiply extends AbstractOpArith {
     }
 
 
-    @Override
+    /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
         //System.out.println("MaxRegisters()" + compiler.getMaxRegisters());
@@ -54,6 +54,11 @@ public class Multiply extends AbstractOpArith {
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }
+    } */
+
+   @Override
+    public void addArithInsruction(DecacCompiler compiler,GPRegister srctReg , GPRegister dstReg){
+            compiler.addInstruction(new MUL(srctReg, dstReg));
     }
 
 }

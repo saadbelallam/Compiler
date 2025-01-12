@@ -5,6 +5,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
 
 /**
  * Arithmetic binary operations (+, -, /, ...)
@@ -55,5 +57,41 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         this.setType(type1);
         return type1;
     }
+
+
+     @Override
+     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
+        if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters()-1){
+            // méthode de l'algorithe voir la classe 
+            // ManagerOfRegisters
+            compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
+            //compiler.addInstruction(new ADD(Register.getR(0), destReg));
+            addArithInsruction(compiler,Register.getR(0),destReg);
+            if(getType().isFloat()){
+               addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
+        }
+        // Cad n < Max
+        else {
+            // Generation du code pour left
+            getLeftOperand().codeGenVal(compiler, destReg);
+            // Generation du code pour right dans le registre n+1
+            GPRegister rightReg = compiler.getMangerR().allocateRegister();
+            getRightOperand().codeGenVal(compiler, rightReg);
+            // Opération
+            
+            //compiler.addInstruction(new ADD(rightReg, destReg));
+            addArithInsruction(compiler,rightReg,destReg);
+            if(getType().isFloat()){
+               addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }else{
+               compiler.addComment("No need for overflow check for type int");
+            }
+            
+            // libération du rightReg
+            compiler.getMangerR().freeRegister(rightReg);
+        }
+     }
         
 }
