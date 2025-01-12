@@ -10,7 +10,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 /**
  * @author gl24
@@ -38,17 +40,37 @@ public class Main extends AbstractMain {
         // LOG.debug("verify Main: end");
     }
     
+    // Gestion de l'erreur de débordement de pile
+    //compiler.addLabel(new Label("stack_overflow_error"));
+    //compiler.addInstruction(new WSTR("Error: Stack Overflow"));
+    //compiler.addInstruction(new WNL());
+    //compiler.addInstruction(new ERROR());
+
+    //Calcule de la taille de la pile 
+    private void StackSize(DecacCompiler compiler) {
+        //à compléter
+        int variables = declVariables.getNombreVariables();
+        int temporaires = compiler.getMangerR().getMaxTemporaires();
+        //System.out.print(temporaires);
+        int stackSize = variables + temporaires;
+
+        if(variables > 0){
+            compiler.addFirst(new ADDSP(variables));
+        }
+        compiler.addFirst(new BOV(new Label("stack_overflow_error")));
+        compiler.addFirst(new TSTO(new ImmediateInteger(stackSize)),temporaires + " (temporaires) " + variables + (" (variables)"));
+        compiler.addFirst(null,"start main program");
+
+    }
 
     @Override
-    protected void codeGenMain(DecacCompiler compiler) {
-        // A FAIRE: traiter les déclarations de variables.
-        // faut calculer le nombre d'emplacement mémoire
-        //on met 20 provisoirement
-        compiler.addInstruction(new TSTO(new ImmediateInteger(20)));;
-        compiler.addInstruction(new ADDSP(20));
-        compiler.addComment("Beginning of main instructions:");
+    protected void codeGenMain(DecacCompiler compiler) {  
+        compiler.addComment("Main program");
+        compiler.addComment("Variables declarations:");
         declVariables.codeGenListVar(compiler);
+        compiler.addComment("Beginning of main instructions:");
         insts.codeGenListInst(compiler);
+        StackSize(compiler);
     }
 
     @Override

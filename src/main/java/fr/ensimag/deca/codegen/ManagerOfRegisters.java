@@ -16,6 +16,8 @@ public class ManagerOfRegisters {
     private Stack<GPRegister> registerStack;
     private boolean[] usedRegisters;
     private int nbOfUsedRegisiters = 0;
+    private int nbTemporaires = 0;
+    private int maxTemporaires = 0;
     
 
     public ManagerOfRegisters(int maxReg) {
@@ -68,12 +70,26 @@ public class ManagerOfRegisters {
         leftOperand.codeGenVal(compiler, destReg);
         // PUSH Rn ; sauvegarde
         compiler.addInstruction(new PUSH(destReg));
+        // réservation d'une case dans la pile pour push
+        nbTemporaires++;
+
+        //On cherche le nombre max des push consécutifs avant un pop
+        if (nbTemporaires > maxTemporaires) {
+            maxTemporaires = nbTemporaires;
+        }
+
         //<codeExp( e2 , n) >
         rightOperand.codeGenVal(compiler,destReg);
         //LOAD Rn, R0
         compiler.addInstruction(new LOAD(destReg,Register.getR(0)));
         // POP Rn ; restauration
         compiler.addInstruction(new POP(destReg));
+        // libération d'une case dans la pile si pop est directement après push
+        nbTemporaires--;
+    }
+
+    public int getMaxTemporaires(){
+            return maxTemporaires;
     }
 
 }
