@@ -1,0 +1,268 @@
+; start main program
+; Main program
+	TSTO #20
+	ADDSP #20
+; Beginning of main instructions:
+	LOAD #1, R2
+	STORE R2, 1(GB)
+	LOAD #0, R2
+	STORE R2, 2(GB)
+	LOAD #5, R2
+	STORE R2, 7(GB)
+	LOAD #10, R2
+	STORE R2, 8(GB)
+	LOAD 1(GB), R2
+	CMP #0, R2
+	BEQ E_Sinon.0
+	LOAD 2(GB), R2
+	CMP #0, R2
+	BNE E_Sinon.0
+	LOAD 7(GB), R2
+	LOAD 8(GB), R3
+	CMP R3, R2
+	BGE E_Sinon.2
+	LOAD 8(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE E_Sinon.2
+	WSTR "Test 1.1 passed"
+	WNL
+	BRA E_Fin.3
+E_Sinon.2:
+	WSTR "Test 1.1 failed"
+	WNL
+E_Fin.3:
+	BRA E_Fin.1
+E_Sinon.0:
+	LOAD 7(GB), R2
+	LOAD 8(GB), R3
+	CMP R3, R2
+	BGT E_Fin_6
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.4
+E_Fin_6:
+	WSTR "Test 1.2 failed"
+	WNL
+	BRA E_Fin.5
+E_Sinon.4:
+E_Fin.5:
+E_Fin.1:
+	LOAD #0, R3
+	STORE R3, 9(GB)
+	BRA while_test_7
+while_body_8:
+	LOAD 9(GB), R3
+	LOAD #1, R2
+	ADD R2, R3
+	STORE R3, 9(GB)
+	LOAD 7(GB), R3
+	LOAD #1, R2
+	SUB R2, R3
+	STORE R3, 7(GB)
+	LOAD #1, R3
+	LOAD 7(GB), R2
+	LOAD #3, R4
+	CMP R4, R2
+	BLT bool_false_10
+	LOAD 8(GB), R4
+	LOAD #7, R2
+	CMP R2, R4
+	BLE bool_false_10
+	BRA bool_end_11
+bool_false_10:
+	LOAD #0, R3
+bool_end_11:
+	STORE R3, 5(GB)
+	LOAD 5(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.12
+	WSTR "x:"
+	LOAD 7(GB), R1
+	WINT
+	WSTR " y:"
+	LOAD 8(GB), R1
+	WINT
+	WSTR " - Condition true"
+	WNL
+	BRA E_Fin.13
+E_Sinon.12:
+E_Fin.13:
+	LOAD 8(GB), R3
+	LOAD #1, R2
+	SUB R2, R3
+	STORE R3, 8(GB)
+while_test_7:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_9
+	LOAD 8(GB), R2
+	LOAD #5, R3
+	CMP R3, R2
+	BLE while_end_9
+	BRA while_body_8
+while_end_9:
+	WSTR "Counter should be 5:"
+	LOAD 9(GB), R1
+	WINT
+	WNL
+	LOAD #1, R3
+	STORE R3, 7(GB)
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BNE E_Sinon.14
+	LOAD 8(GB), R2
+	LOAD 7(GB), R4
+	CMP #0, R4
+	QUO R4, R2
+	LOAD #0, R3
+	CMP R3, R2
+	BNE E_Sinon.14
+	WSTR "Test 3 failed"
+	WNL
+	BRA E_Fin.15
+E_Sinon.14:
+	WSTR "Test 3 passed"
+	WNL
+E_Fin.15:
+	LOAD #1, R3
+	STORE R3, 3(GB)
+	LOAD #0, R3
+	STORE R3, 4(GB)
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_19
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BNE E_Fin_18
+E_Fin_19:
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.16
+	LOAD 4(GB), R3
+	CMP #0, R3
+	BNE E_Sinon.16
+E_Fin_18:
+	LOAD 7(GB), R3
+	LOAD 8(GB), R2
+	CMP R2, R3
+	BGT E_Sinon.20
+	LOAD 8(GB), R2
+	LOAD #10, R3
+	CMP R3, R2
+	BEQ E_Sinon.20
+	WSTR "Test 4.1"
+	WNL
+	BRA E_Fin.21
+E_Sinon.20:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BGE E_Fin_24
+	LOAD 8(GB), R2
+	LOAD #20, R3
+	CMP R3, R2
+	BGT E_Sinon.22
+E_Fin_24:
+	WSTR "Test 4.2"
+	WNL
+	BRA E_Fin.23
+E_Sinon.22:
+E_Fin.23:
+E_Fin.21:
+	BRA E_Fin.17
+E_Sinon.16:
+E_Fin.17:
+	LOAD #10, R3
+	STORE R3, 7(GB)
+	LOAD #0, R3
+	STORE R3, 9(GB)
+	BRA while_test_25
+while_body_26:
+	LOAD 7(GB), R3
+	LOAD #1, R2
+	SUB R2, R3
+	STORE R3, 7(GB)
+	LOAD 9(GB), R3
+	LOAD #1, R2
+	ADD R2, R3
+	STORE R3, 9(GB)
+	LOAD #1, R3
+	LOAD 7(GB), R2
+	LOAD #5, R4
+	CMP R4, R2
+	BGE bool_false_28
+	LOAD 9(GB), R4
+	LOAD #3, R2
+	CMP R2, R4
+	BLE bool_false_28
+	BRA bool_end_29
+bool_false_28:
+	LOAD #0, R3
+bool_end_29:
+	STORE R3, 6(GB)
+	LOAD 6(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.30
+	LOAD #0, R3
+	STORE R3, 7(GB)
+	BRA E_Fin.31
+E_Sinon.30:
+E_Fin.31:
+while_test_25:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_27
+	BRA while_body_26
+while_end_27:
+	WSTR "Counter after break: "
+	LOAD 9(GB), R1
+	WINT
+	WNL
+	LOAD #3, R2
+	STORE R2, 7(GB)
+	LOAD #3, R2
+	STORE R2, 8(GB)
+	LOAD #0, R2
+	STORE R2, 10(GB)
+	BRA while_test_32
+while_body_33:
+	LOAD #3, R2
+	STORE R2, 8(GB)
+	BRA while_test_35
+while_body_36:
+	LOAD 10(GB), R2
+	LOAD #1, R3
+	ADD R3, R2
+	STORE R2, 10(GB)
+	LOAD 8(GB), R2
+	LOAD #1, R3
+	SUB R3, R2
+	STORE R2, 8(GB)
+while_test_35:
+	LOAD 8(GB), R2
+	LOAD #0, R3
+	CMP R3, R2
+	BLE while_end_37
+	BRA while_body_36
+while_end_37:
+	LOAD 7(GB), R3
+	LOAD #1, R2
+	SUB R2, R3
+	STORE R3, 7(GB)
+while_test_32:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_34
+	BRA while_body_33
+while_end_34:
+	WSTR "Nested loops total should be 9: "
+	LOAD 10(GB), R1
+	WINT
+	WNL
+	HALT
+; end main program

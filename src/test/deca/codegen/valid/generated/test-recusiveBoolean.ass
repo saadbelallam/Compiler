@@ -1,0 +1,241 @@
+; start main program
+; Main program
+	TSTO #20
+	ADDSP #20
+; Beginning of main instructions:
+	LOAD #1, R2
+	STORE R2, 1(GB)
+	LOAD #0, R2
+	STORE R2, 2(GB)
+	LOAD #1, R2
+	STORE R2, 3(GB)
+	LOAD #1, R2
+	STORE R2, 4(GB)
+	LOAD #0, R2
+	STORE R2, 5(GB)
+	LOAD #1, R2
+	STORE R2, 6(GB)
+	LOAD #1, R2
+	STORE R2, 7(GB)
+	LOAD #0, R2
+	STORE R2, 8(GB)
+	LOAD #1, R2
+	STORE R2, 9(GB)
+	LOAD #1, R2
+	STORE R2, 10(GB)
+	LOAD #0, R2
+	STORE R2, 11(GB)
+	LOAD #1, R2
+	STORE R2, 12(GB)
+	LOAD #1, R2
+	STORE R2, 13(GB)
+	LOAD #0, R2
+	STORE R2, 14(GB)
+	LOAD #1, R2
+	STORE R2, 15(GB)
+	LOAD #1, R2
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 4(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 5(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 6(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 7(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 8(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 9(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 10(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 11(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 12(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 13(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 14(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	LOAD 15(GB), R3
+	CMP #0, R3
+	BEQ bool_false_0
+	BRA bool_end_1
+bool_false_0:
+	LOAD #0, R2
+bool_end_1:
+	STORE R2, 16(GB)
+	WSTR "Result of nested AND: "
+	LOAD 16(GB), R1
+	CMP #0, R1
+	BEQ print_false_3
+	WSTR "true"
+	BRA print_end_2
+print_false_3:
+	WSTR "false"
+print_end_2:
+	WNL
+	LOAD #1, R2
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BNE E_Fin_6
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BNE E_Fin_7
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BNE E_Fin_8
+	LOAD 4(GB), R3
+	CMP #0, R3
+	BNE E_Fin_9
+	LOAD 5(GB), R3
+	CMP #0, R3
+	BNE E_Fin_10
+	LOAD 6(GB), R3
+	CMP #0, R3
+	BNE E_Fin_11
+	LOAD 7(GB), R3
+	CMP #0, R3
+	BNE E_Fin_12
+	LOAD 8(GB), R3
+	CMP #0, R3
+	BNE E_Fin_13
+	LOAD 9(GB), R3
+	CMP #0, R3
+	BNE E_Fin_14
+	LOAD 10(GB), R3
+	CMP #0, R3
+	BNE E_Fin_15
+	LOAD 11(GB), R3
+	CMP #0, R3
+	BNE E_Fin_16
+	LOAD 12(GB), R3
+	CMP #0, R3
+	BNE E_Fin_17
+	LOAD 13(GB), R3
+	CMP #0, R3
+	BNE E_Fin_18
+	LOAD 14(GB), R3
+	CMP #0, R3
+	BNE E_Fin_19
+	LOAD 15(GB), R3
+	CMP #0, R3
+	BEQ bool_false_4
+E_Fin_19:
+E_Fin_18:
+E_Fin_17:
+E_Fin_16:
+E_Fin_15:
+E_Fin_14:
+E_Fin_13:
+E_Fin_12:
+E_Fin_11:
+E_Fin_10:
+E_Fin_9:
+E_Fin_8:
+E_Fin_7:
+E_Fin_6:
+	BRA bool_end_5
+bool_false_4:
+	LOAD #0, R2
+bool_end_5:
+	STORE R2, 16(GB)
+	WSTR "Result of nested OR: "
+	LOAD 16(GB), R1
+	CMP #0, R1
+	BEQ print_false_21
+	WSTR "true"
+	BRA print_end_20
+print_false_21:
+	WSTR "false"
+print_end_20:
+	WNL
+	LOAD #1, R2
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BNE E_Fin_24
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 4(GB), R3
+	CMP #0, R3
+	BNE E_Fin_25
+	LOAD 5(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 6(GB), R3
+	CMP #0, R3
+	BNE E_Fin_26
+	LOAD 7(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 8(GB), R3
+	CMP #0, R3
+	BNE E_Fin_27
+	LOAD 9(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 10(GB), R3
+	CMP #0, R3
+	BNE E_Fin_28
+	LOAD 11(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 12(GB), R3
+	CMP #0, R3
+	BNE E_Fin_29
+	LOAD 13(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+	LOAD 14(GB), R3
+	CMP #0, R3
+	BNE E_Fin_30
+	LOAD 15(GB), R3
+	CMP #0, R3
+	BEQ bool_false_22
+E_Fin_30:
+E_Fin_29:
+E_Fin_28:
+E_Fin_27:
+E_Fin_26:
+E_Fin_25:
+E_Fin_24:
+	BRA bool_end_23
+bool_false_22:
+	LOAD #0, R2
+bool_end_23:
+	STORE R2, 16(GB)
+	WSTR "Result of mixed AND/OR: "
+	LOAD 16(GB), R1
+	CMP #0, R1
+	BEQ print_false_32
+	WSTR "true"
+	BRA print_end_31
+print_false_32:
+	WSTR "false"
+print_end_31:
+	WNL
+	HALT
+; end main program
