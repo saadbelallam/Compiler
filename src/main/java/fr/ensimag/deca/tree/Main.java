@@ -57,8 +57,10 @@ public class Main extends AbstractMain {
         if(variables > 0){
             compiler.addFirst(new ADDSP(variables));
         }
+        if(stackSize > 0){
         compiler.addFirst(new BOV(new Label("stack_overflow_error")));
         compiler.addFirst(new TSTO(new ImmediateInteger(stackSize)),temporaires + " (temporaires) " + variables + (" (variables)"));
+        }
         compiler.addFirst(null,"start main program");
 
     }
