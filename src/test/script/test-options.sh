@@ -102,6 +102,10 @@ for file in "$directory"/*.deca; do
   # Exécuter decac -r 10 sans générer de fichier .ass
   decac -r 10 "$file" > /dev/null 2>&1 && rm -f "${file%.deca}.ass"
 done
+
+rm -f src/test/deca/codegen/valid/created/*.ass
+
+
 echo -e "${GREEN}[PASS] Résultat correct pour decac -r ${RESET}"
 
 
