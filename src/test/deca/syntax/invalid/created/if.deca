@@ -1,0 +1,7 @@
+//Resultat:
+//      Erreur syntaxique : ligne 2
+{
+if ( 3.2 < = = "hello"){
+   println("this shouldn't be printed");
+}
+}
