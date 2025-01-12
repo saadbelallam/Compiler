@@ -9,6 +9,8 @@ public class ManagerOfLabel {
     private int currentLabelNumber = 0;
     private final Label overflowLabel = new Label("overflow_error");
     private final Label io_Label = new Label("io_error");
+    Label divByZeroError = new Label("div_by_zero_error");
+
     
     
     /**
@@ -21,6 +23,10 @@ public class ManagerOfLabel {
 
     public Label getIOLabel(){
         return io_Label;
+    }
+
+    public Label getDivByZLabel(){
+        return divByZeroError;
     }
  
     /**

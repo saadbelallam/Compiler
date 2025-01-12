@@ -262,11 +262,7 @@ public class DecacCompiler {
         addInstruction(new WSTR("Error: Stack Overflow"));
         addInstruction(new WNL());
         addInstruction(new ERROR());
-        addLabel(new Label("div_by_zero_error"));
-        addInstruction(new WSTR("Error: Division by zero"));
-        addInstruction(new WNL());
-        addInstruction(new ERROR());
-        addInstruction(new ERROR()); */
+         */
         setupErrorHandling();
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
@@ -303,6 +299,13 @@ public class DecacCompiler {
             addLabel(new Label("io_error"));
             addInstruction(new WSTR("Error: Input/Output error"));
             addInstruction(new WNL());
+            addInstruction(new ERROR());
+
+
+            addLabel(new Label("div_by_zero_error"));
+            addInstruction(new WSTR("Error: Division by zero"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
             addInstruction(new ERROR());
         }
 
