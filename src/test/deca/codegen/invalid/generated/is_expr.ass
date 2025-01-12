@@ -1,0 +1,25 @@
+; start main program
+	TSTO #1	; 0 (temporaires) 1 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: int
+; Beginning of main instructions:
+; Assignment to int
+	LOAD 1(GB), R2
+; allocate R3
+	LOAD #0x1.4p2, R3
+	ADD R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 1(GB)
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+overflow_error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
