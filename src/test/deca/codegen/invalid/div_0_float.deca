@@ -1,0 +1,16 @@
+// Description:
+//    Teste la division par zéro avec des flottants.
+//
+// Résultats:
+//    Erreur attendue.
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    float a, b, result;
+    a = 9.0;
+    b = 0.0;
+    result = a / b; // Provoque une erreur.
+    println(result);
+}
