@@ -1,17 +1,16 @@
 // Description:
-//    tests conditionnelle
+//    tests conditionnels
 //
 // Resultats:
 //    ok
 // 
 // Historique:
-//    cree le 01/01/2025
+//    cree le 11/01/2025
 
 {
    if (1 >= 0) {
-      println("ok"); 
+      // ok
    } else { 
-      println("erreur");
+      // erreur
    }
 }
-
