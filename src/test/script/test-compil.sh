@@ -17,6 +17,7 @@ fail_count=0
 # Répertoires
 generated_dir="src/test/deca/codegen/valid/generated"
 results_dir="src/test/deca/codegen/valid/results"
+invalid_dir="src/test/deca/codegen/invalid/generated"
 
 # Fonction pour exécuter ima sur un fichier .ass et comparer avec le résultat attendu
 test_ima_result() {
@@ -72,6 +73,32 @@ run_tests_on_generated() {
     echo ""
 }
 
+# Fonction pour tester les fichiers invalides
+run_invalid_test() {
+    echo ""
+    echo -e "${YELLOW}--- Début des tests sur les fichiers invalides ---${RESET}"
+
+    for invalid_file in "$invalid_dir"/*.ass; do
+        if [ -f "$invalid_file" ]; then
+            # Exécuter la commande decac
+            result=$(ima "$invalid_file" 2>&1)
+            if echo "$result" | grep -q -e "Error" -e "\*\* IMA \*\*"; then
+                echo -e "${GREEN}[PASS] Erreur détectée comme attendu pour ${invalid_file%.ass}.deca.${RESET}"
+                ((success_count++))
+            else
+                echo -e "${RED}[FAIL] Pas d'erreur détectée ou erreur inattendue pour ${invalid_file%.ass}.deca.${RESET}"
+                echo "Sortie obtenue :"
+                echo "$result"
+                ((fail_count++))
+            fi
+        else
+            echo -e "${YELLOW}[WARN] Aucun fichier .ass trouvé dans $invalid_dir.${RESET}"
+        fi
+    done
+
+    echo ""
+}
+
 # Fonction pour afficher le résumé des tests
 show_summary() {
     echo ""
@@ -81,11 +108,23 @@ show_summary() {
     echo ""
 }
 
+# Supprimer les répertoires générés
+rm -rf "$generated_dir"
+rm -rf "$results_dir"
+rm -rf "$invalid_dir"
+
 # Lancement des tests
 if [ ! -d "$generated_dir" ] || [ ! -d "$results_dir" ]; then
     ./src/test/script/run-test.sh
 fi
+
+# Tests sur les fichiers générés
 run_tests_on_generated
+
+# Tests sur les fichiers invalides
+run_invalid_test
+
+# Afficher le résumé
 show_summary
 
 # Fin du script
