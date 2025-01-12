@@ -28,6 +28,7 @@ public class Plus extends AbstractOpArith {
             // ManagerOfRegisters
             compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
             compiler.addInstruction(new ADD(Register.getR(0), destReg));
+            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
         }
         // Cad n < Max
         else {
@@ -38,6 +39,7 @@ public class Plus extends AbstractOpArith {
             getRightOperand().codeGenVal(compiler, rightReg);
             // Opération
             compiler.addInstruction(new ADD(rightReg, destReg));
+            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }

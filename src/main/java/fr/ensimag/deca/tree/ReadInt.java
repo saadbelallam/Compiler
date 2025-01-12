@@ -56,8 +56,10 @@ public class ReadInt extends AbstractReadExpr {
         if (dest.getNumber() != 1) {
             compiler.addInstruction(new RINT());
             compiler.addInstruction(new LOAD(Register.R1, dest));
+            addBOVinstruction(compiler, compiler.getMangerL().getIOLabel());
         } else {
             compiler.addInstruction(new RINT());
+            addBOVinstruction(compiler, compiler.getMangerL().getIOLabel());
         }
     }
 

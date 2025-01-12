@@ -2,10 +2,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.ADD;
 import fr.ensimag.ima.pseudocode.instructions.MUL;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 
 
 /**
@@ -35,6 +32,10 @@ public class Multiply extends AbstractOpArith {
             // ManagerOfRegisters
             compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
             compiler.addInstruction(new MUL(Register.getR(0), destReg));
+            //OV error handling for float
+            if(getType().isFloat()){
+                addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
         }
         // Cad n < Max
         else {
@@ -46,6 +47,10 @@ public class Multiply extends AbstractOpArith {
             getRightOperand().codeGenVal(compiler, rightReg);
             // ADD
             compiler.addInstruction(new MUL(rightReg, destReg));
+            //OV error handling for float
+            if(getType().isFloat()){
+                addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }

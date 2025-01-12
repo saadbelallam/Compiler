@@ -18,6 +18,7 @@ import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -280,5 +281,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // This matches the semantics of an expression statement
     }
 
-
+    public void addBOVinstruction(DecacCompiler compiler,Label errorLabel){
+        compiler.addInstruction(new BOV(errorLabel), "Overflow check for previous operation");
+    }
 }

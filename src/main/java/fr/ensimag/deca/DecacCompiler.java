@@ -1,6 +1,6 @@
 package fr.ensimag.deca;
 
-import fr.ensimag.deca.codegen.RegisterManager;
+//import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.codegen.StackManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
@@ -251,12 +251,14 @@ public class DecacCompiler {
             return false;
         }
 
+       
+
         assert(prog.checkAllLocations());
         prog.verifyProgram(this);
         assert(prog.checkAllDecorations());
         prog.codeGenProgram(this);
         addComment("end main program");
-        addLabel(new Label("stack_overflow_error"));
+        /* addLabel(new Label("stack_overflow_error"));
         addInstruction(new WSTR("Error: Stack Overflow"));
         addInstruction(new WNL());
         addInstruction(new ERROR());
@@ -264,6 +266,8 @@ public class DecacCompiler {
         addInstruction(new WSTR("Error: Division by zero"));
         addInstruction(new WNL());
         addInstruction(new ERROR());
+        addInstruction(new ERROR()); */
+        setupErrorHandling();
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
 
@@ -280,6 +284,28 @@ public class DecacCompiler {
         LOG.info("Compilation of " + sourceName + " successful.");
         return false;
     }
+
+     
+    public void setupErrorHandling() {
+           
+            addLabel(new Label("stack_overflow_error"));
+            addInstruction(new WSTR("Error: Stack Overflow"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
+
+           
+            addLabel(new Label("overflow_error"));
+            addInstruction(new WSTR("Error: Overflow during arithmetic operation"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
+
+          
+            addLabel(new Label("io_error"));
+            addInstruction(new WSTR("Error: Input/Output error"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
+        }
+
 
     /**
      * Build and call the lexer and parser to build the primitive abstract
