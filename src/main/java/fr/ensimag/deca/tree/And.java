@@ -1,10 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.instructions.BEQ;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 /**
  *
@@ -34,8 +31,6 @@ public class And extends AbstractOpBool {
         // Evaluate second condition
         getRightOperand().codeGenCondition(compiler, falseLabel, true);
         compiler.addLabel(endLabel);
-
-
         } else {
 
              getLeftOperand().codeGenCondition(compiler, falseLabel, false);
@@ -43,7 +38,36 @@ public class And extends AbstractOpBool {
         }
     }
 
-    @Override
+     /* @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        ManagerOfRegisters regManager = compiler.getMangerR();
+        
+        if (regManager.getnbOfUsedRegisiters() <= 12) {
+            Label endLabel = new Label("and_end_" + compiler.getMangerL().newLabel());
+            
+            // Evaluate left operand
+            getLeftOperand().codeGenVal(compiler, destReg);
+            
+            // If left operand is false (0), skip right operand
+            compiler.addInstruction(new CMP(0, destReg));
+            compiler.addInstruction(new BEQ(endLabel));
+            
+            // Evaluate right operand if first was true
+            getRightOperand().codeGenVal(compiler, destReg);
+            
+            compiler.addLabel(endLabel);
+        } else {
+            // Fallback: Use MaxRegCase with stack-based approach
+            GPRegister rightReg = regManager.getScratchRegister(1);
+            regManager.MaxRegCase(compiler, getLeftOperand(), getRightOperand(), rightReg);
+            
+            // AND operation using the results
+            compiler.addInstruction(new MUL(rightReg, Register.getR(0))); // R0 contains left operand
+            compiler.addInstruction(new LOAD(Register.getR(0), destReg));
+        }
+    }
+ */
+    /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         Label endLabel = new Label("and_end_" + compiler.getMangerL().newLabel());
         
@@ -59,18 +83,6 @@ public class And extends AbstractOpBool {
         
         // Result is now in destReg
         compiler.addLabel(endLabel);
-    }   
+    }    */
 
-
-    @Override
-    protected void branchInstruction(DecacCompiler compiler, Label label) {
-        
-        compiler.addInstruction(new BEQ(label));
-    }
-    
-    @Override
-    protected int getShortCircuitValue() {
-        return 0; 
-    } 
-   
 }

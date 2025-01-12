@@ -1,10 +1,10 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 
 /**
  * Arithmetic binary operations (+, -, /, ...)
@@ -23,12 +23,18 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         // throw new UnsupportedOperationException("not yet implemented");
         Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
-    
+       // i'm g
         if (!type1.isInt() && !type1.isFloat()) {
             throw new ContextualError("Left operand must be of type int or float", this.getLeftOperand().getLocation());
         }
         if (!type2.isInt() && !type2.isFloat()) {
             throw new ContextualError("Right operand must be of type int or float", this.getRightOperand().getLocation());
+        }
+        if (type1.isBoolean()) {
+            throw new ContextualError("Left operand cannot be of type boolean for arithmetic operations", this.getLeftOperand().getLocation());
+        }
+        if (type2.isBoolean()) {
+            throw new ContextualError("Right operand cannot be of type boolean for arithmetic operations", this.getRightOperand().getLocation());
         }
         if (type1.isFloat() || type2.isFloat()) {
             Type newType = type1;

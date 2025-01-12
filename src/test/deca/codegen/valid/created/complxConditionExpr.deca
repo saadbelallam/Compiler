@@ -1,0 +1,46 @@
+/* 
+Results : 
+
+Iteration 0: Complex Condition: True
+Iteration 1: Complex Condition: True
+Iteration 2: Complex Condition: True
+Iteration 3: Complex Condition: True
+Iteration 4: Complex Condition: True
+Complex test completed!
+                          */
+
+{
+        boolean A = true;
+        boolean B = false;
+        boolean C = true;
+        boolean D = false;
+        int x = 12;
+        int y = 4;
+        int z = 7;
+        int w = 10;
+        int a = 15;
+        int b = 3;
+        int tmp;
+        int i = 0;
+        boolean dynamicCondition;
+        int sum = ((x + y) * (z - w));
+        int prod = ((a * b) - y);
+        int complexCalc = ((sum + prod) / ((x % b) + 1));
+        boolean condition1 = ((A && !B) || (((x > y) && (z < x)) && !(C || B)));
+        boolean condition2 = ((!(((x + z) % 2) == 0) && (A || (B && C))) || ((y * z) > x));
+        boolean condition3 = ((((x - y) < z) && !(A && B)) || ((C && ((x % 3) == 0)) && !((z + 1) > 0)));
+        boolean condition4 = ((((x / y) == 3) && ((z % 2) != 0)) || (!(A && C) && (B || (z > 0))));
+        boolean condition5 = (!(((x > z) && (y < z)) || ((A && C) && ((z % y) == 0))) || ((x - z) < 0));
+        boolean condition6 = (((!condition1 || condition4) && (complexCalc >= 0)) || D);
+        while ((i < 5)) {
+                (tmp = (sum + (i * complexCalc)));
+                (dynamicCondition = ((((tmp % 2) == 0) && !condition5) && ((a - (z / b)) > ((w - y) + i))));
+                if (((((condition1 || (condition2 && condition3)) || (condition4 && condition5)) || condition6) || dynamicCondition)) {
+                        println("Iteration ",i,": Complex Condition: True");
+                } else {
+                        println("Iteration",i,": Complex Condition: False");
+                }
+                (i = (i + 1));
+        }
+        println("Complex test completed!");
+}

@@ -2,13 +2,13 @@ package fr.ensimag.deca.codegen;
 
 import java.util.Stack;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.tree.AbstractExpr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.tree.AbstractExpr;
 
 public class ManagerOfRegisters {
     private static final int FIRST_REG = 2;
@@ -29,6 +29,8 @@ public class ManagerOfRegisters {
         for (int i = maxReg; i >= FIRST_REG; i--) {
             registerStack.push(Register.getR(i));
         }
+        this.nbOfUsedRegisiters = 0;
+        
     }
 
     public GPRegister allocateRegister() {
@@ -37,7 +39,7 @@ public class ManagerOfRegisters {
         }
         GPRegister reg = registerStack.pop();
         usedRegisters[reg.getNumber()] = true;
-        nbOfUsedRegisiters++;
+        this.nbOfUsedRegisiters++;
         return reg;
     }
 
@@ -45,7 +47,7 @@ public class ManagerOfRegisters {
         int regNum = register.getNumber();
         if (regNum >= FIRST_REG && regNum <= maxReg && usedRegisters[regNum]) {
             usedRegisters[regNum] = false;
-            nbOfUsedRegisiters--;
+            this.nbOfUsedRegisiters--;
             registerStack.push(register);
         }
     }
@@ -62,7 +64,7 @@ public class ManagerOfRegisters {
     }
 
     public int getnbOfUsedRegisiters(){
-        return nbOfUsedRegisiters;
+        return this.nbOfUsedRegisiters;
     }
 
     public void MaxRegCase(DecacCompiler compiler,AbstractExpr leftOperand, AbstractExpr rightOperand, GPRegister destReg) {

@@ -1,10 +1,8 @@
 package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 /**
  *
@@ -45,7 +43,7 @@ public class NotEquals extends AbstractOpExactCmp {
         compiler.getMangerR().freeRegister(rightReg);
     } */
 
-   @Override
+   /* @Override
     public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
         GPRegister leftReg = compiler.getMangerR().allocateRegister();
         GPRegister rightReg = compiler.getMangerR().allocateRegister();
@@ -62,8 +60,12 @@ public class NotEquals extends AbstractOpExactCmp {
             compiler.getMangerR().freeRegister(rightReg);
             compiler.getMangerR().freeRegister(leftReg);
             
-        }}
-    
+        }} */
 
+    
+    @Override
+    public void addBranchInstruction(DecacCompiler compiler, Label destLabel,boolean  jump){
+        compiler.addInstruction(jump ? new BNE(destLabel) : new BEQ(destLabel));
+    } 
 
 }

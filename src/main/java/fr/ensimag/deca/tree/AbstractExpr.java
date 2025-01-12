@@ -21,6 +21,7 @@ import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 /**
@@ -168,7 +169,43 @@ public abstract class AbstractExpr extends AbstractInst {
             default:
                 throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
         }
-}
+}   
+    /**
+     * Generate code to printlnx the expression
+     *
+     * @param compiler
+     */
+    protected void codeGenPrintLnx(DecacCompiler compiler){
+        GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        this.codeGenVal(compiler,tmpReg);
+        switch (this.getType().toString()) {
+            case "float" :
+                compiler.addInstruction(new WFLOATX());
+                break;
+            case "int"   :
+                compiler.addInstruction(new WINT());
+                break;
+            case "boolean"  :
+                 Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
+                Label falseLabel = new Label("print_false_" + compiler.getMangerL().newLabel());
+                
+                // Compare with 0 (false)
+                compiler.addInstruction(new CMP(0, tmpReg));
+                compiler.addInstruction(new BEQ(falseLabel));
+                
+                compiler.addInstruction(new WSTR(new ImmediateString("true")));
+                compiler.addInstruction(new BRA(endLabel));
+
+                compiler.addLabel(falseLabel);
+                compiler.addInstruction(new WSTR(new ImmediateString("false")));
+                
+                compiler.addLabel(endLabel);
+                
+                break;
+            default:
+                throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
+        }
+    }
 
 
     /* @Override
@@ -176,9 +213,7 @@ public abstract class AbstractExpr extends AbstractInst {
         throw new UnsupportedOperationException("not yet implemented");
     } */
     
-    public GPRegister codeGenValue(DecacCompiler compiler){
-        throw new UnsupportedOperationException("not yet implemented");
-    }
+    
 
     // In AbstractExpr class
     public  void codeGenVal(DecacCompiler compiler, GPRegister reg){
@@ -215,7 +250,6 @@ public abstract class AbstractExpr extends AbstractInst {
         
         // Generate code to evaluate expression into reg (to compute the expression's bool results)
         this.codeGenVal(compiler, reg); 
-        
 
        // rebuild the way it hadnles codeGenCond its also CodeGenVal ?
     
@@ -229,7 +263,8 @@ public abstract class AbstractExpr extends AbstractInst {
         } else {
             // Branch if equal to 0 (condition is false)
             compiler.addInstruction(new BEQ(label));
-        }   
+        }
+        compiler.getMangerR().freeRegister(reg);   
     }
 
 

@@ -1,0 +1,16 @@
+// Description:
+//    Teste la division normale entre deux nombres flottants.
+//
+// Résultats:
+//    3.0
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    float a, b, result;
+    a = 9.0;
+    b = 3.0;
+    result = a / b;
+    println(result);
+}

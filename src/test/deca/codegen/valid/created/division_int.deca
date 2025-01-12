@@ -1,0 +1,16 @@
+// Description:
+//    Teste la division normale entre deux entiers.
+//
+// Résultats:
+//    3
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    int a, b, result;
+    a = 9;
+    b = 3;
+    result = a / b;
+    println(result);
+}

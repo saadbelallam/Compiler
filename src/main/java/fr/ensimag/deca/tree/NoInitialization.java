@@ -10,9 +10,6 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.instructions.LOAD  ;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * Absence of initialization (e.g. "int x;" as opposed to "int x =
@@ -56,8 +53,6 @@ public class NoInitialization extends AbstractInitialization {
     @Override
     protected  void codeGenInit(DecacCompiler compiler,GPRegister AllocatedR ,DAddr regOf){
         
-        compiler.addInstruction(new LOAD(new ImmediateInteger(0), AllocatedR));
-        compiler.addInstruction(new STORE(AllocatedR,regOf));
     }
 
     @Override

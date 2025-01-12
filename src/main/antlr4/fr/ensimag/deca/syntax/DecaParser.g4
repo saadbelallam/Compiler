@@ -170,32 +170,38 @@ inst returns[AbstractInst tree]
 
 
 // add the setLocation(.)
-if_then_else returns[IfThenElse tree]
+if_then_else returns[AbstractInst tree]
 @init {
+    AbstractExpr condition;
+    ListInst thenBranch;
+    ListInst elseBranch;
+    IfThenElse currentIf;
 }
-    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-            assert($condition.tree != null);
-            assert($li_if.tree != null);
-            $tree = new IfThenElse($condition.tree, $li_if.tree, new ListInst());
-            setLocation($tree, $if1);
-        }
-      (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            assert($elsif_cond.tree != null);
-            assert($elsif_li.tree != null);
-            // Create a new ListInst for the else branch containing the nested if
-            IfThenElse nestedIf = new IfThenElse($elsif_cond.tree, $elsif_li.tree, new ListInst());
-            setLocation(nestedIf, $elsif);
-            $tree.setElseBranch(nestedIf);
-            $tree = nestedIf;
-        }
-      )*
-      (ELSE OBRACE li_else=list_inst CBRACE {
-            assert($li_else.tree != null);
-            $tree.setElseBranch($li_else.tree);
-            setLocation($tree, $if1);
-        }
-      )?
-    ;
+: IF OPARENT condition=expr CPARENT OBRACE thenBranch=list_inst CBRACE
+  {
+    elseBranch = new ListInst();
+    $tree = new IfThenElse($condition.tree, $thenBranch.tree, elseBranch);
+    setLocation($tree, $IF);
+    currentIf = (IfThenElse)$tree;
+  }
+  (
+    ELSE IF OPARENT condition=expr CPARENT OBRACE thenBranch=list_inst CBRACE
+    {
+      IfThenElse elseIf = new IfThenElse($condition.tree, $thenBranch.tree, new ListInst());
+      setLocation(elseIf, $ELSE);
+      currentIf.setElseBranch(elseIf);
+      currentIf = elseIf;
+    }
+  )*
+  (
+    ELSE OBRACE elseBranch=list_inst CBRACE
+    {
+      currentIf.setElseBranch($elseBranch.tree);
+    }
+  )?
+;
+
+
 
 
 list_expr returns[ListExpr tree]

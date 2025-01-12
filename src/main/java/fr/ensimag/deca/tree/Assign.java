@@ -47,18 +47,14 @@ public class Assign extends AbstractBinaryExpr {
     protected void codeGenInst(DecacCompiler compiler) {
         // Generate right operand value first
         GPRegister reg = compiler.getMangerR().allocateRegister();
-        getRightOperand().codeGenVal(compiler, reg);
+        getRightOperand().codeGenVal(compiler, reg); 
         
-        // For left operand, check if it's an identifier
-        if (getLeftOperand() instanceof AbstractIdentifier) {
-            //System.err.println("getLeftOperand() is = " + getLeftOperand().getExpDefinition().getOperand());
-            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
-            DAddr addr = ident.getExpDefinition().getOperand();
-            compiler.addInstruction(new STORE(reg, addr));
-            compiler.getMangerR().freeRegister(reg);
-        } else {
-            throw new UnsupportedOperationException("Left operand must be an identifier");
-        }
+        AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+        DAddr addr = ident.getExpDefinition().getOperand();
+        
+        compiler.addInstruction(new STORE(reg, addr));
+        
+        compiler.getMangerR().freeRegister(reg);
 }
 
 
@@ -67,13 +63,10 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
         // 1. Get memory location of left operand (variable)
-        System.err.println("Error1");
         RegisterOffset varAddr = getLeftOperand().getMemoryLocation() ;
-        System.err.println("Error2");
         
         // 2. Generate code for right operand into dest register
         getRightOperand().codeGenVal(compiler, dest);
-        System.err.println("Error3");
          
         // 3. Store result in variable's memory location
         compiler.addInstruction(new STORE(dest, varAddr));

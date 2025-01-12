@@ -6,10 +6,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
  *
@@ -39,7 +38,7 @@ public class Not extends AbstractUnaryExpr {
         return "!";
     }
 
-    @Override
+   /*  @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         getOperand().codeGenVal(compiler, destReg);
         
@@ -47,7 +46,31 @@ public class Not extends AbstractUnaryExpr {
         // Nhsbo x b x = 1 - x (since x is either 0 or 1)
         compiler.addInstruction(new LOAD(new ImmediateInteger(1), destReg));
         compiler.addInstruction(new SUB(destReg, destReg));
+    } */
+
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        // Create labels for control flow
+        Label falseLabel = new Label("not_false_" + compiler.getMangerL().newLabel());
+        Label endLabel = new Label("not_end_" + compiler.getMangerL().newLabel());
+        
+        // Load true (1) by default
+        compiler.addInstruction(new LOAD(1, destReg));
+        
+        // Use codeGenCondition - if condition is true, jump to falseLabel
+        // Note: we pass !jump to invert the condition
+        codeGenCondition(compiler, falseLabel, true);
+        
+        // Skip the false case if condition was false (meaning NOT is true)
+        compiler.addInstruction(new BRA(endLabel));
+        
+        // False case - load 0
+        compiler.addLabel(falseLabel);
+        compiler.addInstruction(new LOAD(0, destReg));
+        
+        compiler.addLabel(endLabel);
     }
+
 
     @Override
     public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {

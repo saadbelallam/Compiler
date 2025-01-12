@@ -1,12 +1,9 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BGE;
 import fr.ensimag.ima.pseudocode.instructions.BLT;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
-import fr.ensimag.ima.pseudocode.instructions.SGE;
 
 
 /**
@@ -28,12 +25,9 @@ public class GreaterOrEqual extends AbstractOpIneq {
     }
 
     
-    @Override
-    public  void generateSpecificComparison(DecacCompiler compiler, GPRegister register) {
-        compiler.addInstruction(new SGE(register));
-    }
+
     
-   @Override
+   /* @Override
     public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean isWhileOrIf) {
         // Get registers for operands
         GPRegister leftReg = compiler.getMangerR().allocateRegister();
@@ -51,15 +45,53 @@ public class GreaterOrEqual extends AbstractOpIneq {
             // For if/while, we branch to false label if condition is false (i.e., <)
             // For other contexts, we branch if condition is true (i.e., >=)
             compiler.addInstruction(isWhileOrIf ? new BGE(falseLabel) : new BLT(falseLabel));
-            //compiler.addInstruction(isWhileOrIf ? new BLT(falseLabel) : new BGE(falseLabel));
+            //compiler.addInstruction(isWhileOrIf ? new BGE(falseLabel) : new BLT(falseLabel));
             
         } finally {
             // Free registers
             compiler.getMangerR().freeRegister(leftReg);
             compiler.getMangerR().freeRegister(rightReg);
         }
-    }
+    } */
 
+    /* @Override
+    public void codeGenCondition(DecacCompiler compiler, Label falseLabel, boolean jump) {
+        ManagerOfRegisters regManager = compiler.getMangerR();
+        System.err.println("regManager.getnbOfUsedRegisiters()  >= "+ regManager.getnbOfUsedRegisiters());
+            System.err.println("regManager.has  >= "+ compiler.getMangerR().hasAvailableRegisters());
+        
+        if (regManager.getnbOfUsedRegisiters() <= 12) {
+            // Allocate registers normally if two are available
+            GPRegister leftReg = regManager.allocateRegister();
+            GPRegister rightReg = regManager.allocateRegister();
+            
+            try {
+                // Generate code for operands
+                getLeftOperand().codeGenVal(compiler, leftReg);
+                getRightOperand().codeGenVal(compiler, rightReg);
+
+                // Compare and branch
+                compiler.addInstruction(new CMP(rightReg, leftReg));
+                compiler.addInstruction(jump ? new BGE(falseLabel) : new BLT(falseLabel));
+
+
+            } finally {
+                // Free allocated registers
+                regManager.freeRegister(leftReg);
+                regManager.freeRegister(rightReg);
+            }
+        } else {
+            // Fallback: Use MaxRegCase with stack-based approach
+            GPRegister rightReg = regManager.getScratchRegister(1); // Use scratch register R0
+            regManager.MaxRegCase(compiler, getLeftOperand(), getRightOperand(), rightReg);
+            // Perform the comparison and branching
+            compiler.addInstruction(new CMP(rightReg,Register.getR(0)));
+            compiler.addInstruction(jump ? new BGE(falseLabel) : new BLT(falseLabel));
+
+
+        }
+    }
+ */
     /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         // Get register for right operand
@@ -80,7 +112,11 @@ public class GreaterOrEqual extends AbstractOpIneq {
             compiler.getMangerR().freeRegister(rightReg);
         }
     } */
-}
+   @Override
+    public  void addBranchInstruction(DecacCompiler compiler, Label destLabel,boolean  jump){
+            compiler.addInstruction(jump ? new BGE(destLabel) : new BLT(destLabel));
+    }
+}   
 
     /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister register) {

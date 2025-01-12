@@ -1,0 +1,14 @@
+// Description:
+//    Teste une expression combinant addition, soustraction et multiplication.
+//
+// Résultats:
+//    Résultat attendu : 13
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    int result;
+    result = 10 + 5 - 2 * 1;
+    println(result);
+}

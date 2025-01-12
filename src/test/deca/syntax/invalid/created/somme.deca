@@ -1,0 +1,13 @@
+// Description:
+//    Provoque une erreur de syntaxe dans une expression.
+//
+// Résultats:
+//    Erreur de parsing.
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    int result;
+    result = 10 + ;
+}

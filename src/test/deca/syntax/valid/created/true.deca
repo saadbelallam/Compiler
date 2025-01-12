@@ -1,0 +1,22 @@
+// Description:
+//    Tests full program parsing.
+//
+// Results:
+//    Successfully parsed.
+//
+// History:
+//    Created on 08/01/2025.
+
+{
+    int x;
+    x = 5;
+
+    while (x > 0) {
+        println(x);
+        x = x - 1;
+    }
+
+    if (x == 0) {
+        println("Loop finished");
+    }
+}
