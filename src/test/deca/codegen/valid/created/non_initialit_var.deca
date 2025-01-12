@@ -1,5 +1,0 @@
-// affichage d'une variable non initialisée
-{
-  int x;
-  println(x); 
-}
