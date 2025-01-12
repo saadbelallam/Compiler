@@ -1,0 +1,16 @@
+// Description:
+//   lecture correcte d'un float.
+//
+// Résultats attendus :
+//    Ligne 14 : La lecture est invalide, car la variable est déclarée en tant que int.
+//
+// Historique :
+//    Créé le 12/01/2025.
+
+{
+    int x;
+
+    // Lecture valide
+    x = readFloat();
+    println(x);
+}
