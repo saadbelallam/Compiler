@@ -51,6 +51,7 @@ prog returns[AbstractProgram tree]
 main returns[AbstractMain tree]
     : /* epsilon */ {
             $tree = new EmptyMain();
+            setLocation($tree, $start);
         }
     | block {
             assert($block.decls != null);
@@ -126,10 +127,13 @@ inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
             $tree = $e1.tree;
+            setLocation($tree, $e1.start);  
         }
     | SEMI {
-        $tree = new NoOperation(); // Instruction vide
+            $tree = new NoOperation();
+            setLocation($tree, $SEMI);      
         }
+
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
             $tree = new Print(false, $list_expr.tree);
