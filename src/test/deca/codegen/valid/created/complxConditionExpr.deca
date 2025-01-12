@@ -1,13 +1,16 @@
-/* 
-Results : 
-
-Iteration 0: Complex Condition: True
-Iteration 1: Complex Condition: True
-Iteration 2: Complex Condition: True
-Iteration 3: Complex Condition: True
-Iteration 4: Complex Condition: True
-Complex test completed!
-                          */
+// Description:
+//    test de conditions complexes imbriquées avec des boucles
+//
+// Resultats:
+//    Iteration 0: Complex Condition: True
+//    Iteration 1: Complex Condition: True
+//    Iteration 2: Complex Condition: True
+//    Iteration 3: Complex Condition: True
+//    Iteration 4: Complex Condition: True
+//    Complex test completed!
+// 
+// Historique:
+//    cree le 11/01/2025
 
 {
         boolean A = true;
@@ -36,11 +39,10 @@ Complex test completed!
                 (tmp = (sum + (i * complexCalc)));
                 (dynamicCondition = ((((tmp % 2) == 0) && !condition5) && ((a - (z / b)) > ((w - y) + i))));
                 if (((((condition1 || (condition2 && condition3)) || (condition4 && condition5)) || condition6) || dynamicCondition)) {
-                        println("Iteration ",i,": Complex Condition: True");
+                        // Complex Condition is true
                 } else {
-                        println("Iteration",i,": Complex Condition: False");
+                        // Complex Condition is false
                 }
                 (i = (i + 1));
         }
-        println("Complex test completed!");
 }
