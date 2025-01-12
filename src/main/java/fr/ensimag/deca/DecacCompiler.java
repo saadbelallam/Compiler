@@ -260,6 +260,10 @@ public class DecacCompiler {
         addInstruction(new WSTR("Error: Stack Overflow"));
         addInstruction(new WNL());
         addInstruction(new ERROR());
+        addLabel(new Label("div_by_zero_error"));
+        addInstruction(new WSTR("Error: Division by zero"));
+        addInstruction(new WNL());
+        addInstruction(new ERROR());
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
 
