@@ -1,0 +1,26 @@
+// Description:
+//    tests des comparaisons booléennes
+//
+// Resultats:
+//    true
+//    true
+//    false
+//    false
+//    true
+//    true
+//    false
+//    false
+// 
+// Historique:
+//    cree le 11/01/2025
+
+{
+    true == true;
+    true != false;
+    true == false;
+    true != true;
+    false == false;
+    false != true;
+    false == true;
+    false != false;
+}
