@@ -1,0 +1,15 @@
+// Description:
+//    calcul d'une expression imbriquée avec des variables
+//
+// Resultats:
+//    21
+// 
+// Historique:
+//    cree le 11/01/2025
+
+{
+    int x = 1;
+    int y = 1;
+    int z;
+    z = (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x * (x + y) + y) + y) + y) + y) + y) + y) + y) + y + y) + y) + y) + y) + y) + y) + y) + y) + y) + y + y);
+}
