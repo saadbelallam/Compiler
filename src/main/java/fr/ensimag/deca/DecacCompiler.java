@@ -306,7 +306,6 @@ public class DecacCompiler {
             addInstruction(new WSTR("Error: Division by zero"));
             addInstruction(new WNL());
             addInstruction(new ERROR());
-            addInstruction(new ERROR());
         }
 
 
