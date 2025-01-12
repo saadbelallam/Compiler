@@ -19,8 +19,9 @@ public class Null extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
-        // Type intType = new IntType(compiler.getSymbols().create("int"));
-        return null;
+        Type nullType = compiler.environmentType.NULL;        
+        this.setType(nullType);
+        return nullType;
     }
 
     @Override
