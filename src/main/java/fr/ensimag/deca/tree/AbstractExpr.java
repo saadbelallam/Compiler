@@ -141,6 +141,7 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrint(DecacCompiler compiler) {
          GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        compiler.addComment("Load in R1 to be able to display");
         this.codeGenVal(compiler, tmpReg);
         // 3. Print based on type
         switch (this.getType().toString()) {
@@ -178,6 +179,7 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrintLnx(DecacCompiler compiler){
         GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        compiler.addComment("Load in R1 to be able to display");
         this.codeGenVal(compiler,tmpReg);
         switch (this.getType().toString()) {
             case "float" :

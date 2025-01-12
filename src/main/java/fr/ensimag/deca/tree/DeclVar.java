@@ -74,6 +74,7 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void codeGenVar(DecacCompiler compiler) {
         RegisterOffset address = compiler.getMangerM().allocateVariable();
+        compiler.addComment("Variable declaration: " + varName.getName());
         varName.getExpDefinition().setOperand(address);
         
         if (initialization instanceof Initialization) {
@@ -83,13 +84,14 @@ public class DeclVar extends AbstractDeclVar {
             if (type.getType().isFloat() && initExpr.getType().isInt()) {
                 initExpr = new ConvFloat(initExpr);
             }
-            
             GPRegister reg = compiler.getMangerR().allocateRegister();
+            compiler.addComment("allocate R"+reg.getNumber());
             try {
                 // Use the potentially converted expression
                 initExpr.codeGenVal(compiler, reg);
                 compiler.addInstruction(new STORE(reg, address));
             } finally {
+                compiler.addComment("release R"+reg.getNumber());
                 compiler.getMangerR().freeRegister(reg);
             }
         }}

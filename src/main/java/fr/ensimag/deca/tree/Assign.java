@@ -45,6 +45,7 @@ public class Assign extends AbstractBinaryExpr {
     
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+         compiler.addComment("Assignment to " + getLeftOperand());
         // Generate right operand value first
         GPRegister reg = compiler.getMangerR().allocateRegister();
         getRightOperand().codeGenVal(compiler, reg); 

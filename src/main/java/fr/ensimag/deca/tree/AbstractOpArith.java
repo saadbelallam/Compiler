@@ -78,6 +78,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
             getLeftOperand().codeGenVal(compiler, destReg);
             // Generation du code pour right dans le registre n+1
             GPRegister rightReg = compiler.getMangerR().allocateRegister();
+            compiler.addComment("allocate R"+rightReg.getNumber());
             getRightOperand().codeGenVal(compiler, rightReg);
             // Opération
             
@@ -90,6 +91,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
             }
             
             // libération du rightReg
+            compiler.addComment("release R"+rightReg.getNumber());
             compiler.getMangerR().freeRegister(rightReg);
         }
      }

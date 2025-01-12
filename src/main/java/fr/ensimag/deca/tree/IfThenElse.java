@@ -69,6 +69,7 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        compiler.addComment("Beginning of if-then-else statement");
         // Create labels for else and end blocks
         Label elseLabel = new Label("E_Sinon." + compiler.getMangerL().newLabel());
         Label endLabel = new Label("E_Fin." + compiler.getMangerL().newLabel());
@@ -91,6 +92,8 @@ public class IfThenElse extends AbstractInst {
         
         // End label
         compiler.addLabel(endLabel);
+        compiler.addComment("End of if-then-else statement");
+
     }
 
 
