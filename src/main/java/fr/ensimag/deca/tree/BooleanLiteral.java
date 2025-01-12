@@ -14,12 +14,15 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author gl24
  * @date 01/01/2025
  */
 public class BooleanLiteral extends AbstractExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
 
     private boolean value;
 
@@ -34,8 +37,10 @@ public class BooleanLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify boolean literal: start");
         Type booleanType = compiler.environmentType.BOOLEAN;
         this.setType(booleanType);
+        LOG.debug("verify boolean literal: end");
         return booleanType;
     }
 

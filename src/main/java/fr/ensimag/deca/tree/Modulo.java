@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -18,6 +20,8 @@ import fr.ensimag.ima.pseudocode.instructions.SUB;
  * @date 01/01/2025
  */
 public class Modulo extends AbstractOpArith {
+    private static final Logger LOG = Logger.getLogger(AbstractOpArith.class);
+
 
     public Modulo(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
@@ -26,12 +30,14 @@ public class Modulo extends AbstractOpArith {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify modulo: start");
         Type type1 = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type type2 = getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         if (!type1.isInt() || !type2.isInt()) {
             throw new ContextualError("Operands of modulo should be of type int", getLocation());
         }
         setType(type1);
+        LOG.debug("verify modulo: end");
         return type1;
     }
 

@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -22,6 +24,8 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
  * @date 01/01/2025
  */
 public class IntLiteral extends AbstractExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
+
     public int getValue() {
         return value;
     }
@@ -35,7 +39,7 @@ public class IntLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
-        // Type intType = new IntType(compiler.getSymbols().create("int"));
+        LOG.debug("verify int literal: start");
         IntType intType = compiler.environmentType.INT;
 
         if (intType == null || !intType.isInt()) {
@@ -43,6 +47,7 @@ public class IntLiteral extends AbstractExpr {
         }
         
         this.setType(intType);
+        LOG.debug("verify int literal: end");
         return intType;
     }
 

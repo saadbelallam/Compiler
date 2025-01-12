@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -13,6 +15,8 @@ import fr.ensimag.ima.pseudocode.instructions.OPP;
  * @date 01/01/2025
  */
 public class UnaryMinus extends AbstractUnaryExpr {
+            private static final Logger LOG = Logger.getLogger(AbstractUnaryExpr.class);
+
 
     public UnaryMinus(AbstractExpr operand) {
         super(operand);
@@ -21,11 +25,13 @@ public class UnaryMinus extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify unary minus: start");
         Type type = getOperand().verifyExpr(compiler, localEnv, currentClass);
         if (!type.isInt() && !type.isFloat()) {
             throw new ContextualError("Minus can only be applied to int or float", getLocation());
         }
         setType(type);
+        LOG.debug("verify unary minus: end");
         return type;
     }
 

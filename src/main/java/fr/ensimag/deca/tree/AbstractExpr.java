@@ -25,6 +25,8 @@ import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
+
+import org.apache.log4j.Logger;
 /**
  * Expression, i.e. anything that has a value.
  *
@@ -32,6 +34,7 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
  * @date 01/01/2025
  */
 public abstract class AbstractExpr extends AbstractInst {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
     /**
      * @return true if the expression does not correspond to any concrete token
      * in the source code (and should be decompiled to the empty string).
@@ -94,6 +97,7 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,  Type expectedType) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verifyRValue: start");
         Type type = this.verifyExpr(compiler, localEnv, currentClass);
         
         if (!type.sameType(expectedType)) {
@@ -104,7 +108,7 @@ public abstract class AbstractExpr extends AbstractInst {
             }
             throw new ContextualError("Type mismatch: expected " + expectedType + " but found " + type, this.getLocation());
         }
-        
+        LOG.debug("verifyRValue: end");
         return this;
     }
     
@@ -112,7 +116,9 @@ public abstract class AbstractExpr extends AbstractInst {
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verifyInst: start");
         this.verifyExpr(compiler, localEnv, currentClass);
+        LOG.debug("verifyInst: end");
     }
 
     /**
@@ -127,11 +133,13 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     void verifyCondition(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verifyCondition: start");
         Type conditionType = this.verifyExpr(compiler, localEnv, currentClass);
 
         if (!conditionType.isBoolean()) {
             throw new ContextualError("Condition must be of type boolean, found: " + conditionType, this.getLocation());
         }
+        LOG.debug("verifyCondition: end");
     }
 
     /**

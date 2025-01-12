@@ -10,12 +10,15 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author gl24
  * @date 01/01/2025
  */
 public abstract class AbstractOpCmp extends AbstractBinaryExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractBinaryExpr.class);
 
     public AbstractOpCmp(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
@@ -24,6 +27,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
 
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify op cmp: start");
         Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
 
@@ -51,6 +55,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
         Type type = compiler.environmentType.BOOLEAN;
         this.setType(type);
+        LOG.debug("verify op cmp: end");
         return type;
     }
 

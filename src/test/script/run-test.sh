@@ -54,6 +54,46 @@ for file in "$directory"/*.deca; do
 done
 
 
+# Répertoire contenant les fichiers .deca
+directory="src/test/deca/codegen/invalid/created"
+# Répertoire où les fichiers .ass seront copiés
+output_directory="src/test/deca/codegen/invalid/generated"
+
+
+# Vérifier si le répertoire de sortie existe, sinon le créer
+if [ ! -d "$output_directory" ]; then
+  mkdir -p "$output_directory"
+fi
+
+# Parcourir tous les fichiers .deca dans le répertoire
+for file in "$directory"/*.deca; do
+  # Vérifier si des fichiers .deca existent
+  if [ ! -e "$file" ]; then
+    echo -e "${YELLOW}Aucun fichier .deca trouvé dans $directory.${RESET}"
+    exit 1
+  fi
+
+  
+  # Exécuter la commande decac
+  decac "$file"
+
+  # Vérifier si la commande a échoué
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}Erreur lors de la compilation de $file ${RESET}"
+    exit 1
+  fi
+
+  # Nom du fichier .ass généré
+  ass_file="${file%.deca}.ass"
+
+  # Vérifier si le fichier .ass existe
+  if [ -f "$ass_file" ]; then
+    # Copier le fichier .ass dans le répertoire de destination
+    mv "$ass_file" "$output_directory"
+
+  fi
+done
+
 # Répertoire source des fichiers .ass
 input_dir="src/test/deca/codegen/valid"
 # Répertoire de sortie pour les fichiers .res

@@ -10,12 +10,15 @@ import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author gl24
  * @date 01/01/2025
  */
 public abstract class AbstractOpBool extends AbstractBinaryExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractBinaryExpr.class);
 
     public AbstractOpBool(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
@@ -24,6 +27,7 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify op bool: start");
         Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
         if (!type1.isBoolean()) {
@@ -33,6 +37,7 @@ public abstract class AbstractOpBool extends AbstractBinaryExpr {
             throw new ContextualError("Right operand must be of type boolean", this.getRightOperand().getLocation());
         }
         this.setType(type1);
+        LOG.debug("verify op bool: end");
         return type1;
     }
 

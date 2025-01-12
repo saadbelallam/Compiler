@@ -8,6 +8,8 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 
+import org.apache.log4j.Logger;
+
 /**
  * Arithmetic binary operations (+, -, /, ...)
  * 
@@ -15,6 +17,7 @@ import fr.ensimag.ima.pseudocode.Register;
  * @date 01/01/2025
  */
 public abstract class AbstractOpArith extends AbstractBinaryExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractBinaryExpr.class);
 
     public AbstractOpArith(AbstractExpr leftOperand, AbstractExpr rightOperand) {
         super(leftOperand, rightOperand);
@@ -23,6 +26,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify op arith: start");
         Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
        // i'm g
@@ -55,6 +59,7 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         }
     
         this.setType(type1);
+        LOG.debug("verify op arith: end");
         return type1;
     }
 
