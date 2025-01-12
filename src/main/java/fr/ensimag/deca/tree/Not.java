@@ -65,7 +65,7 @@ public class Not extends AbstractUnaryExpr {
         
         // Use codeGenCondition - if condition is true, jump to falseLabel
         // Note: we pass !jump to invert the condition
-        codeGenCondition(compiler, falseLabel, true);
+        codeGenCondition(compiler, falseLabel, false);
         
         // Skip the false case if condition was false (meaning NOT is true)
         compiler.addInstruction(new BRA(endLabel));

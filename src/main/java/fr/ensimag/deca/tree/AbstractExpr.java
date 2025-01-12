@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -25,8 +26,6 @@ import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
-
-import org.apache.log4j.Logger;
 /**
  * Expression, i.e. anything that has a value.
  *
@@ -287,6 +286,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // Generate code for the expression
         this.codeGenVal(compiler, reg);
         
+        compiler.getMangerR().freeRegister(reg);
         // Note: The result is computed but discarded since it's not used
         // This matches the semantics of an expression statement
     }

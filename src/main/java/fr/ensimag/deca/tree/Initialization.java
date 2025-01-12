@@ -13,7 +13,6 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 
 /**
@@ -74,7 +73,7 @@ public class Initialization extends AbstractInitialization {
 
     @Override
     public void codeGenInit(DecacCompiler compiler, GPRegister reg, DAddr address) {
-        if (expression != null) {
+        /* if (expression != null) {
             // Check if we need float conversion
             if (expression.getType().isInt() && getType().isFloat()) {
                 System.err.println("I'm here");
@@ -85,7 +84,7 @@ public class Initialization extends AbstractInitialization {
                 expression.codeGenVal(compiler, reg);
             }
             compiler.addInstruction(new STORE(reg, address));
-        }
+        } */
     }
 }
    
