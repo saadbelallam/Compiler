@@ -1,0 +1,16 @@
+// Description:
+//   lecture correcte d'un float.
+//
+// Résultats attendus :
+//    Ligne 14 : La lecture est valide, car la variable est correctement déclarée.
+//
+// Historique :
+//    Créé le 12/01/2025.
+
+{
+    float x;
+
+    // Lecture valide
+    x = readFloat();
+    println(x);
+}
