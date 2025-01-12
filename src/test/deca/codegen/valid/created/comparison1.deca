@@ -1,3 +1,25 @@
+// Description:
+//    tests des opérateurs de comparaison
+//
+// Resultats:
+//    true
+//    true
+//    true
+//    true
+//
+//    true
+//    true
+//    true
+//    true
+//
+//    true
+//    true
+//    true
+//    true
+// 
+// Historique:
+//    cree le 01/01/2025
+
 {
     1 == 1;
     1 == 1.0;
