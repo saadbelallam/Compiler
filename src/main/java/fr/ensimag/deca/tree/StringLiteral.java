@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream; //ligne rajouté
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -19,6 +20,8 @@ import fr.ensimag.ima.pseudocode.instructions.WSTR;
  * @date 01/01/2025
  */
 public class StringLiteral extends AbstractStringLiteral {
+        private static final Logger LOG = Logger.getLogger(AbstractStringLiteral.class);
+
 
     @Override
     public String getValue() {
@@ -34,6 +37,8 @@ public class StringLiteral extends AbstractStringLiteral {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify string literal: start");
         Type stringType = compiler.environmentType.STRING;
 
         if (stringType == null || !stringType.isString()) {
@@ -41,6 +46,7 @@ public class StringLiteral extends AbstractStringLiteral {
         }
 
         this.setType(stringType);
+        LOG.debug("verify string literal: end");
         return stringType;
     }
 

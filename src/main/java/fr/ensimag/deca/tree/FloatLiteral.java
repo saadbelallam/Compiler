@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -21,6 +22,8 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
  * @date 01/01/2025
  */
 public class FloatLiteral extends AbstractExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
+
 
     public float getValue() {
         return value;
@@ -39,8 +42,10 @@ public class FloatLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");   
+        LOG.debug("verify float literal: start");
         Type type = compiler.environmentType.FLOAT;
         this.setType(type);
+        LOG.debug("verify float literal: end");
         return type;     
     }
 

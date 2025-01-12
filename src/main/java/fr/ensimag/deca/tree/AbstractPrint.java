@@ -11,6 +11,8 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
+import org.apache.log4j.Logger;
+
 /**
  * Print statement (print, println, ...).
  *
@@ -18,6 +20,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
  * @date 01/01/2025
  */
 public abstract class AbstractPrint extends AbstractInst {
+    private static final Logger LOG = Logger.getLogger(AbstractInst.class);
 
     private boolean printHex;
     private ListExpr arguments = new ListExpr();
@@ -36,6 +39,7 @@ public abstract class AbstractPrint extends AbstractInst {
 
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        LOG.debug("verify print: start");
         for (AbstractExpr a : getArguments().getList()) {
             // Vérification du type de chaque argument
             a.verifyExpr(compiler, localEnv, currentClass);
@@ -47,6 +51,7 @@ public abstract class AbstractPrint extends AbstractInst {
             }
 
         }
+        LOG.debug("verify print: end");
     }
     
 

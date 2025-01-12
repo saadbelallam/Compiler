@@ -9,6 +9,8 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
+import org.apache.log4j.Logger;
+
 /**
  * Assignment, i.e. lvalue = expr.
  *
@@ -16,6 +18,7 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
  * @date 01/01/2025
  */
 public class Assign extends AbstractBinaryExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractBinaryExpr.class);
 
     @Override
     public AbstractLValue getLeftOperand() {
@@ -30,9 +33,11 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify assign: start");
         Type type = getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
         this.setRightOperand(getRightOperand().verifyRValue(compiler, localEnv, currentClass, type));
         setType(type);
+        LOG.debug("verify assign: end");
         return type;
 }
 

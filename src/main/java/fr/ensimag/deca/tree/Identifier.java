@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -31,6 +32,8 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
  * @date 01/01/2025
  */
 public class Identifier extends AbstractIdentifier {
+        private static final Logger LOG = Logger.getLogger(AbstractIdentifier.class);
+
     
     @Override
     protected void checkDecoration() {
@@ -173,6 +176,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify identifier: start");
         ExpDefinition expDef = localEnv.get(this.name);
 
         if (expDef == null) {
@@ -181,6 +185,7 @@ public class Identifier extends AbstractIdentifier {
         this.setDefinition(expDef);
         Type type = expDef.getType();
         this.setType(type);
+        LOG.debug("verify identifier: end");
         return type;
     }
 
@@ -191,6 +196,7 @@ public class Identifier extends AbstractIdentifier {
     @Override
     public Type verifyType(DecacCompiler compiler) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify type: start");
         TypeDefinition typeDef = compiler.environmentType.defOfType(this.name);
         if (typeDef == null) {
             throw new ContextualError("Type " + getName() + " is not defined", getLocation());
@@ -198,6 +204,7 @@ public class Identifier extends AbstractIdentifier {
         this.setDefinition(typeDef);
         Type type = typeDef.getType();
         this.setType(type);
+        LOG.debug("verify type: end");
         return type;
     }
     

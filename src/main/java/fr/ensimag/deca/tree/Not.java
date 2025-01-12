@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -16,6 +18,8 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
  * @date 01/01/2025
  */
 public class Not extends AbstractUnaryExpr {
+        private static final Logger LOG = Logger.getLogger(AbstractUnaryExpr.class);
+
 
     public Not(AbstractExpr operand) {
         super(operand);
@@ -24,11 +28,13 @@ public class Not extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify not: start");
         Type type = getOperand().verifyExpr(compiler, localEnv, currentClass);
         if (!type.isBoolean()) {
             throw new ContextualError("Operator '!' only on booleans", getLocation());
         }
         setType(type);
+        LOG.debug("verify not: end");
         return type;
     }
 

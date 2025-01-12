@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -20,6 +21,8 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
  * @date 01/01/2025
  */
 public class Initialization extends AbstractInitialization {
+        private static final Logger LOG = Logger.getLogger(AbstractInitialization.class);
+
     
     private AbstractExpr expression;
 
@@ -40,7 +43,9 @@ public class Initialization extends AbstractInitialization {
     @Override
     protected void verifyInitialization(DecacCompiler compiler, Type t, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify initialization: start");
         expression.verifyRValue(compiler, localEnv, currentClass, t);
+        LOG.debug("verify initialization: end");
     }
 
 

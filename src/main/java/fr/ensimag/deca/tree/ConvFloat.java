@@ -7,6 +7,8 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 
+import org.apache.log4j.Logger;
+
 /**
  * Conversion of an int into a float. Used for implicit conversions.
  * 
@@ -14,6 +16,8 @@ import fr.ensimag.ima.pseudocode.instructions.FLOAT;
  * @date 01/01/2025
  */
 public class ConvFloat extends AbstractUnaryExpr {
+    private static final Logger LOG = Logger.getLogger(AbstractUnaryExpr.class);
+
     public ConvFloat(AbstractExpr operand) {
         super(operand);
     }
@@ -21,9 +25,10 @@ public class ConvFloat extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) {
         // throw new UnsupportedOperationException("not yet implemented");
+        LOG.debug("verify conv float: start");
         Type type = compiler.environmentType.FLOAT;
         this.setType(type);
-        //this.setType(new FloatType(compiler.createSymbol("float")));
+        LOG.debug("verify conv float: end");
         return type;
     }
 

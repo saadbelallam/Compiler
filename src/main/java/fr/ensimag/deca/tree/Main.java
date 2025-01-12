@@ -33,11 +33,11 @@ public class Main extends AbstractMain {
 
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
-        // LOG.debug("verify Main: start");
+        LOG.debug("verify Main: start");
         EnvironmentExp env = new EnvironmentExp(null);
         declVariables.verifyListDeclVariable(compiler, env, null);
         insts.verifyListInst(compiler, env, null, compiler.environmentType.VOID);
-        // LOG.debug("verify Main: end");
+        LOG.debug("verify Main: end");
     }
     
     // Gestion de l'erreur de débordement de pile

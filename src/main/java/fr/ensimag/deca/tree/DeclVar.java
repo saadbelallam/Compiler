@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -23,6 +24,8 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
  * @date 01/01/2025
  */
 public class DeclVar extends AbstractDeclVar {
+        private static final Logger LOG = Logger.getLogger(AbstractDeclVar.class);
+
 
     
     final private AbstractIdentifier type;
@@ -40,6 +43,7 @@ public class DeclVar extends AbstractDeclVar {
 
     @Override
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify DeclVar: start");
         // Étape 0 : Déclaration de type string (?)
         if (this.type.toString().equals("string")) {
             compiler.environmentType.declareType(compiler.createSymbol("string"), 
@@ -69,6 +73,7 @@ public class DeclVar extends AbstractDeclVar {
         } catch (DoubleDefException e) {
             throw new ContextualError("Variable " + name + " is already defined ", this.getLocation());
         }
+        LOG.debug("verify DeclVar: end");
     }
 
     @Override

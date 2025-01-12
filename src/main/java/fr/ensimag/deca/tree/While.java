@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -19,6 +20,9 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
  * @date 01/01/2025
  */
 public class While extends AbstractInst {
+        private static final Logger LOG = Logger.getLogger(AbstractInst.class);
+
+    
     private AbstractExpr condition;
     private ListInst body;
 
@@ -64,8 +68,10 @@ public class While extends AbstractInst {
 
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        LOG.debug("verify While: start");
         condition.verifyCondition(compiler, localEnv, currentClass);
         body.verifyListInst(compiler, localEnv, currentClass, returnType);
+        LOG.debug("verify While: end");
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -20,6 +21,8 @@ import fr.ensimag.ima.pseudocode.instructions.BRA;
  * @date 01/01/2025
  */
 public class IfThenElse extends AbstractInst {
+        private static final Logger LOG = Logger.getLogger(AbstractInst.class);
+
     
     private final AbstractExpr condition; 
     private final ListInst thenBranch;
@@ -62,9 +65,11 @@ public class IfThenElse extends AbstractInst {
 
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        LOG.debug("verify IfThenElse: start");
         this.condition.verifyCondition(compiler, localEnv, currentClass);
         this.thenBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
         this.elseBranch.verifyListInst(compiler, localEnv, currentClass, returnType);
+        LOG.debug("verify IfThenElse: end");
     }
 
     @Override
