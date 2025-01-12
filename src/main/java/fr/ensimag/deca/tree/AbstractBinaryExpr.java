@@ -4,7 +4,9 @@ import java.io.PrintStream;
 
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
  * Binary expressions.
@@ -66,6 +68,10 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         leftOperand.prettyPrint(s, prefix, false);
         rightOperand.prettyPrint(s, prefix, true);
+    }
+   
+    public void addArithInsruction(DecacCompiler compiler,GPRegister srctReg , GPRegister dstReg){
+
     }
 
 }

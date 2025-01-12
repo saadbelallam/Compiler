@@ -2,7 +2,6 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.ADD;
 /**
  * @author gl24
@@ -20,7 +19,7 @@ public class Plus extends AbstractOpArith {
     }
 
     
-    @Override
+   /*  @Override
      public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         //<codeExp( op[ e1 e2] , n) > avec <d v a l ( e2) >=⊥ e t n=MAX
         if (compiler.getMangerR().getnbOfUsedRegisiters() == compiler.getMaxRegisters()-1){
@@ -28,7 +27,10 @@ public class Plus extends AbstractOpArith {
             // ManagerOfRegisters
             compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
             compiler.addInstruction(new ADD(Register.getR(0), destReg));
-            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+
+            if(getType().isFloat()){
+               addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
         }
         // Cad n < Max
         else {
@@ -38,11 +40,23 @@ public class Plus extends AbstractOpArith {
             GPRegister rightReg = compiler.getMangerR().allocateRegister();
             getRightOperand().codeGenVal(compiler, rightReg);
             // Opération
+            
             compiler.addInstruction(new ADD(rightReg, destReg));
-            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            
+            if(getType().isFloat()){
+               addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }else{
+               compiler.addComment("No need for overflow check for type int");
+            }
+            
             // libération du rightReg
             compiler.getMangerR().freeRegister(rightReg);
         }
-     }
+     } */
+
+    @Override
+    public void addArithInsruction(DecacCompiler compiler,GPRegister srctReg , GPRegister dstReg){
+            compiler.addInstruction(new ADD(srctReg, dstReg));
+    }
 }
     
