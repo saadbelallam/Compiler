@@ -10,6 +10,9 @@ public class ManagerOfLabel {
     private final Label overflowLabel = new Label("overflow_error");
     private final Label io_Label = new Label("io_error");
     Label divByZeroError = new Label("div_by_zero_error");
+    private boolean branchOverFlow = false;
+    private boolean branchIO = false;
+    private boolean branchDivByZero = false;
 
     
     
@@ -18,15 +21,30 @@ public class ManagerOfLabel {
      * @return OverFlow Label
      */
     public Label getOverflowLabel() {
+        branchOverFlow = true;
         return overflowLabel;
     }
 
     public Label getIOLabel(){
+        branchIO = true;
         return io_Label;
     }
 
-    public Label getDivByZLabel(){
+    public Label getDivByZeroLabel(){
+        branchDivByZero =true;
         return divByZeroError;
+    }
+
+    public boolean getBranchOverFlow(){
+        return branchOverFlow;
+    }
+
+    public boolean getBranchIO(){
+        return branchIO;
+    }
+
+    public boolean getBranchDivByZero(){
+        return branchDivByZero;
     }
  
     /**
