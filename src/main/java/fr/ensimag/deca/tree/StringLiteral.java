@@ -52,6 +52,12 @@ public class StringLiteral extends AbstractStringLiteral {
         compiler.addInstruction(new WSTR(new ImmediateString(value)));
     }
 
+    // For printx / printlnx
+    @Override
+    protected void codeGenPrintLnx(DecacCompiler compiler) {
+        compiler.addInstruction(new WSTR(new ImmediateString(value)));
+    }
+
     @Override
     public void decompile(IndentPrintStream s) {
         // throw new UnsupportedOperationException("not yet implemented");

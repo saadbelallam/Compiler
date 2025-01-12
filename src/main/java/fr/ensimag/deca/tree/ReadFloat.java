@@ -56,8 +56,10 @@ public class ReadFloat extends AbstractReadExpr {
         if (dest.getNumber() != 1) {
             compiler.addInstruction(new RFLOAT());
             compiler.addInstruction(new LOAD(Register.R1, dest));
+            addBOVinstruction(compiler, compiler.getMangerL().getIOLabel());
         } else {
             compiler.addInstruction(new RFLOAT());
+            addBOVinstruction(compiler, compiler.getMangerL().getIOLabel());
         }
     }
 

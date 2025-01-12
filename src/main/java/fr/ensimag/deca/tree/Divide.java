@@ -49,12 +49,19 @@ public class Divide extends AbstractOpArith {
         //la division
         if (getType().isFloat()) {
             compiler.addInstruction(new DIV(Register.getR(0), register));
+            
         } else {
             compiler.addInstruction(new QUO(Register.getR(0), register));
         }
+
+        //OV error handling for float
+        addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            
     } else {
         // Cas normal
         GPRegister tempReg = compiler.getMangerR().allocateRegister();
+        compiler.addComment("allocate R" + tempReg.getNumber());
+
 
         try {
             // Evaluation de right et left
@@ -78,8 +85,11 @@ public class Divide extends AbstractOpArith {
             } else {
                 compiler.addInstruction(new QUO(tempReg, register));
             }
+            //OV error handling for float
+            addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
         } finally {
             // Libération du registre temporaire
+            compiler.addComment("release R" + tempReg.getNumber());
             compiler.getMangerR().freeRegister(tempReg);
         }
     }

@@ -28,6 +28,11 @@ public class Minus extends AbstractOpArith {
             // ManagerOfRegisters
             compiler.getMangerR().MaxRegCase(compiler,getLeftOperand(), getRightOperand(), destReg);
             compiler.addInstruction(new SUB(Register.getR(0), destReg));
+            //OV error handling for float
+            if(getType().isFloat()){
+                addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
+            
         }
         // Cad n < Max
         else {
@@ -38,6 +43,10 @@ public class Minus extends AbstractOpArith {
             getRightOperand().codeGenVal(compiler, rightReg);
             // Perform subtraction
             compiler.addInstruction(new SUB(rightReg, destReg));
+            //OV error handling for float
+            if(getType().isFloat()){
+                addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
+            }
             // Free the right register
             compiler.getMangerR().freeRegister(rightReg);
         }
