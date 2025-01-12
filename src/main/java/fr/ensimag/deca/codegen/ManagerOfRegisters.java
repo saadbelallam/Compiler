@@ -34,9 +34,9 @@ public class ManagerOfRegisters {
     }
 
     public GPRegister allocateRegister() {
-        if (registerStack.isEmpty()) {
+       /*  if (registerStack.isEmpty()) {
             System.err.println("Register stack overflow");
-        }
+        } */
         GPRegister reg = registerStack.pop();
         usedRegisters[reg.getNumber()] = true;
         this.nbOfUsedRegisiters++;
@@ -54,7 +54,7 @@ public class ManagerOfRegisters {
 
     public GPRegister getScratchRegister(int index) {
         if (index != 0 && index != 1) {
-            throw new IllegalArgumentException("Scratch register index must be 0 or 1");
+            //throw new IllegalArgumentException("Scratch register index must be 0 or 1");
         }
         return Register.getR(index);
     }

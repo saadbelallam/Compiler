@@ -1,9 +1,10 @@
 package fr.ensimag.deca.codegen;
 
+import java.util.Stack;
+
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import java.util.Stack;
 
 public class RegisterManager {
     private final int maxRegisters;
