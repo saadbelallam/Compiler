@@ -85,9 +85,4 @@ public class EnvironmentExp {
         }
         currentEnvironment.put(name, def);
     }
-
-    @Override
-    public String toString() {
-        return "EnvironmentExp : " + currentEnvironment + " parent : " + parentEnvironment;
-    }
 }

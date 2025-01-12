@@ -1,7 +1,6 @@
 package fr.ensimag.deca;
 
 //import fr.ensimag.deca.codegen.RegisterManager;
-import fr.ensimag.deca.codegen.StackManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -14,7 +13,6 @@ import fr.ensimag.deca.codegen.ManagerOfRegisters;
 import fr.ensimag.deca.codegen.ManagerOfLabel;
 import fr.ensimag.deca.codegen.ManagerOfMemory;
 import fr.ensimag.ima.pseudocode.AbstractLine;
-import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Instruction;
 import fr.ensimag.ima.pseudocode.Label;
@@ -242,11 +240,11 @@ public class DecacCompiler {
             LOG.info("Parsing failed");
             return true;
         }
-        if (compilerOptions.getParse()) {
+        if (getCompilerOptions().getParse()) {
             prog.decompile(out);
             return false;
         }
-        if (compilerOptions.getVerify()) {
+        if (getCompilerOptions().getVerify()) {
             prog.verifyProgram(this);
             return false;
         }
@@ -281,31 +279,42 @@ public class DecacCompiler {
         return false;
     }
 
+    private boolean branchStackOverflow = false;
+    
+    public void setBranchStackOverflow(){
+        branchStackOverflow = true;
+    }
      
     public void setupErrorHandling() {
            
+            if (branchStackOverflow){
             addLabel(new Label("stack_overflow_error"));
             addInstruction(new WSTR("Error: Stack Overflow"));
             addInstruction(new WNL());
             addInstruction(new ERROR());
+            }
 
+            if(this.getMangerL().getBranchOverFlow()){
+                addLabel(new Label("overflow_error"));
+                addInstruction(new WSTR("Error: Overflow during arithmetic operation"));
+                addInstruction(new WNL());
+                addInstruction(new ERROR());
+            }
            
-            addLabel(new Label("overflow_error"));
-            addInstruction(new WSTR("Error: Overflow during arithmetic operation"));
-            addInstruction(new WNL());
-            addInstruction(new ERROR());
+            if (this.getMangerL().getBranchIO()){
+                addLabel(new Label("io_error"));
+                addInstruction(new WSTR("Error: Input/Output error"));
+                addInstruction(new WNL());
+                addInstruction(new ERROR());
+            }
 
-          
-            addLabel(new Label("io_error"));
-            addInstruction(new WSTR("Error: Input/Output error"));
-            addInstruction(new WNL());
-            addInstruction(new ERROR());
+            if (this.getMangerL().getBranchDivByZero()){
+                addLabel(new Label("div_by_zero_error"));
+                addInstruction(new WSTR("Error: Division by zero"));
+                addInstruction(new WNL());
+                addInstruction(new ERROR());
+            }
 
-
-            addLabel(new Label("div_by_zero_error"));
-            addInstruction(new WSTR("Error: Division by zero"));
-            addInstruction(new WNL());
-            addInstruction(new ERROR());
         }
 
 

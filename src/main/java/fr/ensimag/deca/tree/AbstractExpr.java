@@ -176,7 +176,6 @@ public abstract class AbstractExpr extends AbstractInst {
                 compiler.addLabel(endLabel);
                 break;
             default:
-                throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
         }
 }   
     /**
@@ -196,7 +195,7 @@ public abstract class AbstractExpr extends AbstractInst {
                 compiler.addInstruction(new WINT());
                 break;
             case "boolean"  :
-                 Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
+                Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
                 Label falseLabel = new Label("print_false_" + compiler.getMangerL().newLabel());
                 
                 // Compare with 0 (false)
@@ -213,7 +212,6 @@ public abstract class AbstractExpr extends AbstractInst {
                 
                 break;
             default:
-                throw new UnsupportedOperationException("Print not implemented for type: " + this.getType());
         }
     }
 

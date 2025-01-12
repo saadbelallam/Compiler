@@ -96,7 +96,7 @@ FLOAT : FLOATDEC | FLOATHEX;
 fragment STRING_CAR : ~('"'|'\r'|'\n'|'\\') ;
 
 // End of line (EOL)
-fragment EOL: '\\' ('n'|'t'|'r');
+fragment EOL: '\n';
 
 
 // String

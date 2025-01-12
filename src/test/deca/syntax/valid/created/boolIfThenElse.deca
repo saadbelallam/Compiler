@@ -1,0 +1,48 @@
+// Description:
+//    tests conditionnelle
+//
+// Resultats:
+//    Condition 1: False
+//    Condition 2: False
+//    Condition 3: True
+//    Condition 4: True
+//    Test completed!
+// 
+// Historique:
+//    cree le 01/01/2025
+
+{
+    // Variable declarations
+    boolean A = true;
+    boolean B = false;
+    boolean C = true;
+    int x = 10;
+    int y = 5;
+
+    // Complex boolean conditions
+    if (A && B || !C) {
+        println("Condition 1: True");
+    } else {
+        println("Condition 1: False");
+    }
+
+    if ((x > y || B) && !(A && C)) {
+        println("Condition 2: True");
+    } else {
+        println("Condition 2: False");
+    }
+
+    if (!(x < y && (A || B)) || C) {
+        println("Condition 3: True");
+    } else {
+        println("Condition 3: False");
+    }
+
+    if (A || (x % 2 == 0 && !B) && C) {
+        println("Condition 4: True");
+    } else {
+        println("Condition 4: False");
+    }
+
+    println("Test completed!");
+}

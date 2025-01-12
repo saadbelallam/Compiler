@@ -93,7 +93,7 @@ public class Divide extends AbstractOpArith {
             }
 
             // Gérer la division par zéro directement via OV
-            Label divByZeroError = compiler.getMangerL().getDivByZLabel();
+            Label divByZeroError = compiler.getMangerL().getDivByZeroLabel();
             addBOVinstruction(compiler, divByZeroError);
             
         } finally {
