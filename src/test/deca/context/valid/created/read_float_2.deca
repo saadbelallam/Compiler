@@ -9,8 +9,6 @@
 
 {
     float f;
-
-    // Lecture invalide
     f = readInt();
     println(f);
 }

@@ -8,7 +8,8 @@
 //    créé le 06/01/2025
 
 {
-    float a;
-    a = readFloat();
+    int a;
+    println("Veuillez rentrez un entier !");
+    a = readInt();
     println(a);
 }

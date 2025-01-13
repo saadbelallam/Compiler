@@ -9,8 +9,6 @@
 
 {
     float x;
-
-    // Lecture valide
     x = readFloat();
     println(x);
 }

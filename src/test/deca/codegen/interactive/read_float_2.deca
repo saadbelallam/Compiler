@@ -1,0 +1,15 @@
+// Description:
+//    Vérification contextuelle de la bonne conversion d'un int en float
+//
+// Résultats attendus :
+//    Ligne 14 : conversion d'un int en float
+//
+// Historique :
+//    Créé le 12/01/2025.
+
+{
+    float f;
+    println("Veuillez rentrez un nombre !");
+    f = readInt();
+    println(f);
+}

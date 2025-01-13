@@ -8,7 +8,8 @@
 //    créé le 06/01/2025
 
 {
-    int a;
-    a = readInt();
+    float a;
+    println("Veuillez rentrez un flottant !");
+    a = readFloat();
     println(a);
 }
