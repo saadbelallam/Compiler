@@ -30,6 +30,9 @@ echo ""
 
 # qlqs cas particuliers
 decac abc.deca > /dev/null 2>&1
+decac src/test/deca/codegen/valid/created/if.dec > /dev/null 2>&1
+decac -b -v > /dev/null 2>&1
+decac -r > /dev/null 2>&1
 decac -r src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
 decac -r 3 src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
 decac -r a src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
