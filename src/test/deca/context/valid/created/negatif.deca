@@ -1,0 +1,9 @@
+// Description : Teste une expression unitaire avec l'opérateur moins (-).
+// Résultats : Évalue correctement le signe négatif d'une valeur.
+// Historique : créé le 08/01/2025
+
+{
+    int result;
+    result = -5; 
+    println(result); 
+}
