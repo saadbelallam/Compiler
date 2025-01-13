@@ -1,7 +1,0 @@
-; start main program
-; Main program
-; Variables declarations:
-; Beginning of main instructions:
-	LOAD #null, R2
-	HALT
-; end main program
