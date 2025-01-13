@@ -1,5 +1,5 @@
-// Description : Teste qu'un type défini ne peut pas être utilisé comme une expression.
-// Résultats : Variable int is not defined
+// Description : Teste qu'un type non initialisée ne peut pas être utilisé comme une expression.
+// Résultats : Erreur
 // Historique : créé le 08/01/2025
 
 {
