@@ -1,0 +1,210 @@
+; start main program
+	TSTO #6	; 0 (temporaires) 6 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: g
+; allocate R2
+	LOAD #0x0.0p0, R2
+	STORE R2, 1(GB)
+; release R2
+; Variable declaration: d
+; allocate R2
+	LOAD #0x1.0p0, R2
+	STORE R2, 2(GB)
+; release R2
+; Variable declaration: fg
+; allocate R2
+	LOAD #0x1.0p0, R2
+	OPP R2, R2
+	STORE R2, 3(GB)
+; release R2
+; Variable declaration: fd
+; allocate R2
+	LOAD #0x1.6fc2ecp-1, R2
+	STORE R2, 4(GB)
+; release R2
+; Variable declaration: m
+; Variable declaration: fm
+; Beginning of main instructions:
+	BRA while_test_0
+while_body_1:
+; Assignment to m
+; allocate R3
+	LOAD 1(GB), R2
+; allocate R4
+	LOAD 2(GB), R4
+	ADD R4, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R4
+	LOAD #0x1.0p1, R3
+	DIV R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 5(GB)
+; Assignment to fm
+	LOAD 5(GB), R2
+; allocate R3
+	LOAD 5(GB), R3
+; allocate R4
+	LOAD 5(GB), R4
+; allocate R5
+	LOAD 5(GB), R5
+; allocate R6
+	LOAD 5(GB), R6
+; allocate R7
+	LOAD 5(GB), R7
+; allocate R8
+	LOAD 5(GB), R8
+; allocate R9
+; allocate R10
+	LOAD #0x1.0p0, R9
+	LOAD #0x1.3bp12, R10
+	DIV R10, R9
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R10
+	MUL R9, R8
+	BOV overflow_error	; Overflow check for previous operation
+; release R9
+; allocate R9
+; allocate R10
+	LOAD #0x1.0p0, R9
+	LOAD #0x1.68p9, R10
+	DIV R10, R9
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R10
+	ADD R9, R8
+	BOV overflow_error	; Overflow check for previous operation
+; release R9
+	MUL R8, R7
+	BOV overflow_error	; Overflow check for previous operation
+; release R8
+; allocate R8
+; allocate R9
+	LOAD #0x1.0p0, R8
+	LOAD #0x1.ep6, R9
+	DIV R9, R8
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R9
+	ADD R8, R7
+	BOV overflow_error	; Overflow check for previous operation
+; release R8
+	MUL R7, R6
+	BOV overflow_error	; Overflow check for previous operation
+; release R7
+; allocate R7
+; allocate R8
+	LOAD #0x1.0p0, R7
+	LOAD #0x1.8p4, R8
+	DIV R8, R7
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R8
+	ADD R7, R6
+	BOV overflow_error	; Overflow check for previous operation
+; release R7
+	MUL R6, R5
+	BOV overflow_error	; Overflow check for previous operation
+; release R6
+; allocate R6
+; allocate R7
+	LOAD #0x1.0p0, R6
+	LOAD #0x1.8p2, R7
+	DIV R7, R6
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R7
+	ADD R6, R5
+	BOV overflow_error	; Overflow check for previous operation
+; release R6
+	MUL R5, R4
+	BOV overflow_error	; Overflow check for previous operation
+; release R5
+; allocate R5
+; allocate R6
+	LOAD #0x1.0p0, R5
+	LOAD #0x1.0p1, R6
+	DIV R6, R5
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R6
+	ADD R5, R4
+	BOV overflow_error	; Overflow check for previous operation
+; release R5
+	MUL R4, R3
+	BOV overflow_error	; Overflow check for previous operation
+; release R4
+; allocate R4
+	LOAD #0x1.0p0, R4
+	ADD R4, R3
+	BOV overflow_error	; Overflow check for previous operation
+; release R4
+	MUL R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+; allocate R3
+	LOAD #1, R3
+	FLOAT R3, R3
+	SUB R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 6(GB)
+; Beginning of if-then-else statement
+	LOAD 6(GB), R2
+	LOAD #0x0.0p0, R3
+	CMP R3, R2
+	BLE E_Sinon.3
+; Assignment to d
+	LOAD 5(GB), R3
+	STORE R3, 2(GB)
+; Assignment to fd
+	LOAD 6(GB), R3
+	STORE R3, 4(GB)
+	BRA E_Fin.4
+E_Sinon.3:
+; Assignment to g
+	LOAD 5(GB), R3
+	STORE R3, 1(GB)
+; Assignment to fg
+	LOAD 6(GB), R3
+	STORE R3, 3(GB)
+E_Fin.4:
+; End of if-then-else statement
+while_test_0:
+	LOAD 2(GB), R3
+	LOAD 1(GB), R2
+; allocate R4
+	LOAD #0x1.0p-23, R4
+	ADD R4, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R4
+	CMP R2, R3
+	BLT while_end_2
+	BRA while_body_1
+while_end_2:
+; Load in R1 to be able to display
+	LOAD 1(GB), R1
+	WFLOAT
+	WSTR " = "
+; Load in R1 to be able to display
+	LOAD 1(GB), R1
+	WFLOATX
+	WNL
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+overflow_error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+div_by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR

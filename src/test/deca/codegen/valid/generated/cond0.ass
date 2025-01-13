@@ -1,0 +1,15 @@
+; start main program
+; Main program
+; Variables declarations:
+; Beginning of main instructions:
+; Beginning of if-then-else statement
+	LOAD #1, R2
+	LOAD #0, R3
+	CMP R3, R2
+	BLT E_Sinon.0
+	BRA E_Fin.1
+E_Sinon.0:
+E_Fin.1:
+; End of if-then-else statement
+	HALT
+; end main program

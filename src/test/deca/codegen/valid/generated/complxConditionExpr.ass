@@ -1,0 +1,458 @@
+; start main program
+	TSTO #22	; 0 (temporaires) 22 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: A
+; allocate R2
+	LOAD #1, R2
+	STORE R2, 1(GB)
+; release R2
+; Variable declaration: B
+; allocate R2
+	LOAD #0, R2
+	STORE R2, 2(GB)
+; release R2
+; Variable declaration: C
+; allocate R2
+	LOAD #1, R2
+	STORE R2, 3(GB)
+; release R2
+; Variable declaration: D
+; allocate R2
+	LOAD #0, R2
+	STORE R2, 4(GB)
+; release R2
+; Variable declaration: x
+; allocate R2
+	LOAD #12, R2
+	STORE R2, 5(GB)
+; release R2
+; Variable declaration: y
+; allocate R2
+	LOAD #4, R2
+	STORE R2, 6(GB)
+; release R2
+; Variable declaration: z
+; allocate R2
+	LOAD #7, R2
+	STORE R2, 7(GB)
+; release R2
+; Variable declaration: w
+; allocate R2
+	LOAD #10, R2
+	STORE R2, 8(GB)
+; release R2
+; Variable declaration: a
+; allocate R2
+	LOAD #15, R2
+	STORE R2, 9(GB)
+; release R2
+; Variable declaration: b
+; allocate R2
+	LOAD #3, R2
+	STORE R2, 10(GB)
+; release R2
+; Variable declaration: tmp
+; Variable declaration: i
+; allocate R2
+	LOAD #0, R2
+	STORE R2, 12(GB)
+; release R2
+; Variable declaration: dynamicCondition
+; Variable declaration: sum
+; allocate R2
+	LOAD 5(GB), R2
+; allocate R3
+	LOAD 6(GB), R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+; allocate R3
+	LOAD 7(GB), R3
+; allocate R4
+	LOAD 8(GB), R4
+	SUB R4, R3
+; No need for overflow check for type int
+; release R4
+	MUL R3, R2
+; No need for overflow check for type int
+; release R3
+	STORE R2, 14(GB)
+; release R2
+; Variable declaration: prod
+; allocate R2
+	LOAD 9(GB), R2
+; allocate R3
+	LOAD 10(GB), R3
+	MUL R3, R2
+; No need for overflow check for type int
+; release R3
+; allocate R3
+	LOAD 6(GB), R3
+	SUB R3, R2
+; No need for overflow check for type int
+; release R3
+	STORE R2, 15(GB)
+; release R2
+; Variable declaration: complexCalc
+; allocate R2
+; allocate R3
+	LOAD 14(GB), R2
+; allocate R4
+	LOAD 15(GB), R4
+	ADD R4, R2
+; No need for overflow check for type int
+; release R4
+	LOAD 5(GB), R3
+	LOAD 10(GB), R4
+	REM R4, R3
+	BOV div_by_zero_error	; Overflow check for previous operation
+; allocate R4
+	LOAD #1, R4
+	ADD R4, R3
+; No need for overflow check for type int
+; release R4
+	QUO R3, R2
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 16(GB)
+; release R2
+; Variable declaration: condition1
+; allocate R2
+	LOAD #1, R2
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_3
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_2
+E_Fin_3:
+	LOAD 5(GB), R3
+	LOAD 6(GB), R4
+	CMP R4, R3
+	BLE bool_false_0
+	LOAD 7(GB), R4
+	LOAD 5(GB), R3
+	CMP R3, R4
+	BGE bool_false_0
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BNE bool_false_0
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BNE bool_false_0
+E_Fin_2:
+	BRA bool_end_1
+bool_false_0:
+	LOAD #0, R2
+bool_end_1:
+	STORE R2, 17(GB)
+; release R2
+; Variable declaration: condition2
+; allocate R2
+	LOAD #1, R2
+	LOAD 5(GB), R3
+; allocate R5
+	LOAD 7(GB), R5
+	ADD R5, R3
+; No need for overflow check for type int
+; release R5
+	LOAD #2, R5
+	REM R5, R3
+	BOV div_by_zero_error	; Overflow check for previous operation
+	LOAD #0, R4
+	CMP R4, R3
+	BEQ E_Fin_7
+	LOAD 1(GB), R4
+	CMP #0, R4
+	BNE E_Fin_6
+	LOAD 2(GB), R4
+	CMP #0, R4
+	BEQ E_Fin_8
+	LOAD 3(GB), R4
+	CMP #0, R4
+	BNE E_Fin_6
+E_Fin_8:
+E_Fin_7:
+	LOAD 6(GB), R4
+; allocate R5
+	LOAD 7(GB), R5
+	MUL R5, R4
+; No need for overflow check for type int
+; release R5
+	LOAD 5(GB), R3
+	CMP R3, R4
+	BLE bool_false_4
+E_Fin_6:
+	BRA bool_end_5
+bool_false_4:
+	LOAD #0, R2
+bool_end_5:
+	STORE R2, 18(GB)
+; release R2
+; Variable declaration: condition3
+; allocate R2
+	LOAD #1, R2
+	LOAD 5(GB), R3
+; allocate R5
+	LOAD 6(GB), R5
+	SUB R5, R3
+; No need for overflow check for type int
+; release R5
+	LOAD 7(GB), R4
+	CMP R4, R3
+	BGE E_Fin_12
+	LOAD 1(GB), R4
+	CMP #0, R4
+	BEQ E_Fin_11
+	LOAD 2(GB), R4
+	CMP #0, R4
+	BEQ E_Fin_11
+E_Fin_12:
+	LOAD 3(GB), R4
+	CMP #0, R4
+	BEQ bool_false_9
+	LOAD 5(GB), R4
+	LOAD #3, R5
+	REM R5, R4
+	BOV div_by_zero_error	; Overflow check for previous operation
+	LOAD #0, R3
+	CMP R3, R4
+	BNE bool_false_9
+	LOAD 7(GB), R3
+; allocate R5
+	LOAD #1, R5
+	ADD R5, R3
+; No need for overflow check for type int
+; release R5
+	LOAD #0, R4
+	CMP R4, R3
+	BGT bool_false_9
+E_Fin_11:
+	BRA bool_end_10
+bool_false_9:
+	LOAD #0, R2
+bool_end_10:
+	STORE R2, 19(GB)
+; release R2
+; Variable declaration: condition4
+; allocate R2
+	LOAD #1, R2
+; allocate R5
+	LOAD 5(GB), R4
+	LOAD 6(GB), R5
+	QUO R5, R4
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R5
+	LOAD #3, R3
+	CMP R3, R4
+	BNE E_Fin_16
+	LOAD 7(GB), R3
+	LOAD #2, R5
+	REM R5, R3
+	BOV div_by_zero_error	; Overflow check for previous operation
+	LOAD #0, R4
+	CMP R4, R3
+	BNE E_Fin_15
+E_Fin_16:
+	LOAD 1(GB), R4
+	CMP #0, R4
+	BEQ E_Fin_17
+	LOAD 3(GB), R4
+	CMP #0, R4
+	BNE bool_false_13
+E_Fin_17:
+	LOAD 2(GB), R4
+	CMP #0, R4
+	BNE E_Fin_18
+	LOAD 7(GB), R4
+	LOAD #0, R3
+	CMP R3, R4
+	BLE bool_false_13
+E_Fin_18:
+E_Fin_15:
+	BRA bool_end_14
+bool_false_13:
+	LOAD #0, R2
+bool_end_14:
+	STORE R2, 20(GB)
+; release R2
+; Variable declaration: condition5
+; allocate R2
+	LOAD #1, R2
+	LOAD 5(GB), R3
+	LOAD 7(GB), R4
+	CMP R4, R3
+	BLE E_Fin_23
+	LOAD 6(GB), R4
+	LOAD 7(GB), R3
+	CMP R3, R4
+	BLT E_Fin_22
+E_Fin_23:
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_21
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_21
+	LOAD 7(GB), R3
+	LOAD 6(GB), R5
+	REM R5, R3
+	BOV div_by_zero_error	; Overflow check for previous operation
+	LOAD #0, R4
+	CMP R4, R3
+	BNE E_Fin_21
+E_Fin_22:
+	LOAD 5(GB), R4
+; allocate R5
+	LOAD 7(GB), R5
+	SUB R5, R4
+; No need for overflow check for type int
+; release R5
+	LOAD #0, R3
+	CMP R3, R4
+	BGE bool_false_19
+E_Fin_21:
+	BRA bool_end_20
+bool_false_19:
+	LOAD #0, R2
+bool_end_20:
+	STORE R2, 21(GB)
+; release R2
+; Variable declaration: condition6
+; allocate R2
+	LOAD #1, R2
+	LOAD 17(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_28
+	LOAD 20(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_27
+E_Fin_28:
+	LOAD 16(GB), R3
+	LOAD #0, R4
+	CMP R4, R3
+	BGE E_Fin_26
+E_Fin_27:
+	LOAD 4(GB), R4
+	CMP #0, R4
+	BEQ bool_false_24
+E_Fin_26:
+	BRA bool_end_25
+bool_false_24:
+	LOAD #0, R2
+bool_end_25:
+	STORE R2, 22(GB)
+; release R2
+; Beginning of main instructions:
+	BRA while_test_29
+while_body_30:
+; Assignment to tmp
+	LOAD 14(GB), R2
+; allocate R4
+	LOAD 12(GB), R4
+; allocate R3
+	LOAD 16(GB), R3
+	MUL R3, R4
+; No need for overflow check for type int
+; release R3
+	ADD R4, R2
+; No need for overflow check for type int
+; release R4
+	STORE R2, 11(GB)
+; Assignment to dynamicCondition
+	LOAD #1, R2
+	LOAD 11(GB), R4
+	LOAD #2, R5
+	REM R5, R4
+	BOV div_by_zero_error	; Overflow check for previous operation
+	LOAD #0, R3
+	CMP R3, R4
+	BNE bool_false_32
+	LOAD 21(GB), R3
+	CMP #0, R3
+	BNE bool_false_32
+	LOAD 9(GB), R3
+; allocate R5
+; allocate R6
+	LOAD 7(GB), R5
+	LOAD 10(GB), R6
+	QUO R6, R5
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R6
+	SUB R5, R3
+; No need for overflow check for type int
+; release R5
+	LOAD 8(GB), R4
+; allocate R5
+	LOAD 6(GB), R5
+	SUB R5, R4
+; No need for overflow check for type int
+; release R5
+; allocate R5
+	LOAD 12(GB), R5
+	ADD R5, R4
+; No need for overflow check for type int
+; release R5
+	CMP R4, R3
+	BLE bool_false_32
+	BRA bool_end_33
+bool_false_32:
+	LOAD #0, R2
+bool_end_33:
+	STORE R2, 13(GB)
+; Beginning of if-then-else statement
+	LOAD 17(GB), R2
+	CMP #0, R2
+	BNE E_Fin_36
+	LOAD 18(GB), R2
+	CMP #0, R2
+	BEQ E_Fin_37
+	LOAD 19(GB), R2
+	CMP #0, R2
+	BNE E_Fin_36
+E_Fin_37:
+	LOAD 20(GB), R2
+	CMP #0, R2
+	BEQ E_Fin_38
+	LOAD 21(GB), R2
+	CMP #0, R2
+	BNE E_Fin_36
+E_Fin_38:
+	LOAD 22(GB), R2
+	CMP #0, R2
+	BNE E_Fin_36
+	LOAD 13(GB), R2
+	CMP #0, R2
+	BEQ E_Sinon.34
+E_Fin_36:
+	BRA E_Fin.35
+E_Sinon.34:
+E_Fin.35:
+; End of if-then-else statement
+; Assignment to i
+	LOAD 12(GB), R2
+; allocate R4
+	LOAD #1, R4
+	ADD R4, R2
+; No need for overflow check for type int
+; release R4
+	STORE R2, 12(GB)
+while_test_29:
+	LOAD 12(GB), R2
+	LOAD #5, R4
+	CMP R4, R2
+	BGE while_end_31
+	BRA while_body_30
+while_end_31:
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+div_by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR

@@ -1,0 +1,29 @@
+; start main program
+	TSTO #1	; 0 (temporaires) 1 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: num
+; Beginning of main instructions:
+; Assignment to num
+	LOAD #4, R2
+	STORE R2, 1(GB)
+; Beginning of if-then-else statement
+	LOAD 1(GB), R2
+	LOAD #0, R3
+	CMP R3, R2
+	BLE E_Sinon.0
+	WSTR "Positif"
+	WNL
+	BRA E_Fin.1
+E_Sinon.0:
+	WSTR "Inférieur ou égal à 0"
+	WNL
+E_Fin.1:
+; End of if-then-else statement
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR

@@ -1,0 +1,10 @@
+; start main program
+; Main program
+; Variables declarations:
+; Beginning of main instructions:
+	WSTR "ok"
+	WNL
+	WSTR "ok"
+	WNL
+	HALT
+; end main program

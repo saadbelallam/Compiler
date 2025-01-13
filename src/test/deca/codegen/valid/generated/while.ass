@@ -1,0 +1,38 @@
+; start main program
+	TSTO #1	; 0 (temporaires) 1 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: k
+; allocate R2
+	LOAD #0, R2
+	STORE R2, 1(GB)
+; release R2
+; Beginning of main instructions:
+	BRA while_test_0
+while_body_1:
+; Load in R1 to be able to display
+	LOAD 1(GB), R1
+	WINT
+	WNL
+; Assignment to k
+	LOAD 1(GB), R2
+; allocate R3
+	LOAD #1, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+	STORE R2, 1(GB)
+while_test_0:
+	LOAD 1(GB), R2
+	LOAD #11, R3
+	CMP R3, R2
+	BGT while_end_2
+	BRA while_body_1
+while_end_2:
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR

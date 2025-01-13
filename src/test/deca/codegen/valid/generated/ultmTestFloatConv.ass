@@ -1,0 +1,178 @@
+; start main program
+	TSTO #10	; 0 (temporaires) 10 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: f1
+; Variable declaration: f2
+; Variable declaration: f3
+; Variable declaration: f4
+; Variable declaration: f5
+; Variable declaration: f6
+; Variable declaration: f7
+; Variable declaration: f8
+; Variable declaration: f9
+; Variable declaration: x
+; Beginning of main instructions:
+; Assignment to f1
+	LOAD #5, R2
+	FLOAT R2, R2
+	STORE R2, 1(GB)
+	WSTR "Test 1 - Float from int literal: "
+; Load in R1 to be able to display
+	LOAD 1(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f2
+	LOAD #10, R2
+; allocate R3
+	LOAD #3, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+	FLOAT R2, R2
+	STORE R2, 2(GB)
+	WSTR "Test 2 - Float from int arithmetic: "
+; Load in R1 to be able to display
+	LOAD 2(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f3
+	LOAD #0x1.ep2, R2
+	STORE R2, 3(GB)
+; Assignment to f4
+	LOAD 3(GB), R2
+; allocate R3
+	LOAD #2, R3
+	FLOAT R3, R3
+	ADD R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 4(GB)
+	WSTR "Test 3 - Mixed addition: "
+; Load in R1 to be able to display
+	LOAD 4(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f5
+	LOAD #3, R2
+; allocate R3
+	LOAD #2, R3
+	MUL R3, R2
+; No need for overflow check for type int
+; release R3
+; allocate R3
+	LOAD #1, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+	FLOAT R2, R2
+	STORE R2, 5(GB)
+	WSTR "Test 4 - Multiple int operations: "
+; Load in R1 to be able to display
+	LOAD 5(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f6
+; allocate R3
+	LOAD #5, R2
+	LOAD #2, R3
+	QUO R3, R2
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R3
+	FLOAT R2, R2
+	STORE R2, 6(GB)
+	WSTR "Test 5 - Int division to float: "
+; Load in R1 to be able to display
+	LOAD 6(GB), R1
+	WFLOAT
+	WNL
+; Assignment to x
+	LOAD #3, R2
+	STORE R2, 10(GB)
+; Assignment to f7
+	LOAD 10(GB), R2
+; allocate R3
+	LOAD #2, R3
+	MUL R3, R2
+; No need for overflow check for type int
+; release R3
+	FLOAT R2, R2
+; allocate R3
+	LOAD #0x1.8p0, R3
+	ADD R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 7(GB)
+	WSTR "Test 6 - Complex expression: "
+; Load in R1 to be able to display
+	LOAD 7(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f8
+	LOAD #42, R2
+	FLOAT R2, R2
+	STORE R2, 8(GB)
+	WSTR "Test 7 - Assignment: "
+; Load in R1 to be able to display
+	LOAD 8(GB), R1
+	WFLOAT
+	WNL
+; Assignment to f9
+	LOAD #1, R2
+; allocate R3
+	LOAD #2, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+; allocate R3
+	LOAD #3, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+	FLOAT R2, R2
+; allocate R3
+	LOAD #0x1.2p2, R3
+	ADD R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 9(GB)
+	WSTR "Test 8 - Chained operations: "
+; Load in R1 to be able to display
+	LOAD 9(GB), R1
+	WFLOAT
+	WNL
+	WSTR ""
+	WNL
+	WSTR "Expected results:"
+	WNL
+	WSTR "Test 1 should be: 5.0"
+	WNL
+	WSTR "Test 2 should be: 13.0"
+	WNL
+	WSTR "Test 3 should be: 9.5"
+	WNL
+	WSTR "Test 4 should be: 7.0"
+	WNL
+	WSTR "Test 5 should be: 2.5"
+	WNL
+	WSTR "Test 6 should be: 7.5"
+	WNL
+	WSTR "Test 7 should be: 42.0"
+	WNL
+	WSTR "Test 8 should be: 10.5"
+	WNL
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+overflow_error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+div_by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR

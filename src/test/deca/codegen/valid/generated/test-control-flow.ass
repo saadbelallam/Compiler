@@ -1,0 +1,361 @@
+; start main program
+	TSTO #10	; 0 (temporaires) 10 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: a
+; Variable declaration: b
+; Variable declaration: c
+; Variable declaration: d
+; Variable declaration: result
+; Variable declaration: shouldBreak
+; Variable declaration: x
+; Variable declaration: y
+; Variable declaration: counter
+; Variable declaration: total
+; Beginning of main instructions:
+; Assignment to a
+	LOAD #1, R2
+	STORE R2, 1(GB)
+; Assignment to b
+	LOAD #0, R2
+	STORE R2, 2(GB)
+; Assignment to x
+	LOAD #5, R2
+	STORE R2, 7(GB)
+; Assignment to y
+	LOAD #10, R2
+	STORE R2, 8(GB)
+; Beginning of if-then-else statement
+	LOAD 1(GB), R2
+	CMP #0, R2
+	BEQ E_Sinon.0
+	LOAD 2(GB), R2
+	CMP #0, R2
+	BNE E_Sinon.0
+; Beginning of if-then-else statement
+	LOAD 7(GB), R2
+	LOAD 8(GB), R3
+	CMP R3, R2
+	BGE E_Sinon.2
+	LOAD 8(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE E_Sinon.2
+	WSTR "Test 1.1 passed"
+	WNL
+	BRA E_Fin.3
+E_Sinon.2:
+	WSTR "Test 1.1 failed"
+	WNL
+E_Fin.3:
+; End of if-then-else statement
+	BRA E_Fin.1
+E_Sinon.0:
+; Beginning of if-then-else statement
+	LOAD 7(GB), R2
+	LOAD 8(GB), R3
+	CMP R3, R2
+	BGT E_Fin_6
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.4
+E_Fin_6:
+	WSTR "Test 1.2 failed"
+	WNL
+	BRA E_Fin.5
+E_Sinon.4:
+E_Fin.5:
+; End of if-then-else statement
+E_Fin.1:
+; End of if-then-else statement
+; Assignment to counter
+	LOAD #0, R3
+	STORE R3, 9(GB)
+	BRA while_test_7
+while_body_8:
+; Assignment to counter
+	LOAD 9(GB), R3
+; allocate R2
+	LOAD #1, R2
+	ADD R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 9(GB)
+; Assignment to x
+	LOAD 7(GB), R3
+; allocate R2
+	LOAD #1, R2
+	SUB R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 7(GB)
+; Assignment to result
+	LOAD #1, R3
+	LOAD 7(GB), R2
+	LOAD #3, R4
+	CMP R4, R2
+	BLT bool_false_10
+	LOAD 8(GB), R4
+	LOAD #7, R2
+	CMP R2, R4
+	BLE bool_false_10
+	BRA bool_end_11
+bool_false_10:
+	LOAD #0, R3
+bool_end_11:
+	STORE R3, 5(GB)
+; Beginning of if-then-else statement
+	LOAD 5(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.12
+	WSTR "x:"
+; Load in R1 to be able to display
+	LOAD 7(GB), R1
+	WINT
+	WSTR " y:"
+; Load in R1 to be able to display
+	LOAD 8(GB), R1
+	WINT
+	WSTR " - Condition true"
+	WNL
+	BRA E_Fin.13
+E_Sinon.12:
+E_Fin.13:
+; End of if-then-else statement
+; Assignment to y
+	LOAD 8(GB), R3
+; allocate R2
+	LOAD #1, R2
+	SUB R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 8(GB)
+while_test_7:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_9
+	LOAD 8(GB), R2
+	LOAD #5, R3
+	CMP R3, R2
+	BLE while_end_9
+	BRA while_body_8
+while_end_9:
+	WSTR "Counter should be 5:"
+; Load in R1 to be able to display
+	LOAD 9(GB), R1
+	WINT
+	WNL
+; Assignment to x
+	LOAD #1, R3
+	STORE R3, 7(GB)
+; Beginning of if-then-else statement
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BNE E_Sinon.14
+; allocate R4
+	LOAD 8(GB), R2
+	LOAD 7(GB), R4
+	QUO R4, R2
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R4
+	LOAD #0, R3
+	CMP R3, R2
+	BNE E_Sinon.14
+	WSTR "Test 3 failed"
+	WNL
+	BRA E_Fin.15
+E_Sinon.14:
+	WSTR "Test 3 passed"
+	WNL
+E_Fin.15:
+; End of if-then-else statement
+; Assignment to c
+	LOAD #1, R3
+	STORE R3, 3(GB)
+; Assignment to d
+	LOAD #0, R3
+	STORE R3, 4(GB)
+; Beginning of if-then-else statement
+	LOAD 1(GB), R3
+	CMP #0, R3
+	BEQ E_Fin_19
+	LOAD 2(GB), R3
+	CMP #0, R3
+	BNE E_Fin_18
+E_Fin_19:
+	LOAD 3(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.16
+	LOAD 4(GB), R3
+	CMP #0, R3
+	BNE E_Sinon.16
+E_Fin_18:
+; Beginning of if-then-else statement
+	LOAD 7(GB), R3
+	LOAD 8(GB), R2
+	CMP R2, R3
+	BGT E_Sinon.20
+	LOAD 8(GB), R2
+	LOAD #10, R3
+	CMP R3, R2
+	BEQ E_Sinon.20
+	WSTR "Test 4.1"
+	WNL
+	BRA E_Fin.21
+E_Sinon.20:
+; Beginning of if-then-else statement
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BGE E_Fin_24
+	LOAD 8(GB), R2
+	LOAD #20, R3
+	CMP R3, R2
+	BGT E_Sinon.22
+E_Fin_24:
+	WSTR "Test 4.2"
+	WNL
+	BRA E_Fin.23
+E_Sinon.22:
+E_Fin.23:
+; End of if-then-else statement
+E_Fin.21:
+; End of if-then-else statement
+	BRA E_Fin.17
+E_Sinon.16:
+E_Fin.17:
+; End of if-then-else statement
+; Assignment to x
+	LOAD #10, R3
+	STORE R3, 7(GB)
+; Assignment to counter
+	LOAD #0, R3
+	STORE R3, 9(GB)
+	BRA while_test_25
+while_body_26:
+; Assignment to x
+	LOAD 7(GB), R3
+; allocate R2
+	LOAD #1, R2
+	SUB R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 7(GB)
+; Assignment to counter
+	LOAD 9(GB), R3
+; allocate R2
+	LOAD #1, R2
+	ADD R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 9(GB)
+; Assignment to shouldBreak
+	LOAD #1, R3
+	LOAD 7(GB), R2
+	LOAD #5, R4
+	CMP R4, R2
+	BGE bool_false_28
+	LOAD 9(GB), R4
+	LOAD #3, R2
+	CMP R2, R4
+	BLE bool_false_28
+	BRA bool_end_29
+bool_false_28:
+	LOAD #0, R3
+bool_end_29:
+	STORE R3, 6(GB)
+; Beginning of if-then-else statement
+	LOAD 6(GB), R3
+	CMP #0, R3
+	BEQ E_Sinon.30
+; Assignment to x
+	LOAD #0, R3
+	STORE R3, 7(GB)
+	BRA E_Fin.31
+E_Sinon.30:
+E_Fin.31:
+; End of if-then-else statement
+while_test_25:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_27
+	BRA while_body_26
+while_end_27:
+	WSTR "Counter after break: "
+; Load in R1 to be able to display
+	LOAD 9(GB), R1
+	WINT
+	WNL
+; Assignment to x
+	LOAD #3, R2
+	STORE R2, 7(GB)
+; Assignment to y
+	LOAD #3, R2
+	STORE R2, 8(GB)
+; Assignment to total
+	LOAD #0, R2
+	STORE R2, 10(GB)
+	BRA while_test_32
+while_body_33:
+; Assignment to y
+	LOAD #3, R2
+	STORE R2, 8(GB)
+	BRA while_test_35
+while_body_36:
+; Assignment to total
+	LOAD 10(GB), R2
+; allocate R3
+	LOAD #1, R3
+	ADD R3, R2
+; No need for overflow check for type int
+; release R3
+	STORE R2, 10(GB)
+; Assignment to y
+	LOAD 8(GB), R2
+; allocate R3
+	LOAD #1, R3
+	SUB R3, R2
+; No need for overflow check for type int
+; release R3
+	STORE R2, 8(GB)
+while_test_35:
+	LOAD 8(GB), R2
+	LOAD #0, R3
+	CMP R3, R2
+	BLE while_end_37
+	BRA while_body_36
+while_end_37:
+; Assignment to x
+	LOAD 7(GB), R3
+; allocate R2
+	LOAD #1, R2
+	SUB R2, R3
+; No need for overflow check for type int
+; release R2
+	STORE R3, 7(GB)
+while_test_32:
+	LOAD 7(GB), R3
+	LOAD #0, R2
+	CMP R2, R3
+	BLE while_end_34
+	BRA while_body_33
+while_end_34:
+	WSTR "Nested loops total should be 9: "
+; Load in R1 to be able to display
+	LOAD 10(GB), R1
+	WINT
+	WNL
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+div_by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR
