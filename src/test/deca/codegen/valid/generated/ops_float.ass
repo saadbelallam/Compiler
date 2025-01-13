@@ -1,0 +1,70 @@
+; start main program
+	TSTO #5	; 0 (temporaires) 5 (variables)
+	BOV stack_overflow_error
+; Main program
+; Variables declarations:
+; Variable declaration: a
+; Variable declaration: b
+; Variable declaration: s
+; Variable declaration: p
+; Variable declaration: d
+; Beginning of main instructions:
+; Assignment to a
+	LOAD #5, R2
+	FLOAT R2, R2
+	STORE R2, 1(GB)
+; Assignment to b
+	LOAD #5, R2
+	FLOAT R2, R2
+	STORE R2, 2(GB)
+; Assignment to s
+	LOAD 1(GB), R2
+; allocate R3
+	LOAD 2(GB), R3
+	ADD R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 3(GB)
+; Assignment to p
+	LOAD 1(GB), R2
+; allocate R3
+	LOAD 2(GB), R3
+	MUL R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 4(GB)
+; Assignment to d
+; allocate R3
+	LOAD 1(GB), R2
+	LOAD 2(GB), R3
+	DIV R3, R2
+	BOV overflow_error	; Overflow check for previous operation
+	BOV div_by_zero_error	; Overflow check for previous operation
+; release R3
+	STORE R2, 5(GB)
+; Load in R1 to be able to display
+	LOAD 3(GB), R1
+	WFLOAT
+	WNL
+; Load in R1 to be able to display
+	LOAD 4(GB), R1
+	WFLOAT
+	WNL
+; Load in R1 to be able to display
+	LOAD 5(GB), R1
+	WFLOAT
+	WNL
+	HALT
+; end main program
+stack_overflow_error:
+	WSTR "Error: Stack Overflow"
+	WNL
+	ERROR
+overflow_error:
+	WSTR "Error: Overflow during arithmetic operation"
+	WNL
+	ERROR
+div_by_zero_error:
+	WSTR "Error: Division by zero"
+	WNL
+	ERROR

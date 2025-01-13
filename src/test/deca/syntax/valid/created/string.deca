@@ -1,0 +1,15 @@
+// Description:
+//    Test de la concaténation et de l'affichage de chaînes de caractères.
+//
+// Résultats:
+//    Affiche "Hello, Deca!".
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    string s;
+    s = "Hello, ";
+    s = s + "Deca!";
+    println(s); // Devrait afficher "Hello, Deca!"
+}

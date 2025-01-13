@@ -1,0 +1,9 @@
+; start main program
+; Main program
+; Variables declarations:
+; Beginning of main instructions:
+	WSTR "Hello"
+	WSTR "world !"
+	WNL
+	HALT
+; end main program

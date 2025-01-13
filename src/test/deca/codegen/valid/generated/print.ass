@@ -1,0 +1,64 @@
+; start main program
+; Main program
+; Variables declarations:
+; Beginning of main instructions:
+	WSTR "Hello, Deca!"
+	WSTR "New Line"
+	WNL
+	WSTR " "
+	WSTR "  "
+	WNL
+; Load in R1 to be able to display
+	LOAD #0x1.0p1, R1
+	WFLOATX
+; Load in R1 to be able to display
+	LOAD #0x1.0p1, R1
+	WFLOATX
+	WNL
+; Load in R1 to be able to display
+	LOAD #2, R1
+	WINT
+; Load in R1 to be able to display
+	LOAD #2, R1
+	WINT
+	WNL
+; Load in R1 to be able to display
+	LOAD #0, R1
+	CMP #0, R1
+	BEQ print_false_1
+	WSTR "true"
+	BRA print_end_0
+print_false_1:
+	WSTR "false"
+print_end_0:
+; Load in R1 to be able to display
+	LOAD #0, R1
+	CMP #0, R1
+	BEQ print_false_3
+	WSTR "true"
+	BRA print_end_2
+print_false_3:
+	WSTR "false"
+print_end_2:
+	WNL
+; Load in R1 to be able to display
+	LOAD #1, R1
+	CMP #0, R1
+	BEQ print_false_5
+	WSTR "true"
+	BRA print_end_4
+print_false_5:
+	WSTR "false"
+print_end_4:
+; Load in R1 to be able to display
+	LOAD #1, R1
+	CMP #0, R1
+	BEQ print_false_7
+	WSTR "true"
+	BRA print_end_6
+print_false_7:
+	WSTR "false"
+print_end_6:
+	WNL
+	HALT
+; end main program

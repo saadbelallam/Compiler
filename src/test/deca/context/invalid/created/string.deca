@@ -1,0 +1,16 @@
+// Description:
+//    Test de la concaténation et de l'affichage de chaînes de caractères.
+//
+// Résultats:
+//    Erreur : operand must be of type int or float
+
+//
+// Historique:
+//    créé le 08/01/2025
+
+{
+    string s;
+    s = "Hello, ";
+    s = s + "Deca!";
+    println(s); 
+}
