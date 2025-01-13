@@ -1,0 +1,15 @@
+// Description:
+//    Teste Overflow
+//
+// Résultats:
+//    Erreur attendue.
+//
+// Historique:
+//    créé le 12/01/2025
+
+{
+	 float x = 3.4028235e+38;
+	 float y = x*2;
+	 println(x);
+	 println(y);
+}

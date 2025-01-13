@@ -1,0 +1,16 @@
+// Description:
+//  Test des priorités d'opérations
+//  Mélange des parenthèses, des multiplications et des divisions
+//
+// Historique:
+//    cree le 01/01/2025
+
+{
+    int p = 12;
+    int q = 8;
+    int r;
+
+    r = (p * q + (q - p) % (p + q) / 2) * (p + q) - ((p % q) + q) / (p - q + 1);
+    r = r + (r * ((p - q) / 3)) % (q + 1);
+    print(r, " = "); printlnx(r);
+}

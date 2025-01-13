@@ -1,0 +1,13 @@
+// Description:
+//  erreur: Operands of modulo should be of type int
+//
+// Historique:
+//    cree le 12/01/2025
+
+{
+    float a = 5.5f;
+    float b = 10.1f;
+    float c;
+
+    c = a % b;
+}

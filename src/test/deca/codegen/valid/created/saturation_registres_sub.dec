@@ -1,0 +1,13 @@
+// Description:
+//  Test pour saturation des registres et utilisation de pile
+//
+// Historique:
+//    cree le 13/01/2025
+
+{ 
+    int a = 2;
+    int b = 3;
+    int c = (a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a*(a-b)-b)-b)-b)-b)-b)-b)-b)-b)-b-b)-b)-b)-b)-b)-b)-b)-b)-b)-b)-b-b);
+    println(c);
+    
+}

@@ -1,0 +1,17 @@
+// Description:
+//  Calcul imbriqué avec diverses opérations arithmétiques
+//  Vérifie la gestion des opérations arithmétiques
+//
+// Historique:
+//    cree le 12/01/2025
+
+{
+    int x = 5;
+    int y = 10;
+    int z;
+
+    z = ((x + y) * (x - y) / (x % y + 1) + (x * y) % (x + 1)) * ((y - x) + (x % 3));
+    z = z + (z * (x * y - (x / 2))) % (y + x);
+    z = (z * ((x + y) / (y - 1))) % (x + 1);
+    print(z, " = "); printlnx(z);
+}
