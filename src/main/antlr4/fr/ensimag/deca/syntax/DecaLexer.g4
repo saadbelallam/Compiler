@@ -102,7 +102,7 @@ fragment EOL: '\n';
 // String
 STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
-COMMENT :  ('//' .*? '\n' | '/*' .*? '*/' ) -> skip;
+COMMENT : ('/*' .*? '*/' | '//' (~[\r\n])*) -> skip;
 
 // include
 fragment FILENAME : (LETTER | DIGIT | DOT | MINUS | '_' )+;
