@@ -430,6 +430,7 @@ primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
             $tree = $ident.tree;
+            setLocation($tree, $ident.start);
         }
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
@@ -440,19 +441,27 @@ primary_expr returns[AbstractExpr tree]
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
             $tree = $expr.tree;
+            setLocation($tree, $OPARENT);
         }
     | READINT OPARENT CPARENT {
         $tree = new ReadInt();
+        setLocation($tree, $READINT);
+        
         }
     | READFLOAT OPARENT CPARENT {
         $tree = new ReadFloat();
+        setLocation($tree, $READFLOAT);
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            $tree = new New($ident.tree);
+            setLocation($tree, $NEW);
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
+            $tree = new Cast($type.tree, $expr.tree);
+            setLocation($tree, $cast);
         }
     | literal {
             assert($literal.tree != null);
@@ -465,6 +474,7 @@ type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
             $tree = $ident.tree;
+            setLocation($tree, $ident.start);
         }
     ;
 
@@ -499,6 +509,8 @@ literal returns[AbstractExpr tree]
         setLocation($tree, $FALSE);
         }
     | THIS {
+        $tree = new This();
+        setLocation($tree, $THIS);
         }
     | NULL {
         $tree = new Null();
