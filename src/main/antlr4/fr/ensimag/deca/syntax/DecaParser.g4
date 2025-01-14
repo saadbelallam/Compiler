@@ -429,6 +429,7 @@ primary_expr returns[AbstractExpr tree]
     | m=ident OPARENT args=list_expr CPARENT {
             assert($args.tree != null);
             assert($m.tree != null);
+            $tree = list_expr.tree;
             setLocation($tree, $m.start);
         }
     | OPARENT expr CPARENT {
