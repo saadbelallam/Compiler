@@ -55,7 +55,11 @@ public class DeclField extends AbstractDeclField {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrintChildren'");
+        // throw new UnsupportedOperationException("Unimplemented method 'prettyPrintChildren'");
+        type.prettyPrint(s, prefix, false);
+        fieldName.prettyPrint(s, prefix, false);
+        initialization.prettyPrint(s, prefix, true);
+        
     }
 
     @Override

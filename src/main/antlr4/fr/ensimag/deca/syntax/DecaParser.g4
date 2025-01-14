@@ -524,7 +524,7 @@ list_classes returns[ListDeclClass tree]
 class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
         assert($name.tree != null);
-        // assert($superclass.tree != null);
+        assert($superclass.tree != null);
         assert($class_body.tree1 != null);
         assert($class_body.tree2 != null);
         $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree1, $class_body.tree2);
@@ -536,7 +536,7 @@ class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
         assert($ident.tree != null);
         $tree = $ident.tree;
-        setLocation($tree, $EXTENDS);
+        setLocation($tree, $ident.start);
         }
     | /* epsilon */ {
         }

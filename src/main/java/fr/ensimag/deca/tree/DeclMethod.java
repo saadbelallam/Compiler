@@ -61,7 +61,12 @@ public class DeclMethod extends AbstractDeclMethod{
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'prettyPrintChildren'");
+        // throw new UnsupportedOperationException("Unimplemented method 'prettyPrintChildren'");
+        type.prettyPrint(s, prefix, false);
+        methodName.prettyPrint(s, prefix, false);
+        listParams.prettyPrint(s, prefix, false);
+        listDeclVar.prettyPrint(s, prefix, false);
+        listInst.prettyPrint(s, prefix, true);
     }
 
     @Override
