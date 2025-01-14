@@ -10,12 +10,14 @@
 package fr.ensimag.deca.codegen;
 
 import org.apache.commons.lang.Validate;
+
 import fr.ensimag.ima.pseudocode.*;
 import fr.ensimag.ima.pseudocode.DAddr;
 import static fr.ensimag.ima.pseudocode.Register.getR;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import net.bytebuddy.asm.Advice;
 
 
 
@@ -23,6 +25,8 @@ public class ManagerOfMemory {
     private int currentOffset;
     private static final int WORD_SIZE = 1; // 32-bit words
     private static final int STACK_RESERVE = 16; // Reserve space for register spilling
+    private int currentOffsetParam  = -2;
+    
 
     public ManagerOfMemory() {
         this.currentOffset = 1;
@@ -32,6 +36,21 @@ public class ManagerOfMemory {
         RegisterOffset location = new RegisterOffset(currentOffset, Register.GB);
         currentOffset += WORD_SIZE;
         return location;
+    }
+
+    public RegisterOffset allocateParam(){
+        RegisterOffset location = new RegisterOffset(currentOffsetParam, Register.LB);
+        currentOffsetParam -= WORD_SIZE;
+        return location;
+    }
+    // TO REST THE OFFEST FOR AN OTHER CALLED METHOD
+    public void resetOffsetParam() {
+        currentOffsetParam = -2;
+    }
+    
+    // size of the 
+    public int getParamSpace() {
+        return -(currentOffsetParam  + 2);    
     }
 
     public RegisterOffset allocateStack() {
@@ -46,6 +65,10 @@ public class ManagerOfMemory {
 
     public int getCurrentOffset() {
         return currentOffset;
+    }
+
+    public int getCurrentOffsetPram() {
+        return currentOffsetParam;
     }
 
     public int getTotalSpace() {
