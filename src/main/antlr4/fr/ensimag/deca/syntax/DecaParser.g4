@@ -524,7 +524,7 @@ list_classes returns[ListDeclClass tree]
 class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
         assert($name.tree != null);
-        assert($superclass.tree != null);
+        assert($superclass.tree != null); // this assertion is commented bcz we can define a class without extends-> eps
         assert($class_body.tree1 != null);
         assert($class_body.tree2 != null);
         $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree1, $class_body.tree2);
@@ -539,6 +539,8 @@ class_extension returns[AbstractIdentifier tree]
         setLocation($tree, $ident.start);
         }
     | /* epsilon */ {
+        $tree =new Identifier(getDecacCompiler().createSymbol("Object")); // we need to handle the case where class_xtendsion -> eps
+        $tree.setLocation(Location.BUILTIN);
         }
     ;
 
