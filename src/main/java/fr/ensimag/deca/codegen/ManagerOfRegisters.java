@@ -89,6 +89,25 @@ public class ManagerOfRegisters {
         // libération d'une case dans la pile si pop est directement après push
         nbTemporaires--;
     }
+    
+    // this fucntion is used to save registers whille we call a method (like a ctx_swwitch)
+    public void SaveRegIntoStack(DecacCompiler compiler){
+       compiler.addComment("saving registers from R"+FIRST_REG + " to R"+ maxReg);
+       for (int i = maxReg; i >= FIRST_REG; i--) {
+            compiler.addInstruction(new PUSH(Register.getR(i)));
+        }
+    }
+
+    public void RestoreSavedRegisters(DecacCompiler compiler){
+        compiler.addComment("poping registers from R"+FIRST_REG + " to R"+ maxReg);
+        for (int i = maxReg; i >= FIRST_REG; i--) {
+            compiler.addInstruction(new POP(Register.getR(i)));
+        }
+    }
+
+    public GPRegister getReturnRegister() {
+        return Register.R0; 
+    }
 
     public int getMaxTemporaires(){
             return maxTemporaires;
