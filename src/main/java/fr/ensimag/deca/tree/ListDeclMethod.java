@@ -9,7 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
-    private static final Logger LOG = Logger.getLogger(ListDeclField.class);
+    private static final Logger LOG = Logger.getLogger(ListDeclMethod.class);
 
     @Override
     public void decompile(IndentPrintStream s) {

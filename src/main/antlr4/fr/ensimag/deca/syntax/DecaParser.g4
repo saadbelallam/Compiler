@@ -556,16 +556,16 @@ class_body returns[ListDeclMethod tree1, ListDeclField tree2]
     ;
 
 decl_field_set[ListDeclField l]
-    : v=visibility t=type list_decl_field[$l, v, $t.tree]
+    : v=visibility t=type list_decl_field[$l, $v.vis, $t.tree]
       SEMI
     ;
 
-visibility returns[Visibility v]
+visibility returns[Visibility vis]
     : /* epsilon */ {
-        $v = Visibility.PUBLIC;
+        $vis = Visibility.PUBLIC;
         }
     | PROTECTED {
-        $v = Visibility.PROTECTED;
+        $vis = Visibility.PROTECTED;
         }
     ;
 
@@ -619,9 +619,9 @@ decl_method returns [AbstractDeclMethod tree]
         }
     ;
 
-list_params returns[ListParams tree]
+list_params returns[ListDeclParam tree]
 @init   {
-        $tree = new ListParams();
+        $tree = new ListDeclParam();
         }
     : (p1=param {
         $tree.add($p1.tree);

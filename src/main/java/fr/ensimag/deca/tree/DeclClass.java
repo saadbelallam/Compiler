@@ -19,7 +19,7 @@ public class DeclClass extends AbstractDeclClass {
     private final ListDeclMethod methods;
 
     public DeclClass(AbstractIdentifier name, AbstractIdentifier superClass,
-            ListDeclField fields, ListDeclMethod methods) {
+    ListDeclMethod methods, ListDeclField fields) {
         this.name = name;
         this.superClass = superClass;
         this.fields = fields;

@@ -15,16 +15,18 @@ public class DeclField extends AbstractDeclField {
 
             private static final Logger LOG = Logger.getLogger(AbstractDeclField.class);
 
-
+    final private Visibility visibility;
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
 
 
-    public DeclField(AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization) {
+    public DeclField(Visibility visibility, AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization) {
+        Validate.notNull(visibility);
         Validate.notNull(type);
         Validate.notNull(fieldName);
         Validate.notNull(initialization);
+        this.visibility = visibility;
         this.type = type;
         this.fieldName = fieldName;
         this.initialization = initialization;

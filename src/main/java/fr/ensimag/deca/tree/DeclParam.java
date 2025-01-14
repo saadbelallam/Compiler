@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -13,6 +15,18 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 
 
 public class  DeclParam extends AbstractDeclParam {
+
+    final private AbstractIdentifier type;
+    final private AbstractIdentifier paramName;
+
+    public DeclParam(AbstractIdentifier type, AbstractIdentifier paramName) {
+    Validate.notNull(type);
+    Validate.notNull(paramName);
+
+    this.type = type;
+    this.paramName = paramName;
+
+}
 
     @Override
     public void decompile(IndentPrintStream s) {
