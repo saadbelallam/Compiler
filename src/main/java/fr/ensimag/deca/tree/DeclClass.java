@@ -126,5 +126,9 @@ public class DeclClass extends AbstractDeclClass {
     public AbstractIdentifier getSuperClass() {
         return superClass;
     }
+
+    public ListDeclMethod  getMethods(){
+        return methods;
+    }
           
     }

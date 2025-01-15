@@ -10,6 +10,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
 
 public class DeclMethod extends AbstractDeclMethod{
 
@@ -22,6 +23,8 @@ public class DeclMethod extends AbstractDeclMethod{
     final private ListDeclParam listParams;
     final private ListDeclVar listDeclVar;
     final private ListInst listInst;
+
+    private Label methodLabel;
 
 
 
@@ -75,8 +78,40 @@ public class DeclMethod extends AbstractDeclMethod{
         throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
     }
 
-    public AbstractIdentifier getName() {
-        return methodName;
-}
+    public String getName() {
+        return methodName.getName().getName();
+        }
+
+    /* @Override
+    protected void codeGenMethod(DecacCompiler compiler) {
+        // Generate unique label for this method
+        Label methodLabel = getMethodLabel();
+        compiler.addLabel(methodLabel);
+
+        // Save registers that will be used
+        compiler.addInstruction(new PUSH(compiler.getRegisterManager().getScratchRegister(1)));
+
+        // Generate code for method parameters
+        params.codeGenParams(compiler);
+
+        // Generate method body
+        body.codeGenBody(compiler);
+
+        // Restore registers
+        compiler.addInstruction(new POP(compiler.getRegisterManager().getScratchRegister(1)));
+
+        // Return from method
+        compiler.addInstruction(new RTS());
+    } */
+
+   /* @Override
+    public ClassDefinition getClassDefinition() {
+        return classDefinition;
+    }
+
+    public void setClassDefinition(ClassDefinition classDef) {
+        this.classDefinition = classDef;
+    } */
+
     
 }

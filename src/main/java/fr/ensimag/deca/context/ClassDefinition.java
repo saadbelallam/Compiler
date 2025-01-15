@@ -1,9 +1,13 @@
 package fr.ensimag.deca.context;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * Definition of a class.
@@ -13,6 +17,43 @@ import fr.ensimag.ima.pseudocode.DAddr;
  */
 public class ClassDefinition extends TypeDefinition {
     private DAddr VMTableAddr;
+
+    private final Map<String, Label> methodLabels = new HashMap<>(); 
+    private final Map<String, Integer> methodOffsets = new HashMap<>();  
+
+
+    public Label getMethodLabel(String methodName) {
+        return methodLabels.get(methodName);
+    }
+
+    public Map<String,Label> getMethodLabels() {
+        return methodLabels;
+    }
+
+    
+    public void setMethodLabel(String methodName, Label label) {
+        methodLabels.put(methodName, label);
+    }
+
+    public void setMethodOffset(String methodName, int offset) {
+        methodOffsets.put(methodName, offset);
+    }
+
+    public int getMethodOffset(String methodName) {
+        Integer offset = methodOffsets.get(methodName);
+        if (offset == null) {
+            return 0;
+        }
+        return offset;
+    }
+
+    public boolean hasMethodOffset(String methodName) {
+        return methodOffsets.containsKey(methodName);
+    }
+
+    public Map<String, Integer> getMethodOffsets() {
+        return methodOffsets;
+    }
 
     public DAddr getVMTablesAddr(){
         return VMTableAddr;
