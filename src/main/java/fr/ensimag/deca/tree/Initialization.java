@@ -56,8 +56,7 @@ public class Initialization extends AbstractInitialization {
     }
 
     @Override
-    protected
-    void iterChildren(TreeFunction f) {
+    protected void iterChildren(TreeFunction f) {
         expression.iter(f);
     }
 

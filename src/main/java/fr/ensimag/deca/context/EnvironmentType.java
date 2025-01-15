@@ -56,6 +56,10 @@ public class EnvironmentType {
         envTypes.put(name, type);
     }
 
+    public Definition get(Symbol name) {
+        return envTypes.get(name);
+    }
+
     public final VoidType    VOID;
     public final IntType     INT;
     public final FloatType   FLOAT;

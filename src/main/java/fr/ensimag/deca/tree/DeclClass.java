@@ -1,9 +1,14 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+
 import java.io.PrintStream;
 
 /**
@@ -33,7 +38,21 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        // throw new UnsupportedOperationException("not yet implemented");
+        System.out.println("superclass" + superClass.getName());
+        if (name.getName().getName().equals(superClass.getName().getName())) {
+            throw new ContextualError("Class " + name.getName() + " cannot extend itself", name.getLocation());
+        }
+
+        ClassType type = new ClassType(name.getName(), this.getLocation(), superClass.getClassDefinition());
+        ClassDefinition currentClass = new ClassDefinition(type, this.getLocation(), superClass.getClassDefinition());
+        if (compiler.environmentType.get(name.getName()) != null) {
+            throw new ContextualError("Class " + name.getName() + " already exists", name.getLocation());
+        }
+        name.setDefinition(currentClass);
+        name.setType(type);
+        compiler.environmentType.declareType(name.getName(), currentClass);
+
     }
 
     @Override
@@ -59,7 +78,11 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+        // throw new UnsupportedOperationException("Not yet supported");
+        name.iter(f);
+        superClass.iter(f);
+        fields.iter(f);
+        methods.iter(f);
     }
 
 }

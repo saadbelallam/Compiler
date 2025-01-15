@@ -5,7 +5,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 
-public abstract class AbstractDeclMethod extends Tree{
+public abstract class AbstractDeclMethod extends Tree {
 
 
      /**
