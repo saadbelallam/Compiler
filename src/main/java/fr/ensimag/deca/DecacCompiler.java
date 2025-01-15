@@ -176,6 +176,10 @@ public class DecacCompiler {
         return symbolTable.create(name);
     }
 
+    public EnvironmentType getEnvironmentType(){
+        return environmentType;
+    }
+
     /**
      * Run the compiler (parse source file, generate code)
      *
