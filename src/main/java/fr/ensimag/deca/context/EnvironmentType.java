@@ -17,6 +17,7 @@ import fr.ensimag.deca.tree.Location;
  */
 public class EnvironmentType {
     public EnvironmentType(DecacCompiler compiler) {
+       
         
         envTypes = new HashMap<Symbol, TypeDefinition>();
         
@@ -44,7 +45,20 @@ public class EnvironmentType {
         Symbol nullSymb = compiler.createSymbol("null");
         NULL = new NullType(nullSymb);
         envTypes.put(nullSymb, new TypeDefinition(NULL, Location.BUILTIN));
-    
+
+        Symbol objectSymb = compiler.createSymbol("Object");
+        OBJECT = new ClassType(objectSymb, Location.BUILTIN, null);
+        ClassDefinition objectDef = new ClassDefinition(
+            OBJECT, 
+            Location.BUILTIN,  // Location
+            null     // No superclass
+        );
+        
+        // Add built-in methods for Object here if needed
+        // For example: equals(), toString(), etc.
+        
+        // Register Object in the environment
+        envTypes.put(objectSymb, objectDef);
         
     }
 
@@ -68,4 +82,5 @@ public class EnvironmentType {
     public final StringType  STRING;
     public final BooleanType BOOLEAN;
     public final NullType NULL;
+    public final ClassType OBJECT;
 }
