@@ -30,6 +30,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.log4j.Logger;
 
+import fr.ensimag.deca.codegen.MethodLables;
 import fr.ensimag.deca.codegen.VirtualTables;
 
 /**
@@ -157,6 +158,8 @@ public class DecacCompiler {
     private final ManagerOfMemory memoryManger = new ManagerOfMemory();
     private final ManagerOfLabel labelManger = new ManagerOfLabel();
     private final VirtualTables vTables = new VirtualTables();
+    private final MethodLables methodLables = new MethodLables();
+
 
     public VirtualTables getVTables(){
         return vTables;
@@ -172,6 +175,11 @@ public class DecacCompiler {
 
     public ManagerOfLabel getMangerL(){
         return labelManger;
+    }
+
+
+    public MethodLables getMethodLablesManager(){
+        return methodLables;
     }
 
     
