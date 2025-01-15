@@ -46,7 +46,16 @@ public class VirtualTables {
         Map<String, Label> methodTable = new HashMap<>();
 
         if (declClass.getSuperClass() != null) {
-            methodTable.putAll(compiler.getMethodLablesManager().getMethodLabels());
+            System.err.println("hey");
+            for (Map.Entry<String, Label> entry : superDef.getMethodLablesManager().getMethodLabels().entrySet()) {
+                System.err.println("key = " + entry.getKey());
+                System.err.println("Value = " + entry.getValue());
+            }   
+
+            methodTable.putAll(superDef.getMethodLablesManager().getMethodLabels());
+        }
+        else {
+            System.err.println("i'm null " + declClass.getSuperClassName());
         }
 
         for (AbstractDeclMethod method : declClass.getMethods().getList()) {
@@ -55,11 +64,11 @@ public class VirtualTables {
             String methodName = declMethod.getName();
             Label methodLabel = new Label("code." + className + "." + methodName);
             methodTable.put(methodName, methodLabel);
-            compiler.getMethodLablesManager().setMethodLabel(methodName, methodLabel);}
+            classDef.getMethodLablesManager().setMethodLabel(methodName, methodLabel);}
 
 
         // Step 4: Generate VMT entries in correct order
-        //int offset = 1; // Start after parent pointe
+        int offset = 1; // Start after parent pointe
 
         for (Map.Entry<String, Label> entry : methodTable.entrySet()) {
             // Load method address
@@ -68,9 +77,9 @@ public class VirtualTables {
             // Store in VMT at correct offset
             RegisterOffset methodOffset = compiler.getMangerM().allocateVariable();
             compiler.addInstruction(new STORE(Register.R0, methodOffset));
-
+            
             // Store method offset in class definition for method calls
-            //compiler.getMethodLablesManager().setMethodOffset(entry.getKey(), offset++);
+            //classDef.setMethodOffset(entry.getKey(), offset++);
         }
 
 }
@@ -94,7 +103,7 @@ public class VirtualTables {
         compiler.getMangerM().allocateVariable()));
         
         objectClassDef.setVMTableAddr(objectVMT);
-        compiler.getMethodLablesManager().setMethodLabel("equals", equalsLabel);
+        objectClassDef.getMethodLablesManager().setMethodLabel("equals", equalsLabel);
     }
 
 

@@ -158,7 +158,7 @@ public class DecacCompiler {
     private final ManagerOfMemory memoryManger = new ManagerOfMemory();
     private final ManagerOfLabel labelManger = new ManagerOfLabel();
     private final VirtualTables vTables = new VirtualTables();
-    private final MethodLables methodLables = new MethodLables();
+    
 
 
     public VirtualTables getVTables(){
@@ -178,9 +178,6 @@ public class DecacCompiler {
     }
 
 
-    public MethodLables getMethodLablesManager(){
-        return methodLables;
-    }
 
     
 

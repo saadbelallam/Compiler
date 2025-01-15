@@ -2,6 +2,7 @@ package fr.ensimag.deca.context;
 
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.deca.codegen.MethodLables;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.DAddr;
 
@@ -13,6 +14,11 @@ import fr.ensimag.ima.pseudocode.DAddr;
  */
 public class ClassDefinition extends TypeDefinition {
     private DAddr VMTableAddr;
+    private final MethodLables methodLables = new MethodLables();
+
+    public MethodLables getMethodLablesManager(){
+        return methodLables;
+    }
 
     public DAddr getVMTablesAddr(){
         return VMTableAddr;
