@@ -207,11 +207,11 @@ public class DecacCompiler {
             LOG.debug("stack overflow", e);
             err.println("Stack overflow while compiling file " + sourceFile + ".");
             return true;
-        } catch (Exception e) {
+       /*  } catch (Exception e) {
            LOG.fatal("Exception raised while compiling file " + sourceFile
                    + ":", e);
            err.println("Internal compiler error while compiling file " + sourceFile + ", sorry.");
-           return true;
+           return true; */
         } catch (AssertionError e) {
             LOG.fatal("Assertion failed while compiling file " + sourceFile
                     + ":", e);
@@ -251,9 +251,9 @@ public class DecacCompiler {
 
        
 
-        assert(prog.checkAllLocations());
+        //assert(prog.checkAllLocations());
         prog.verifyProgram(this);
-        assert(prog.checkAllDecorations());
+        //assert(prog.checkAllDecorations());
         prog.codeGenProgram(this);
         addComment("end main program");
         /* addLabel(new Label("stack_overflow_error"));

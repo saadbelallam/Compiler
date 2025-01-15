@@ -1,8 +1,9 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.tree.Location;
-import fr.ensimag.ima.pseudocode.Label;
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.tree.Location;
+import fr.ensimag.ima.pseudocode.DAddr;
 
 /**
  * Definition of a class.
@@ -11,6 +12,16 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2025
  */
 public class ClassDefinition extends TypeDefinition {
+    private DAddr VMTableAddr;
+
+    public DAddr getVMTablesAddr(){
+        return VMTableAddr;
+
+    }
+
+    public void setVMTableAddr(DAddr adress){
+        this.VMTableAddr = adress;
+    }
 
 
     public void setNumberOfFields(int numberOfFields) {

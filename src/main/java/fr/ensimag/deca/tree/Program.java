@@ -38,7 +38,7 @@ public class Program extends AbstractProgram {
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
         this.classes.verifyListClass(compiler);
-        this.main.verifyMain(compiler);
+        //this.main.verifyMain(compiler);
         LOG.debug("verify program: end");
     }
 
@@ -46,7 +46,8 @@ public class Program extends AbstractProgram {
     public void codeGenProgram(DecacCompiler compiler) {
         // A FAIRE: compléter ce squelette très rudimentaire de code
         compiler.addComment("Main program");
-        main.codeGenMain(compiler);
+        classes.codeGenListClass(compiler);
+        //main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
     }
 

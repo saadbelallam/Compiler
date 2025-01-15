@@ -1,8 +1,9 @@
 package fr.ensimag.deca.context;
 
-import fr.ensimag.deca.DecacCompiler;
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 
@@ -43,6 +44,7 @@ public class EnvironmentType {
         Symbol nullSymb = compiler.createSymbol("null");
         NULL = new NullType(nullSymb);
         envTypes.put(nullSymb, new TypeDefinition(NULL, Location.BUILTIN));
+    
         
     }
 

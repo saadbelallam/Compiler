@@ -1,15 +1,13 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.ClassType;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
-
 import java.io.PrintStream;
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -39,7 +37,32 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
-        System.out.println("superclass" + superClass.getName());
+        //System.out.println("superclass" + superClass.getName());
+        ClassDefinition superClassDef = null;
+    
+        if (superClass != null) {
+            // Verify superclass exists in environment for the super class
+            Definition superDef = compiler.environmentType.get(superClass.getName());
+            if (superDef == null) {
+                throw new ContextualError("Superclass " + superClass.getName() + " is not defined", 
+                    superClass.getLocation());
+            }
+            if (!(superDef instanceof ClassDefinition)) {
+                throw new ContextualError("Superclass " + superClass.getName() + " is not a class", 
+                    superClass.getLocation());
+            }
+            superClassDef = (ClassDefinition) superDef;
+            superClass.setDefinition(superClassDef);
+        } else {
+            superClassDef = (ClassDefinition) compiler.getEnvironmentType().get(
+                compiler.createSymbol("Object"));
+        }
+
+        if (name.getName().equals(superClass.getName())) {
+            throw new ContextualError("Class " + name.getName() + " cannot extend itself", 
+                name.getLocation());
+        }
+        
         if (name.getName().getName().equals(superClass.getName().getName())) {
             throw new ContextualError("Class " + name.getName() + " cannot extend itself", name.getLocation());
         }
@@ -49,6 +72,8 @@ public class DeclClass extends AbstractDeclClass {
         if (compiler.environmentType.get(name.getName()) != null) {
             throw new ContextualError("Class " + name.getName() + " already exists", name.getLocation());
         }
+        
+        
         name.setDefinition(currentClass);
         name.setType(type);
         compiler.environmentType.declareType(name.getName(), currentClass);
@@ -85,4 +110,21 @@ public class DeclClass extends AbstractDeclClass {
         methods.iter(f);
     }
 
-}
+    public ClassDefinition getClassDefinition() {
+           return name.getClassDefinition();}
+    
+    public ClassDefinition getSuperClassDefinition(){
+        return superClass.getClassDefinition();
+    }
+
+
+    public String getSuperClassName(){
+        return superClass.getName().getName();
+    }
+
+
+    public AbstractIdentifier getSuperClass() {
+        return superClass;
+    }
+          
+    }

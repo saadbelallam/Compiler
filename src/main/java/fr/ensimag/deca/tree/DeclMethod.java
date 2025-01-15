@@ -74,5 +74,9 @@ public class DeclMethod extends AbstractDeclMethod{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
     }
+
+    public AbstractIdentifier getName() {
+        return methodName;
+}
     
 }
