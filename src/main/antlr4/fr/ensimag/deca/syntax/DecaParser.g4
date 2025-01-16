@@ -542,12 +542,16 @@ list_classes returns[ListDeclClass tree]
 class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
         assert($name.tree != null);
-        assert($superclass.tree != null); // this assertion is commented bcz we can define a class without extends-> eps
+        // Remove or modify this assertion since superclass can be Object implicitly
+        // assert($superclass.tree != null); 
         assert($class_body.tree1 != null);
         assert($class_body.tree2 != null);
         $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree1, $class_body.tree2);
         setLocation($tree, $CLASS);
-        }
+        setLocation($tree, $name.start);
+        setLocation($superclass.tree, $superclass.start);
+        setLocation($name.tree, $name.start);
+    }
     ;
 
 class_extension returns[AbstractIdentifier tree]
@@ -557,7 +561,7 @@ class_extension returns[AbstractIdentifier tree]
         setLocation($tree, $ident.start);
         }
     | /* epsilon */ {
-        $tree =new Identifier(getDecacCompiler().createSymbol("Object")); // we need to handle the case where class_xtendsion -> eps
+        $tree = new Identifier(getDecacCompiler().createSymbol("Object"));
         $tree.setLocation(Location.BUILTIN);
         }
     ;
@@ -619,24 +623,35 @@ decl_field[Visibility v, AbstractIdentifier t] returns [AbstractDeclField tree]
         }
     ;
 
+
 decl_method returns [AbstractDeclMethod tree]
-@init {
-}
-    : type ident OPARENT params=list_params CPARENT (block {
-        assert($type.tree != null);
-        assert($ident.tree != null);
-        assert($params.tree != null);
-        assert($block.decls != null);
-        assert($block.insts != null);
-        $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, $block.decls, $block.insts);
-        setLocation($tree, $type.start);
+    : type ident OPARENT params=list_params CPARENT (
+        block {
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            assert($params.tree != null);
+            assert($block.decls != null);
+            assert($block.insts != null);
+            
+            AbstractMethodBody body = new MethodBody($block.decls, $block.insts);
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
+            setLocation($tree, $type.start);
         }
-      | ASM OPARENT code=multi_line_string CPARENT SEMI {
-        // assert($code.text != null);
-        // $tree = new DeclAsm($code.text);
+      | ASM OPARENT code=multi_line_string CPARENT SEMI{
+            assert($code.text != null);
+            assert($type.tree != null);
+            assert($ident.tree != null);
+            assert($params.tree != null);
+            
+            // Create assembly method body
+            StringLiteral asmCode = new StringLiteral($code.text);
+            AbstractMethodBody body = new MethodAsmBody(asmCode);
+            
+            // Create method declaration with assembly body
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
+            setLocation($tree, $ASM);
         }
-      ) {
-        }
+    )
     ;
 
 list_params returns[ListDeclParam tree]
