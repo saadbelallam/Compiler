@@ -1,0 +1,11 @@
+// Description:
+//    Classe de nom invalide.
+//
+// Résultats:
+//    Invalide syntaxiquement car CodingStyle du nom de la classe non respecté
+//
+// Historique:
+//    créé le 14/01/2025
+
+class 4ClasseInvalide {
+}
