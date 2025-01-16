@@ -1,10 +1,13 @@
 package fr.ensimag.deca.context;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.Validate;
 
-import fr.ensimag.deca.codegen.MethodLables;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * Definition of a class.
@@ -14,12 +17,41 @@ import fr.ensimag.ima.pseudocode.DAddr;
  */
 public class ClassDefinition extends TypeDefinition {
     private DAddr VMTableAddr;
-    private final MethodLables methodLables = new MethodLables();
-
-    public MethodLables getMethodLablesManager(){
-        return methodLables;
+    // i declared this method to prevent losing overridden methods
+    private final Map<String, Integer> methodOffsets = new HashMap<>();
+    // methods are suspected to be overridden
+    private final Map<String, Label> methodLabels = new HashMap<>();
+ 
+   
+    public void addMethod(String methodName, Label label, int offset) {
+        methodLabels.put(methodName, label);
+        methodOffsets.put(methodName, offset);
     }
 
+    public Label getMethodLabel(String methodName) {
+        return methodLabels.get(methodName);
+    }
+
+    public Integer getMethodOffset(String methodName) {
+        return methodOffsets.get(methodName);
+    }
+
+    public Map<String, Label> getMethodLabels() {
+        return new HashMap<>(methodLabels);
+    }
+
+    public Map<String, Integer> getMethodOffsets() {
+        return new HashMap<>(methodOffsets);
+    }
+
+    // Method to inherit methods from superclass
+    public void inheritMethodsFrom(ClassDefinition superclass) {
+        if (superclass != null) {
+            methodLabels.putAll(superclass.getMethodLabels());
+            methodOffsets.putAll(superclass.getMethodOffsets());
+        }
+    }
+     
     public DAddr getVMTablesAddr(){
         return VMTableAddr;
 

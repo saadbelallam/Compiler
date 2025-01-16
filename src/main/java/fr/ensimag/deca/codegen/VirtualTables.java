@@ -1,7 +1,8 @@
 package fr.ensimag.deca.codegen;
 
-import java.util.HashMap;
+import java.util.AbstractMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -24,7 +25,7 @@ import fr.ensimag.ima.pseudocode.instructions.STORE;
  */
 public class VirtualTables {
     
-    
+     private static final String EQUALS_METHOD = "equals";
     /**
      * Generates virtual method table for a class
      */
@@ -43,48 +44,42 @@ public class VirtualTables {
 
         classDef.setVMTableAddr(tableAddr);
 
-        Map<String, Label> methodTable = new HashMap<>();
+        classDef.inheritMethodsFrom(superDef);
 
-        if (declClass.getSuperClass() != null) {
-            System.err.println("hey");
-            for (Map.Entry<String, Label> entry : superDef.getMethodLablesManager().getMethodLabels().entrySet()) {
-                System.err.println("key = " + entry.getKey());
-                System.err.println("Value = " + entry.getValue());
-            }   
-
-            methodTable.putAll(superDef.getMethodLablesManager().getMethodLabels());
+        Map<Integer, Map.Entry<String, Label>> sortedMethods = new TreeMap<>();
+        
+        for (Map.Entry<String, Integer> entry : superDef.getMethodOffsets().entrySet()) {
+            String methodName = entry.getKey();
+            int offset = entry.getValue();
+            Label label = superDef.getMethodLabel(methodName);
+            sortedMethods.put(offset, new AbstractMap.SimpleEntry<>(methodName, label));
         }
-        else {
-            System.err.println("i'm null " + declClass.getSuperClassName());
-        }
-
+        
+        // Add/override methods from this class
         for (AbstractDeclMethod method : declClass.getMethods().getList()) {
             DeclMethod declMethod = (DeclMethod) method;
-
             String methodName = declMethod.getName();
             Label methodLabel = new Label("code." + className + "." + methodName);
-            methodTable.put(methodName, methodLabel);
-            classDef.getMethodLablesManager().setMethodLabel(methodName, methodLabel);}
-
-
-        // Step 4: Generate VMT entries in correct order
-        int offset = 1; // Start after parent pointe
-
-        for (Map.Entry<String, Label> entry : methodTable.entrySet()) {
-            // Load method address
-            compiler.addInstruction(new LOAD(new LabelOperand(entry.getValue()), Register.R0));
             
-            // Store in VMT at correct offset
-            RegisterOffset methodOffset = compiler.getMangerM().allocateVariable();
-            compiler.addInstruction(new STORE(Register.R0, methodOffset));
+            // get existing offset if method is overridden, otherwise use new offset
+            int offset = classDef.getMethodOffset(methodName) != null ? 
+                        classDef.getMethodOffset(methodName) : 
+                        sortedMethods.size() + 1;
             
-            // Store method offset in class definition for method calls
-            //classDef.setMethodOffset(entry.getKey(), offset++);
+            classDef.addMethod(methodName, methodLabel, offset);
+            
+            // Update 
+            sortedMethods.put(offset, new AbstractMap.SimpleEntry<>(methodName, methodLabel));
         }
-
-}
-
-     public void codeGenVMTforObject(DecacCompiler compiler) {
+        
+        for (Map.Entry<Integer, Map.Entry<String, Label>> entry : sortedMethods.entrySet()) {
+            Label methodLabel = entry.getValue().getValue();
+        
+            compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
+            compiler.addInstruction(new STORE(Register.R0, compiler.getMangerM().allocateVariable()));
+        }
+    }
+    public void codeGenVMTforObject(DecacCompiler compiler) {
          compiler.addComment("Code for Object method table");
     
         Definition objectDef = compiler.getEnvironmentType().get(
@@ -103,8 +98,10 @@ public class VirtualTables {
         compiler.getMangerM().allocateVariable()));
         
         objectClassDef.setVMTableAddr(objectVMT);
-        objectClassDef.getMethodLablesManager().setMethodLabel("equals", equalsLabel);
+        objectClassDef.addMethod(EQUALS_METHOD, equalsLabel, 1);
     }
+
+    
 
 
     
