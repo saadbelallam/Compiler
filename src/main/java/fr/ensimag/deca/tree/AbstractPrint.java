@@ -46,8 +46,8 @@ public abstract class AbstractPrint extends AbstractInst {
 
             Type type = a.getType();
             // Accepte int, float, boolean et string
-            if (!type.isInt() && !type.isFloat() && !type.isBoolean() && !type.isString()) {
-                throw new ContextualError("Println can only print int, float, boolean or string", a.getLocation());
+            if (!type.isInt() && !type.isFloat() && !type.isString()) {
+                throw new ContextualError("Println can only print int, float or string", a.getLocation());
             }
 
         }
