@@ -1,0 +1,12 @@
+// Description:
+//    Classe contenant une déclaration de champ sans type.
+//
+// Résultats:
+//    Invalide syntaxiquement car déclaration d'un champ sans type.
+//
+// Historique:
+//    créé le 14/01/2025
+
+class InvalideClasse2 {
+    champ;
+}
