@@ -1,0 +1,13 @@
+// Description:
+//    Classe avec un champ privé.
+//
+// Résultats:
+//    Invalide syntaxiquement car utilisation d'un champs de visibilité private non présente dans la syntaxe deca.
+//
+// Historique:
+//    créé le 14/01/2025
+
+class InvalideClasse {
+    private int champs;
+
+}
