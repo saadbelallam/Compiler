@@ -15,17 +15,14 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 /**
  * Expression, i.e. anything that has a value.
  *
@@ -147,7 +144,7 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-         GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
         compiler.addComment("Load in R1 to be able to display");
         this.codeGenVal(compiler, tmpReg);
         // 3. Print based on type
@@ -157,23 +154,6 @@ public abstract class AbstractExpr extends AbstractInst {
                 break;
             case "float":
                 compiler.addInstruction(new WFLOAT());
-                break;
-            case "boolean":
-                // For boolean, we typically print "true" or "false"
-                Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
-                Label falseLabel = new Label("print_false_" + compiler.getMangerL().newLabel());
-                
-                // Compare with 0 (false)
-                compiler.addInstruction(new CMP(0, tmpReg));
-                compiler.addInstruction(new BEQ(falseLabel));
-                
-                compiler.addInstruction(new WSTR(new ImmediateString("true")));
-                compiler.addInstruction(new BRA(endLabel));
-
-                compiler.addLabel(falseLabel);
-                compiler.addInstruction(new WSTR(new ImmediateString("false")));
-                
-                compiler.addLabel(endLabel);
                 break;
             default:
         }
@@ -193,23 +173,6 @@ public abstract class AbstractExpr extends AbstractInst {
                 break;
             case "int"   :
                 compiler.addInstruction(new WINT());
-                break;
-            case "boolean"  :
-                Label endLabel = new Label("print_end_" + compiler.getMangerL().newLabel());
-                Label falseLabel = new Label("print_false_" + compiler.getMangerL().newLabel());
-                
-                // Compare with 0 (false)
-                compiler.addInstruction(new CMP(0, tmpReg));
-                compiler.addInstruction(new BEQ(falseLabel));
-                
-                compiler.addInstruction(new WSTR(new ImmediateString("true")));
-                compiler.addInstruction(new BRA(endLabel));
-
-                compiler.addLabel(falseLabel);
-                compiler.addInstruction(new WSTR(new ImmediateString("false")));
-                
-                compiler.addLabel(endLabel);
-                
                 break;
             default:
         }

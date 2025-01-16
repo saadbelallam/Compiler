@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -67,9 +68,18 @@ public class Assign extends AbstractBinaryExpr {
     
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
-        this.codeGenInst(compiler);
-        getRightOperand().codeGenVal(compiler, dest);
-   
+        GPRegister reg = compiler.getMangerR().allocateRegister();
+        try {
+            getRightOperand().codeGenVal(compiler, reg);
+            
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            DAddr addr = ident.getExpDefinition().getOperand();
+            compiler.addInstruction(new STORE(reg, addr));
+            
+            compiler.addInstruction(new LOAD(addr, dest));
+        } finally {
+            compiler.getMangerR().freeRegister(reg);
+        }
     }
 
    
