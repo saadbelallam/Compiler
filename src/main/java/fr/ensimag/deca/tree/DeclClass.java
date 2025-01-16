@@ -8,6 +8,10 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -90,6 +94,41 @@ public class DeclClass extends AbstractDeclClass {
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         throw new UnsupportedOperationException("not yet implemented");
     }
+
+
+
+    public void codeGenClass(DecacCompiler compiler) {
+        compiler.setCurrentClass(this);
+        String className = name.getName().getName();
+        
+        // 1. Generate initialization code for fields
+        generateInitialization(compiler, className);
+        
+        // 2. Generate code for methods
+        //generateMethods(compiler, className);
+    }
+
+    private void generateInitialization(DecacCompiler compiler, String className) {
+        Label initLabel = new Label("init." + className);
+        compiler.addLabel(initLabel);
+        
+        compiler.addFirst(new BOV(new Label("pile_pleine")));
+        
+        compiler.getMangerR().SaveRegIntoStack(compiler);
+        
+        if (superClass != null) {
+            compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
+        }
+    
+        for (AbstractDeclField field : fields.getList()) {
+            field.codeGenField(compiler);
+        }
+    
+         compiler.getMangerR().RestoreSavedRegisters(compiler);
+        
+        compiler.addInstruction(new RTS());
+    }
+
 
 
     @Override

@@ -11,6 +11,14 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
+import fr.ensimag.ima.pseudocode.instructions.WNL;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class DeclMethod extends AbstractDeclMethod{
 
@@ -21,32 +29,61 @@ public class DeclMethod extends AbstractDeclMethod{
     final private AbstractIdentifier type;
     final private AbstractIdentifier methodName;
     final private ListDeclParam listParams;
-    final private ListDeclVar listDeclVar;
-    final private ListInst listInst;
+    //final private ListDeclVar listDeclVar;
+    //final private ListInst listInst;
+    final private AbstractMethodBody body;
+    
 
-    private Label methodLabel;
 
 
-
-    public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam listParams,ListDeclVar listDeclVar,ListInst listInst) {
+    public DeclMethod(AbstractIdentifier type, AbstractIdentifier methodName, ListDeclParam listParams,AbstractMethodBody body) {
         Validate.notNull(type);
         Validate.notNull(methodName);
         Validate.notNull(listParams);
-        Validate.notNull(listDeclVar);
-        Validate.notNull(listInst);
+        Validate.notNull(body);
+        //Validate.notNull(listInst);
 
         this.type = type;
         this.methodName = methodName;
         this.listParams =listParams;
-        this.listDeclVar = listDeclVar;
-        this.listInst = listInst;
+        this.body = body;
+        //this.listDeclVar = listDeclVar;
+        //this.listInst = listInst;
     }
-
+    
     @Override
     protected void codeGenMethod(DecacCompiler compiler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'codeGenMethod'");
+        compiler.getMangerM().resetOffsetParam();
+        DeclClass currentClass = (DeclClass) compiler.getCurrentCass();
+        String methodN = methodName.getName().getName();
+        String ClassName = currentClass.getClassDefinition().getType().getName().getName();
+        Label methodLabel = new Label("code." + ClassName + "." + methodN);
+        compiler.addLabel(methodLabel);
+
+        int paramCount = listParams.size();
+        
+        
+        compiler.addFirst(new TSTO(paramCount + 16));
+        compiler.addFirst(new BOV(new Label("stack_overflow")));
+        compiler.addInstruction(new ADDSP(paramCount + 2));
+
+        listParams.codeGenListParm(compiler);
+        if (body != null) {
+            body.codeGenBody(compiler);
+        }
+
+        if (!type.getName().toString().equals("void")) {
+            compiler.addInstruction(new WSTR("Error: missing return statement in non-void method"));
+            compiler.addInstruction(new WNL());
+            compiler.addInstruction(new ERROR());
+        }
+        Label endLabel = new Label("fin." + ClassName+ "." + methodName);
+        compiler.addLabel(endLabel);
+
+        compiler.addInstruction(new SUBSP(paramCount + 2));
+        compiler.addInstruction(new RTS());
     }
+
 
     @Override
     protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
@@ -68,8 +105,7 @@ public class DeclMethod extends AbstractDeclMethod{
         type.prettyPrint(s, prefix, false);
         methodName.prettyPrint(s, prefix, false);
         listParams.prettyPrint(s, prefix, false);
-        listDeclVar.prettyPrint(s, prefix, false);
-        listInst.prettyPrint(s, prefix, true);
+        body.prettyPrint(s, prefix, false);
     }
 
     @Override

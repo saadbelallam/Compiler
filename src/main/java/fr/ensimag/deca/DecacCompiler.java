@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.codegen.MethodLables;
 import fr.ensimag.deca.codegen.VirtualTables;
+import fr.ensimag.deca.tree.AbstractDeclClass;
 
 /**
  * Decac compiler instance.
@@ -158,7 +159,16 @@ public class DecacCompiler {
     private final ManagerOfMemory memoryManger = new ManagerOfMemory();
     private final ManagerOfLabel labelManger = new ManagerOfLabel();
     private final VirtualTables vTables = new VirtualTables();
-    
+    private AbstractDeclClass currentClass;
+
+
+    public void setCurrentClass(AbstractDeclClass currentClass) {
+        this.currentClass = currentClass;
+    }
+
+    public AbstractDeclClass getCurrentCass(){
+        return currentClass;
+    }
 
 
     public VirtualTables getVTables(){

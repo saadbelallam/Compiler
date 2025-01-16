@@ -2,6 +2,8 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -13,8 +15,6 @@ import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-
-import org.apache.log4j.Logger;
 
 /**
  *

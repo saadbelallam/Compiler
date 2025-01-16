@@ -22,7 +22,7 @@ public class FieldAccess extends AbstractExpr{
         this.classM = classM;
         this.field = field;
     }
-
+    
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError {

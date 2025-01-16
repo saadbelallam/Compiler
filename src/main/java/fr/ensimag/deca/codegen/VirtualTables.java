@@ -80,7 +80,11 @@ public class VirtualTables {
         }
     }
     public void codeGenVMTforObject(DecacCompiler compiler) {
+         compiler.addComment("--------------------------------------------------");
+         compiler.addComment("|       Construction des tables des methodes     |");
+         compiler.addComment("--------------------------------------------------");
          compiler.addComment("Code for Object method table");
+
     
         Definition objectDef = compiler.getEnvironmentType().get(
             compiler.createSymbol("Object")

@@ -1,4 +1,6 @@
 package fr.ensimag.deca.tree;
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -6,10 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
-
-import org.apache.log4j.Logger;
 
 /**
  * Assignment, i.e. lvalue = expr.
@@ -68,14 +67,9 @@ public class Assign extends AbstractBinaryExpr {
     
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
-        // 1. Get memory location of left operand (variable)
-        RegisterOffset varAddr = getLeftOperand().getMemoryLocation() ;
-        
-        // 2. Generate code for right operand into dest register
+        this.codeGenInst(compiler);
         getRightOperand().codeGenVal(compiler, dest);
-         
-        // 3. Store result in variable's memory location
-        compiler.addInstruction(new STORE(dest, varAddr));
+   
     }
 
    
