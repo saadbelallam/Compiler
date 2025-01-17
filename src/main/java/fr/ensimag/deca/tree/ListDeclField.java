@@ -20,21 +20,30 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     @Override
     public void decompile(IndentPrintStream s) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        //throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        for (AbstractDeclField declField : getList()) {
+            declField.decompile(s);
+            s.println();
+        }
     }
 
-    void verifyListDeclVariable(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+    void verifyListDeclField(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
        // TODO Auto-generated method stub
        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
-    }     
+    }   
+    
+    
     //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
     public int getNombreFields() {
         return this.getList().size();
     }
 
     
-    public void codeGenListVar(DecacCompiler compiler){
+    public void codeGenListField(DecacCompiler compiler){
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        //throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        for(AbstractDeclField field : this.getList()){
+            field.codeGenField(compiler);
+        }
     }
 }
