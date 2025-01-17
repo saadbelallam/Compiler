@@ -110,7 +110,7 @@ public class DeclMethod extends AbstractDeclMethod {
             try {
                 currentClass.getMembers().declare(methodName.getName(), methodDef);
             } catch (EnvironmentExp.DoubleDefException e) {
-                throw new ContextualError("The method " + methodName + " is already defined" + " // class : " + currentClass.getType(), this.getLocation());
+                throw new ContextualError("The method " + methodName + " is already defined in class : " + currentClass.getType(), this.getLocation());
             }
             this.methodName.setDefinition(methodDef);
             this.methodName.setType(methodType);
@@ -119,19 +119,19 @@ public class DeclMethod extends AbstractDeclMethod {
 
         // Si une méthode existe dans la super-classe, vérifier les règles de redéfinition
         if (!(superMethodDef instanceof MethodDefinition)) {
-            throw new ContextualError("The method" + methodName + " cannot be redefined" + " // class : " + currentClass.getType(), this.getLocation());
+            throw new ContextualError("The method" + methodName + " cannot be redefined in class : " + currentClass.getType(), this.getLocation());
         }
 
         // Vérifier la signature
         Signature superSignature = ((MethodDefinition) superMethodDef).getSignature();
         if (!methodSignature.equals(superSignature)) {
-            throw new ContextualError("Redefinition with different signature " + " // class : " + currentClass.getType(), this.getLocation());
+            throw new ContextualError("Redefinition of " + methodName + " with different signature in class : " + currentClass.getType(), this.getLocation());
         }
 
         // Vérifier le type de retour
         Type superMethodType = superMethodDef.getType();
         if (!envTypes.subType(methodType, superMethodType)) {
-            throw new ContextualError("Return type of " + methodName + "is not compatible with super class" + " // class : " + currentClass.getType(), this.getLocation());
+            throw new ContextualError("Return type of " + methodName + " in class" + currentClass.getType() + " is not compatible with super class", this.getLocation());
         }
 
         // La méthode redéfinie hérite de l'index de la méthode parent
@@ -140,7 +140,7 @@ public class DeclMethod extends AbstractDeclMethod {
         try {
             currentClass.getMembers().declare(methodName.getName(), methodDef);
         } catch (EnvironmentExp.DoubleDefException e) {
-            throw new ContextualError("The method " + methodName + " is already defined" + " // class : " + currentClass.getType(), this.getLocation());
+            throw new ContextualError("The method " + methodName + " is already defined in class : " + currentClass.getType(), this.getLocation());
         }
         this.methodName.setDefinition(methodDef);
         this.methodName.setType(methodType);

@@ -419,7 +419,7 @@ select_expr returns[AbstractExpr tree]
         }
         | /* epsilon */ {
             // we matched "e.i"
-            $tree = new FieldAccess($e1.tree, $i.tree);
+            $tree = new Selection($e1.tree, $i.tree);
             setLocation($tree, $i.start);
 
         }
@@ -548,9 +548,6 @@ class_decl returns[AbstractDeclClass tree]
         assert($class_body.tree2 != null);
         $tree = new DeclClass($name.tree, $superclass.tree, $class_body.tree1, $class_body.tree2);
         setLocation($tree, $CLASS);
-        setLocation($tree, $name.start);
-        setLocation($superclass.tree, $superclass.start);
-        setLocation($name.tree, $name.start);
     }
     ;
 

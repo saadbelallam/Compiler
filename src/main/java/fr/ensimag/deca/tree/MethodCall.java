@@ -6,10 +6,8 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.DecacFatalError;
+import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 public class MethodCall extends AbstractExpr{
@@ -22,7 +20,7 @@ public class MethodCall extends AbstractExpr{
     final private ListExpr listExpr;
      
 
-    public MethodCall(AbstractExpr classM,AbstractIdentifier methodName,ListExpr listExpr ) {
+    public MethodCall(AbstractExpr classM, AbstractIdentifier methodName, ListExpr listExpr ) {
         Validate.notNull(methodName);
         Validate.notNull(listExpr);
         Validate.notNull(classM);
@@ -31,7 +29,7 @@ public class MethodCall extends AbstractExpr{
         this.classM =classM;
     }
 
-    public MethodCall(AbstractIdentifier methodName,ListExpr listExpr) {
+    public MethodCall(AbstractIdentifier methodName, ListExpr listExpr) {
         Validate.notNull(methodName);
         Validate.notNull(listExpr);
         this.methodName = methodName;
@@ -96,10 +94,31 @@ public class MethodCall extends AbstractExpr{
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        classM.verifyExpr(compiler, localEnv, currentClass);
+        Type typeClass = classM.getType();
+
+        if (typeClass == null || !typeClass.isClass()) {
+            throw new ContextualError("Method call '" + methodName.getName() + "' is not associated with any class", getLocation());
+        } 
+
+        ClassDefinition classDef = (ClassDefinition) compiler.environmentType.get(typeClass.getName());
+        methodName.verifyExpr(compiler, classDef.getMembers(), currentClass);
+        Signature signature = methodName.getMethodDefinition().getSignature();
+        int paramNumber = 0;
+
+        for (AbstractExpr expr : listExpr.getList()) {
+            if (paramNumber < signature.size()) {
+                listExpr.set(paramNumber, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(paramNumber)));
+                paramNumber++;
+            } else {
+                throw new ContextualError("Expecting " + signature.size() + " parameters, but found  " + listExpr.getList().size() 
+                                        + " parameters in method : " + methodName + " ,class : " + currentClass.getType(), getLocation());
+            }
+        }
+
+        setType(methodName.getType());
+        return methodName.getType();
+            
     }
-    
 }
