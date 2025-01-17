@@ -3,7 +3,10 @@ package fr.ensimag.deca.context;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 
@@ -77,6 +80,34 @@ public class EnvironmentType {
         }
 
         return false;
+    }
+
+    public boolean subType(Type t1, Type t2) {
+        if (t1.sameType(t2) && !t1.isClass() && !t2.isClass()) {
+            return true;
+        }
+
+        if (t1.isNull() && t2.isClass()) {
+            return true;
+        }
+
+        if (t2.isClass()) {
+            if (!t1.isClass()) {
+                return false;
+            }
+            ClassType t1ClassType = (ClassType) t1;
+            ClassType t2ClassType = (ClassType) t2;
+            return t1ClassType.isSubClassOf(t2ClassType);
+        }
+        return false;
+    }
+
+    
+    public boolean assignCompatible(Type t1, Type t2) {
+        if (t1.isFloat() && t2.isInt()) {
+            return true;
+        }
+        return subType(t2, t1);
     }
 
     public TypeDefinition defOfType(Symbol s) {

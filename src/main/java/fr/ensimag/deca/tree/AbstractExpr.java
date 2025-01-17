@@ -94,19 +94,34 @@ public abstract class AbstractExpr extends AbstractInst {
     public AbstractExpr verifyRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,  Type expectedType) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
         LOG.debug("verifyRValue: start");
-        Type type = this.verifyExpr(compiler, localEnv, currentClass);
         
-        if (!type.sameType(expectedType)) {
-            if (type.isInt() && expectedType.isFloat()) {
-                ConvFloat convFloat = new ConvFloat(this);
-                convFloat.verifyExpr(compiler, localEnv, currentClass);
-                return convFloat;
-            }
-            throw new ContextualError("Type mismatch: expected " + expectedType + " but found " + type, this.getLocation());
+        Type type = this.verifyExpr(compiler, localEnv, currentClass);
+        if (!compiler.environmentType.assignCompatible(expectedType, type)) {
+            throw new ContextualError("Type " + type + " is not compatible with type " + expectedType, this.getLocation());
         }
+
+        if (type.sameType(expectedType) || type.isNull()) {
+            LOG.debug("verifyRValue: end");
+            return this;
+        }
+
+        if (expectedType.isFloat() && type.isInt()) {
+            ConvFloat conv = new ConvFloat(this);
+            conv.setType(expectedType);
+            LOG.debug("verifyRValue: end");
+            return conv;
+        }
+
+        AbstractIdentifier ident = new Identifier(expectedType.getName());
+        ident.verifyExpr(compiler, localEnv, currentClass);
+        ident.setType(expectedType);
+        Cast cast = new Cast(ident, this);
+        cast.setType(expectedType);
         LOG.debug("verifyRValue: end");
-        return this;
+        return cast;
+        
     }
+
     
     
     @Override

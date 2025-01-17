@@ -1,8 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.Logger;
+
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -11,7 +14,9 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 
-public class Return extends AbstractInst{
+public class Return extends AbstractInst {
+    private static final Logger LOG = Logger.getLogger(AbstractInst.class);
+
 
     private AbstractExpr expr;
     private  Label returnLabel;
@@ -25,11 +30,26 @@ public class Return extends AbstractInst{
         this.returnLabel = rLabel;
     }
 
+    public void setExpr(AbstractExpr expr){
+        this.expr = expr;
+    }
+
+
     @Override
-    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass,
-            Type returnType) throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyInst'");
+    protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        LOG.debug("verify Return: start");
+
+        if (returnType.isVoid()) {
+            throw new ContextualError("Return type cannot be void", this.getLocation());
+        }
+
+        if (!compiler.environmentType.assignCompatible(returnType, expr.getType())) {
+            throw new ContextualError("Type " + expr.getType().getName() + " is not compatible with return type " + returnType, this.getLocation());
+        }
+
+        this.setExpr(expr.verifyRValue(compiler, localEnv, currentClass, returnType));
+
+        LOG.debug("verify Return: end");
     }
 
     @Override
