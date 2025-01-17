@@ -64,6 +64,21 @@ public class EnvironmentType {
 
     private final Map<Symbol, TypeDefinition> envTypes;
 
+    public boolean castCompatible(Type sourceType, Type targetType) {
+        if (sourceType.equals(targetType)) {
+            return true;
+        }
+       
+        if (!sourceType.isInt() && !targetType.isFloat()) {
+            return true;
+        }
+        if (!sourceType.isFloat() && !targetType.isInt()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public TypeDefinition defOfType(Symbol s) {
         return envTypes.get(s);
     }

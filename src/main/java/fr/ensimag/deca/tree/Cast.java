@@ -10,6 +10,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.FLOAT;
+import fr.ensimag.ima.pseudocode.instructions.INT;
 
 public class Cast extends AbstractExpr {
 
@@ -24,17 +27,44 @@ public class Cast extends AbstractExpr {
         this.expr = expr;
     }
 
-    @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+     @Override
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, 
+            ClassDefinition currentClass) throws ContextualError {
+        Type castType = type.verifyType(compiler);
+        Type exprType = expr.verifyExpr(compiler, localEnv, currentClass);
+        
+        
+        if (!compiler.getEnvironmentType().castCompatible(exprType, castType)) {
+            throw new ContextualError("Invalid cast from " + exprType + " to " + castType, getLocation());
+        }
+        
+        setType(castType);
+        return castType;
+    }
+
+     @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        expr.codeGenVal(compiler, destReg);
+        
+        Type sourceType = expr.getType();
+        Type targetType = type.getType();
+
+        if (sourceType.isInt() && targetType.isFloat()) {
+            compiler.addInstruction(new FLOAT(destReg, destReg));
+        } 
+        else if(targetType.isInt() && sourceType.isFloat()){
+            compiler.addInstruction(new INT(destReg, destReg));
+        }
+
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.print("(");
+        type.decompile(s);
+        s.print(") (");
+        expr.decompile(s);
+        s.print(")");
     }
 
     @Override
@@ -45,8 +75,8 @@ public class Cast extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        type.iter(f);
+        expr.iter(f);
     }
     
 }

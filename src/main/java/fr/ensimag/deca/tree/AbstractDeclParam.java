@@ -18,11 +18,8 @@ public abstract class AbstractDeclParam extends Tree {
 
     // this functions are subject to change at any time !!! i's just a prototype inspired by the other functions 
     
-    protected abstract void verifyParam(DecacCompiler compiler);
+    protected abstract void verifyParamBody(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError;
     
-    protected abstract void verifyBody(DecacCompiler compiler,
-                          EnvironmentExp methodEnv) 
-        throws ContextualError;
     
     // Attribute LB to param
     protected abstract void codeGenParam(DecacCompiler compiler);

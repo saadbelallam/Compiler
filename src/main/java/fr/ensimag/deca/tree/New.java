@@ -26,6 +26,7 @@ public class New extends AbstractExpr{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
     }
+    
 
     @Override
     public void decompile(IndentPrintStream s) {
