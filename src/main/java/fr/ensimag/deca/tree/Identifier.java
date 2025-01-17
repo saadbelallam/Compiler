@@ -175,19 +175,33 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        // throw new UnsupportedOperationException("not yet implemented");
         LOG.debug("verify identifier: start");
+        
         ExpDefinition expDef = localEnv.get(this.name);
-
+        
+        // if not found in local env and we're in a class context, check class fields        
+        if (expDef == null && currentClass != null) {
+            expDef = currentClass.getMembers().get(this.name);
+               
+            if (expDef != null && expDef.isField()) {
+                this.setDefinition(expDef);
+                Type type = expDef.getType();
+                this.setType(type);
+                LOG.debug("verify identifier: found field in class");
+                return type;
+            }
+        }
+        
         if (expDef == null) {
-            throw new ContextualError("Variable " + this.getName() + " is not defined", this.getLocation());
+        throw new ContextualError("Variable " + this.getName() + " is not defined", this.getLocation());
         }
         this.setDefinition(expDef);
         Type type = expDef.getType();
         this.setType(type);
         LOG.debug("verify identifier: end");
         return type;
-    }
+        }
+
 
     /**
      * Implements non-terminal "type" of [SyntaxeContextuelle] in the 3 passes
