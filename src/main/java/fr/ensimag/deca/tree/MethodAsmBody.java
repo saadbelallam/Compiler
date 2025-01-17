@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.InlinePortion;
 
 
 
@@ -22,7 +23,16 @@ public class MethodAsmBody extends AbstractMethodBody {
     
     @Override
     protected  void codeGenBody(DecacCompiler compiler){
-
+        String code = asmCode.getValue();
+        code = code.substring(1, code.length() - 1)  
+                  .replace("\\\"", "\"")             
+                  .replace("\\n", "\n")              
+                  .replace("\\t", "\t");             
+        
+        compiler.addComment("Begin assembly code");
+        compiler.add(new InlinePortion(code));
+        compiler.addComment("End assembly code");
+    
     }   
 
     @Override
