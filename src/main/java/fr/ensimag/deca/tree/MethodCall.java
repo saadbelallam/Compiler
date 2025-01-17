@@ -10,7 +10,7 @@ import fr.ensimag.deca.DecacFatalError;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-public class MethodCall extends AbstractExpr{
+public class MethodCall extends AbstractExpr {
 
     private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
 
@@ -95,6 +95,7 @@ public class MethodCall extends AbstractExpr{
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify MethodCall: start");
         classM.verifyExpr(compiler, localEnv, currentClass);
         Type typeClass = classM.getType();
 
@@ -105,20 +106,20 @@ public class MethodCall extends AbstractExpr{
         ClassDefinition classDef = (ClassDefinition) compiler.environmentType.get(typeClass.getName());
         methodName.verifyExpr(compiler, classDef.getMembers(), currentClass);
         Signature signature = methodName.getMethodDefinition().getSignature();
-        int paramNumber = 0;
+        int numParams = 0;
 
         for (AbstractExpr expr : listExpr.getList()) {
-            if (paramNumber < signature.size()) {
-                listExpr.set(paramNumber, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(paramNumber)));
-                paramNumber++;
+            if (numParams < signature.size()) {
+                listExpr.set(numParams, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(numParams)));
+                numParams++;
             } else {
-                throw new ContextualError("Expecting " + signature.size() + " parameters, but found  " + listExpr.getList().size() 
-                                        + " parameters in method : " + methodName + " ,class : " + currentClass.getType(), getLocation());
+                throw new ContextualError("Expecting " + signature.size() + " parameter(s), but found  " + listExpr.getList().size() 
+                                        + " parameter(s) in method : " + methodName + ", class : " + classM.getType(), getLocation());
             }
         }
 
         setType(methodName.getType());
+        LOG.debug("verify MethodCall: end");
         return methodName.getType();
-            
     }
 }
