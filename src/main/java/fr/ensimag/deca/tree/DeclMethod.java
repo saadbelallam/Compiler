@@ -93,10 +93,11 @@ public class DeclMethod extends AbstractDeclMethod{
 
 
     @Override
-    protected void verifyDeclMethod(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyDeclMethod'");
+    protected void verifyDeclMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify declMethodBody: start");
+        EnvironmentExp envExpParams = listParams.verifyListParamBody(compiler);
+        body.verifyMethodBody(compiler, envExpParams, currentClass, type.getType());  
+        LOG.debug("verify declMethodBody: end");
     }
 
     @Override

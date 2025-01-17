@@ -23,10 +23,26 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         throw new UnsupportedOperationException("Unimplemented method 'decompile'");
     }
 
-    void verifyListDeclVariable(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-       // TODO Auto-generated method stub
-       throw new UnsupportedOperationException("Unimplemented method 'decompile'");
-    }     
+
+    void verifyListDeclFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify listDeclField: start");
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyDeclFieldMembers(compiler, currentClass);
+        }
+        LOG.debug("verify listDeclField: end");
+    }
+
+
+    void verifyListDeclFieldBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify listDeclField: start");
+        for (AbstractDeclField declField : getList()) {
+            declField.verifyDeclFieldBody(compiler, localEnv, currentClass);
+        }
+        LOG.debug("verify listDeclField: end");
+    }   
+    
+    
+
     //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
     public int getNombreFields() {
         return this.getList().size();

@@ -45,10 +45,10 @@ public class DeclVar extends AbstractDeclVar {
     protected void verifyDeclVar(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify DeclVar: start");
         // Étape 0 : Déclaration de type string (?)
-        if (this.type.toString().equals("string")) {
-            compiler.environmentType.declareType(compiler.createSymbol("string"), 
-                                                new TypeDefinition(compiler.environmentType.STRING, this.getLocation()));
-        }
+        // if (this.type.toString().equals("string")) {
+        //     compiler.environmentType.declareType(compiler.createSymbol("string"), 
+        //                                         new TypeDefinition(compiler.environmentType.STRING, this.getLocation()));
+        // }
 
         // Étape 1 : Vérification du type
         Type varType = this.type.verifyType(compiler);
