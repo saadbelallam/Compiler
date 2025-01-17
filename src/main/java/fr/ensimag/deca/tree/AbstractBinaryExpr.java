@@ -74,4 +74,13 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     }
 
+     @Override
+    public int getMaxExpressionDepth() {
+        
+        return Math.max(
+            getLeftOperand().getMaxExpressionDepth(),
+            getRightOperand().getMaxExpressionDepth()
+        ) + 1;
+    }
+
 }

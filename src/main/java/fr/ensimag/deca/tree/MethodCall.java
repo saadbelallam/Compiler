@@ -2,8 +2,6 @@ package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
 
-import javax.swing.AbstractListModel;
-
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
@@ -39,6 +37,39 @@ public class MethodCall extends AbstractExpr{
         this.methodName = methodName;
         this.listExpr = listExpr;
     }
+
+    @Override 
+    public int getMaxExpressionDepth() {
+        int maxArgDepth = 0;
+        for (AbstractExpr arg : listExpr.getList()) {
+            maxArgDepth = Math.max(maxArgDepth, arg.getMaxExpressionDepth());
+        }
+        return maxArgDepth + listExpr.size() + 3;
+    }
+
+    /* @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        methodCallCount++; // Increment counter when generating code for method call
+        
+        // Push arguments onto stack in reverse order
+        for (int i = arguments.size() - 1; i >= 0; i--) {
+            GPRegister argReg = compiler.getRegisterManager().allocateRegister();
+            arguments.getList().get(i).codeGenVal(compiler, argReg);
+            compiler.addInstruction(new PUSH(argReg));
+            compiler.getRegisterManager().freeRegister(argReg);
+        }
+
+        // Call the method
+        compiler.addInstruction(new BSR(method.getMethodDefinition().getLabel()));
+
+        // Pop result into destination register
+        compiler.addInstruction(new POP(destReg));
+
+        // Clean up arguments from stack
+        if (arguments.size() > 0) {
+            compiler.addInstruction(new SUBSP(arguments.size()));
+        }
+    } */
 
     @Override
     public void decompile(IndentPrintStream s) {

@@ -82,6 +82,11 @@ public class Assign extends AbstractBinaryExpr {
         }
     }
 
+    @Override
+    public int getMaxExpressionDepth() {
+        return getRightOperand().getMaxExpressionDepth() + 1;
+    }
+
    
 
 }

@@ -3,6 +3,10 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 
@@ -21,6 +25,11 @@ public class MethodAsmBody extends AbstractMethodBody {
 
     }   
 
+    @Override
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+       
+    }
+
 
     @Override
     public void decompile(IndentPrintStream s) {
@@ -33,6 +42,15 @@ public class MethodAsmBody extends AbstractMethodBody {
     @Override
     protected void iterChildren(TreeFunction f) {
         asmCode.iter(f);
+    }
+    @Override
+    public  int getLocalVarCount(){
+          return 0;
+     }
+
+    @Override
+    public int getMaxExpressionDepth(){
+        return 0;
     }
 
     @Override

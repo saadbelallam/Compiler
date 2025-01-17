@@ -268,4 +268,10 @@ public class Identifier extends AbstractIdentifier {
         return name.toString();
     }
 
+    @Override
+    public int getMaxExpressionDepth() {
+       
+        return 1;
+    }
+
 } 

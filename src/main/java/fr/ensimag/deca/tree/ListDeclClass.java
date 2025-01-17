@@ -55,6 +55,9 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         for (AbstractDeclClass c : this.getList()) {
             compiler.getVTables().codeGenVMT(compiler, c);
         }
+        for (AbstractDeclClass c : this.getList()) {
+            c.codeGenClass(compiler);
+        }
 }
 
 

@@ -101,7 +101,31 @@ public class DeclVar extends AbstractDeclVar {
             }
         }}
 
-
+    @Override
+    protected void codeGenLocalVar(DecacCompiler compiler){
+        RegisterOffset address = compiler.getMangerM().allocateLocalVariable();
+        System.err.println("Local Variable declaration: " + varName.getName());
+        compiler.addComment("Local Variable declaration: " + varName.getName());
+        varName.getExpDefinition().setOperand(address);
+        
+        /* if (initialization instanceof Initialization) {
+            AbstractExpr initExpr = ((Initialization) initialization).getExpression();
+            
+            // Add explicit conversion if initializing float with int
+            if (type.getType().isFloat() && initExpr.getType().isInt()) {
+                initExpr = new ConvFloat(initExpr);
+            }
+            GPRegister reg = compiler.getMangerR().allocateRegister();
+            compiler.addComment("allocate R"+reg.getNumber());
+            try {
+                // Use the potentially converted expression
+                initExpr.codeGenVal(compiler, reg);
+                compiler.addInstruction(new STORE(reg, address));
+            } finally {
+                compiler.addComment("release R"+reg.getNumber());
+                compiler.getMangerR().freeRegister(reg);
+            }
+        } */}
 
 
     

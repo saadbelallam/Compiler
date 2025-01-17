@@ -1,8 +1,10 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
  * Unary expression.
@@ -39,6 +41,12 @@ public abstract class AbstractUnaryExpr extends AbstractExpr {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         operand.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public int getMaxExpressionDepth() {
+     
+        return getOperand().getMaxExpressionDepth() + 1;
     }
 
 }

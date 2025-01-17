@@ -16,6 +16,11 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
  */
 public abstract class AbstractLValue extends AbstractExpr {
      public abstract RegisterOffset getMemoryLocation();
-     public abstract ExpDefinition getExpDefinition();     
+     public abstract ExpDefinition getExpDefinition(); 
+     @Override
+     public int getMaxExpressionDepth() {
+        // Literals just need space for their value
+        return 1;
+    }    
      
 }

@@ -18,13 +18,14 @@ public class ManagerOfRegisters {
     private int nbOfUsedRegisiters = 0;
     private int nbTemporaires = 0;
     private int maxTemporaires = 0;
-    
+    private boolean[] savedRegisters;
 
     public ManagerOfRegisters(int maxReg) {
         this.maxReg = maxReg;
         //System.out.println("Manager: "+this.maxReg);
         this.registerStack = new Stack<>();
         this.usedRegisters = new boolean[maxReg + 1];
+        this.savedRegisters = new boolean[maxReg + 1];
         // Initialize register stack with available registers (R15 to R2)
         for (int i = maxReg; i >= FIRST_REG; i--) {
             registerStack.push(Register.getR(i));
@@ -90,18 +91,25 @@ public class ManagerOfRegisters {
         nbTemporaires--;
     }
     
-    // this fucntion is used to save registers whille we call a method (like a ctx_swwitch)
-    public void SaveRegIntoStack(DecacCompiler compiler){
-       compiler.addComment("saving registers from R"+FIRST_REG + " to R"+ maxReg);
-       for (int i = maxReg; i >= FIRST_REG; i--) {
-            compiler.addInstruction(new PUSH(Register.getR(i)));
+
+    public void SaveRegIntoStack(DecacCompiler compiler) {
+        compiler.addComment("Saving registers");
+        clearSavedRegisters();
+        for (int i = maxReg; i >= FIRST_REG; i--) {
+            if (usedRegisters[i]) {
+                compiler.addInstruction(new PUSH(Register.getR(i)));
+                savedRegisters[i] = true;
+            }
         }
     }
 
-    public void RestoreSavedRegisters(DecacCompiler compiler){
-        compiler.addComment("poping registers from R"+FIRST_REG + " to R"+ maxReg);
-        for (int i = maxReg; i >= FIRST_REG; i--) {
-            compiler.addInstruction(new POP(Register.getR(i)));
+    public void RestoreSavedRegisters(DecacCompiler compiler) {
+        compiler.addComment("Restoring registers");
+        for (int i = FIRST_REG; i <= maxReg; i++) {
+            if (savedRegisters[i]) {
+                compiler.addInstruction(new POP(Register.getR(i)));
+                savedRegisters[i] = false;
+            }
         }
     }
 
@@ -111,6 +119,12 @@ public class ManagerOfRegisters {
 
     public int getMaxTemporaires(){
             return maxTemporaires;
+    }
+
+     public void clearSavedRegisters() {
+        for (int i = FIRST_REG; i <= maxReg; i++) {
+            savedRegisters[i] = false;
+        }
     }
 
 }

@@ -13,12 +13,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.ERROR;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
-import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
-import fr.ensimag.ima.pseudocode.instructions.WNL;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 public class DeclMethod extends AbstractDeclMethod{
 
@@ -59,28 +55,35 @@ public class DeclMethod extends AbstractDeclMethod{
         String ClassName = currentClass.getClassDefinition().getType().getName().getName();
         Label methodLabel = new Label("code." + ClassName + "." + methodN);
         compiler.addLabel(methodLabel);
+        
 
         int paramCount = listParams.size();
         
-        
-        compiler.addFirst(new TSTO(paramCount + 16));
-        compiler.addFirst(new BOV(new Label("stack_overflow")));
-        compiler.addInstruction(new ADDSP(paramCount + 2));
+        int d2 = body.getLocalVarCount() + listParams.size();
+    
+        // d1 = d2 + register saves + method call overhead + expression depth
+        int d1 = d2 + 
+                compiler.getMangerR().getnbOfUsedRegisiters() +
+                + body.getMaxExpressionDepth();
+            
+        compiler.addInstruction(new TSTO(d1));
+        compiler.addInstruction(new BOV(new Label("stack_overflow")));
+        compiler.addInstruction(new ADDSP(d2));
+       
+        compiler.getMangerR().SaveRegIntoStack(compiler);
 
-        listParams.codeGenListParm(compiler);
+        //listParams.codeGenListParm(compiler);
+
         if (body != null) {
             body.codeGenBody(compiler);
         }
 
-        if (!type.getName().toString().equals("void")) {
-            compiler.addInstruction(new WSTR("Error: missing return statement in non-void method"));
-            compiler.addInstruction(new WNL());
-            compiler.addInstruction(new ERROR());
-        }
+       
         Label endLabel = new Label("fin." + ClassName+ "." + methodName);
         compiler.addLabel(endLabel);
+        compiler.getMangerR().RestoreSavedRegisters(compiler);
 
-        compiler.addInstruction(new SUBSP(paramCount + 2));
+        
         compiler.addInstruction(new RTS());
     }
 
@@ -151,3 +154,10 @@ public class DeclMethod extends AbstractDeclMethod{
 
     
 }
+
+
+/*  if (!type.getName().toString().equals("void")) {
+            compiler.addInstruction(new WSTR("Error: missing return statement in non-void method"));
+            compiler.addInstruction(new WNL());
+            compiler.addInstruction(new ERROR());
+        } */

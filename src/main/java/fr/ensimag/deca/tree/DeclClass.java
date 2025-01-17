@@ -9,9 +9,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.BSR;
-import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -96,7 +93,7 @@ public class DeclClass extends AbstractDeclClass {
     }
 
 
-
+    @Override
     public void codeGenClass(DecacCompiler compiler) {
         compiler.setCurrentClass(this);
         String className = name.getName().getName();
@@ -112,7 +109,7 @@ public class DeclClass extends AbstractDeclClass {
         Label initLabel = new Label("init." + className);
         compiler.addLabel(initLabel);
         
-        compiler.addFirst(new BOV(new Label("pile_pleine")));
+        /* compiler.addFirst(new BOV(new Label("pile_pleine")));
         
         compiler.getMangerR().SaveRegIntoStack(compiler);
         
@@ -122,11 +119,15 @@ public class DeclClass extends AbstractDeclClass {
     
         for (AbstractDeclField field : fields.getList()) {
             field.codeGenField(compiler);
+        } */
+
+        for (AbstractDeclMethod method : methods.getList()) {
+            method.codeGenMethod(compiler);
         }
-    
-         compiler.getMangerR().RestoreSavedRegisters(compiler);
+         
+       /*  compiler.getMangerR().RestoreSavedRegisters(compiler);
         
-        compiler.addInstruction(new RTS());
+        compiler.addInstruction(new RTS()); */
     }
 
 

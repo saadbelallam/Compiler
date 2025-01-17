@@ -255,4 +255,9 @@ public abstract class AbstractExpr extends AbstractInst {
     public void addBOVinstruction(DecacCompiler compiler,Label errorLabel){
         compiler.addInstruction(new BOV(errorLabel), "Overflow check for previous operation");
     }
+
+    public int getMaxExpressionDepth() {
+        // Base case for simple expressions
+        return 1;
+    }
 }

@@ -43,6 +43,12 @@ public class ManagerOfMemory {
         currentOffsetParam -= WORD_SIZE;
         return location;
     }
+    public RegisterOffset allocateLocalVariable(){
+        RegisterOffset location = new RegisterOffset(currentOffsetParam, Register.LB);
+        currentOffsetParam -= WORD_SIZE;
+        return location;
+    }
+    
     // TO REST THE OFFEST FOR AN OTHER CALLED METHOD
     public void resetOffsetParam() {
         currentOffsetParam = -2;

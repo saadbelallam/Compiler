@@ -1,6 +1,10 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 
 /**
  * Method body containing declarations and instructions
@@ -21,13 +25,22 @@ public abstract class AbstractMethodBody extends Tree {
      * - Method call parameters
      * @return Number of words needed on stack
      */
-   // public abstract int getStackSpace();
+   //public abstract int getStackSpace();
+
+   
+    
+       
+
+    protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType)
+            throws ContextualError;
     
     /**
      * Gets the number of local variables declared in this method
      * @return Number of local variables
      */
-    //public abstract int getLocalVarCount();
+    public abstract int getLocalVarCount();
+
+    public abstract int getMaxExpressionDepth();
     
     /**
      * Checks if this method body contains a return statement

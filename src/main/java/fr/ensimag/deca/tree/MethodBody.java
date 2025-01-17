@@ -3,6 +3,10 @@ package fr.ensimag.deca.tree;
 import java.io.PrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -19,36 +23,40 @@ public class MethodBody extends AbstractMethodBody {
     }
 
     @Override
-    protected void codeGenBody(DecacCompiler compiler) {
-       
-        
-        // Generate code for method instructions
-        if (instructions != null) {
-            instructions.codeGenListInst(compiler);
-        }
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
+        this.declVariables.verifyListDeclVariable(compiler, localEnv, currentClass);
+        this.instructions.verifyListInst(compiler, localEnv, currentClass, returnType);
     }
 
-    /* @Override
+    @Override
+    protected void codeGenBody(DecacCompiler compiler) {
+      if(declVariables != null){
+         for (AbstractDeclVar var : declVariables.getList()) {
+            if (var instanceof DeclVar) {
+                DeclVar declVar = (DeclVar) var;
+             declVar.codeGenLocalVar(compiler);}
+       }
+       
+    
+    }}
+
+
+
+
+   /*  @Override
     public int getStackSpace() {
         int space = 0;
-        // Space for local variables
         if (declVariables != null) {
             space += declVariables.size();
         }
-        // Space for maximum method call parameters in instructions
-        if (instructions != null) {
-            space += instructions.getMaxMethodCallParams();
-        }
-        // Add space for temporary calculations (typically 2-3 words)
-        space += 3;
         return space;
     } */
 
-    /* @Override
+    @Override
     public int getLocalVarCount() {
         return declVariables != null ? declVariables.size() : 0;
     }
-
+    /*
     @Override
     public boolean hasReturn() {
         return hasReturn;
@@ -79,5 +87,19 @@ public class MethodBody extends AbstractMethodBody {
     public void decompile(IndentPrintStream s) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+    }
+
+   public int getMaxExpressionDepth() {
+        int maxDepth = 0;
+        
+        if (instructions != null) {
+            for (AbstractInst inst : instructions.getList()) {
+                if (inst instanceof AbstractExpr) {
+                    maxDepth = Math.max(maxDepth, ((AbstractExpr) inst).getMaxExpressionDepth());
+                }
+            }
+        }
+
+        return maxDepth;
     }
 }

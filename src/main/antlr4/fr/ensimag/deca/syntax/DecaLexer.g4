@@ -2,20 +2,13 @@ lexer grammar DecaLexer;
 
 options {
    language=Java;
-   // Tell ANTLR to make the generated lexer class extend the
-   // the named class, which is where any supporting code and
-   // variables will be placed.
    superClass = AbstractDecaLexer;
 }
 
-// ce bloc nous permet d'ajouter du cide au lexer
 @members {
 }
 
-// Deca lexer rules.
-
-
-// Mots réservés
+// Keywords must come BEFORE IDENT to have higher priority
 ASM         : 'asm';
 CLASS       : 'class';
 EXTENDS     : 'extends';
@@ -37,79 +30,65 @@ THIS        : 'this';
 TRUE        : 'true';
 WHILE       : 'while';
 
-// Opérateurs comparatifs
+// Operators
 EQEQ     : '==';
-NEQ     : '!=';
-GEQ     : '>=';
-LEQ     : '<=';
-LT      : '<';
-GT      : '>';
+NEQ      : '!=';
+GEQ      : '>=';
+LEQ      : '<=';
+LT       : '<';
+GT       : '>';
+AND      : '&&';
+OR       : '||';
+EQUALS   : '=';
+PLUS     : '+';
+MINUS    : '-';
+TIMES    : '*';
+SLASH    : '/';
+PERCENT  : '%';
 
-// Opérateurs logiques
-AND     : '&&';
-OR      : '||';
+// Symbols
+COMMA    : ',';
+DOT      : '.';
+OPARENT  : '(';
+CPARENT  : ')';
+OBRACE   : '{';
+CBRACE   : '}';
+EXCLAM   : '!';
+SEMI     : ';';
 
-// Assignation
-EQUALS  : '=';
-
-// Opérateurs arithmétiques
-PLUS    : '+';
-MINUS   : '-';
-TIMES   : '*';
-SLASH   : '/';
-PERCENT : '%';
-
-// Symboles divers
-COMMA   : ',';
-DOT     : '.';
-OPARENT : '(';
-CPARENT : ')';
-OBRACE  : '{';
-CBRACE  : '}';
-EXCLAM  : '!';
-SEMI    : ';';
-
-
-// Identificateurs
-fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
-fragment DIGIT : '0' .. '9';
-fragment POSITIVE_DIGIT : '1' .. '9';
+// Identifiers and numbers
+fragment LETTER : 'a'..'z' | 'A'..'Z';
+fragment DIGIT : '0'..'9';
+fragment POSITIVE_DIGIT : '1'..'9';
 IDENT : (LETTER | '$' | '_')(LETTER | DIGIT | '$' | '_')*;
 INT : '0' | POSITIVE_DIGIT DIGIT*;
 
-// Littéraux flottants
+// Float literals
 fragment NUM : DIGIT+;
 fragment SIGN : '+' | '-';
 fragment EXP : ('E' | 'e') SIGN? NUM;
 fragment DEC : NUM '.' NUM;
 fragment FLOATDEC : DEC (EXP)? ('F' | 'f')?;
-fragment DIGITHEX : '0' .. '9' | 'A' .. 'F' | 'a' .. 'f';
+fragment DIGITHEX : '0'..'9' | 'A'..'F' | 'a'..'f';
 fragment NUMHEX : DIGITHEX+;
 fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN? NUM ('F' | 'f')?;
-
-// Définition principale pour les flottants
 FLOAT : FLOATDEC | FLOATHEX;
 
-
-// fragment STRING_CAR contient tous les carctères
-// à l’exception des caractères '"', '\' et de EOL
+// String handling
 fragment STRING_CAR : ~('"'|'\r'|'\n'|'\\') ;
+fragment EOL : '\n' | '\r' | '\r\n';
+fragment ESC : '\\' ['"\\] ;
 
-// End of line (EOL)
-fragment EOL: '\n';
+// Modified string rules to handle escapes properly
+STRING : '"' (STRING_CAR | ESC)* '"';
+MULTI_LINE_STRING : '"' (STRING_CAR | ESC | EOL)* '"';
 
+// Comments
+COMMENT : ('/*' .*? '*/' | '//' ~[\r\n]*) -> skip;
 
-// String
-STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
-MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
-COMMENT : ('/*' .*? '*/' | '//' (~[\r\n])*) -> skip;
+// Include directive
+fragment FILENAME : (LETTER | DIGIT | DOT | MINUS | '_')+;
+INCLUDE : '#include' [ \t]* '"' FILENAME '"' {doInclude(getText());};
 
-// include
-fragment FILENAME : (LETTER | DIGIT | DOT | MINUS | '_' )+;
-INCLUDE : '#include' (' ')* '"' FILENAME '"' {
-   doInclude(getText());
-};
-
-
-// Ignore spaces, tabs, newlines and whitespaces
-WS : (' '|'\t'|'\r'|'\n') -> skip;
+// Whitespace
+WS : [ \t\r\n] -> skip;

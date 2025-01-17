@@ -9,4 +9,9 @@ public abstract class AbstractStringLiteral extends AbstractExpr {
 
     public abstract String getValue();
     
+    @Override
+    public int getMaxExpressionDepth() {
+        return 1;
+    }
+    
 }
