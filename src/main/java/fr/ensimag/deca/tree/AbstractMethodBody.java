@@ -5,6 +5,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * Method body containing declarations and instructions
@@ -46,5 +47,9 @@ public abstract class AbstractMethodBody extends Tree {
      * Checks if this method body contains a return statement
      * @return true if method contains return, false otherwise
      */
-    //public abstract boolean hasReturn();
+    public abstract boolean hasReturn();
+
+    public void setLabelLabel(Label returnLabel){
+
+    }
 }

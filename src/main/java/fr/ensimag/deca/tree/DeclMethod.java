@@ -74,13 +74,17 @@ public class DeclMethod extends AbstractDeclMethod{
 
         //listParams.codeGenListParm(compiler);
 
+        Label endLabel = new Label("fin." + ClassName+ "." + methodName);
+
         if (body != null) {
+            body.setLabelLabel(endLabel);
             body.codeGenBody(compiler);
         }
 
        
-        Label endLabel = new Label("fin." + ClassName+ "." + methodName);
+        
         compiler.addLabel(endLabel);
+        
         compiler.getMangerR().RestoreSavedRegisters(compiler);
 
         

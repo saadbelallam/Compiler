@@ -54,6 +54,11 @@ public class MethodAsmBody extends AbstractMethodBody {
     }
 
     @Override
+    public boolean hasReturn(){
+        return false;
+    }
+
+    @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         asmCode.prettyPrint(s, prefix, true);
     }

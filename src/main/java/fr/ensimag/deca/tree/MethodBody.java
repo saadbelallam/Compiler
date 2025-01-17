@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * Concrete implementation of method body
@@ -16,6 +17,7 @@ public class MethodBody extends AbstractMethodBody {
     private final ListDeclVar declVariables;
     private final ListInst instructions;
     private boolean hasReturn = false;
+    private Label returnLabel;
 
     public MethodBody(ListDeclVar declVariables, ListInst instructions) {
         this.declVariables = declVariables;
@@ -34,10 +36,17 @@ public class MethodBody extends AbstractMethodBody {
          for (AbstractDeclVar var : declVariables.getList()) {
             if (var instanceof DeclVar) {
                 DeclVar declVar = (DeclVar) var;
-             declVar.codeGenLocalVar(compiler);}
-       }
-       
-    
+             //declVar.codeGenLocalVar(compiler);
+             }
+        }
+        if (instructions != null) {
+            for (AbstractInst inst : instructions.getList()) {
+                if (inst instanceof Return) {
+                    ((Return)inst).setReturnLabel(returnLabel);
+                }
+                inst.codeGenInst(compiler);
+            }
+        }
     }}
 
 
@@ -56,17 +65,23 @@ public class MethodBody extends AbstractMethodBody {
     public int getLocalVarCount() {
         return declVariables != null ? declVariables.size() : 0;
     }
-    /*
+    
     @Override
     public boolean hasReturn() {
         return hasReturn;
-    } */
+    }
 
     /**
      * Called by Return statements during code generation
      */
+   
     public void setHasReturn(boolean hasReturn) {
         this.hasReturn = hasReturn;
+    }
+    
+    @Override
+    public void setLabelLabel(Label returnLabel){
+        this.returnLabel = returnLabel;
     }
 
 
@@ -89,6 +104,7 @@ public class MethodBody extends AbstractMethodBody {
         throw new UnsupportedOperationException("Unimplemented method 'decompile'");
     }
 
+   @Override
    public int getMaxExpressionDepth() {
         int maxDepth = 0;
         

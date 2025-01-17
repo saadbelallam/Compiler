@@ -97,6 +97,8 @@ public class DeclClass extends AbstractDeclClass {
     public void codeGenClass(DecacCompiler compiler) {
         compiler.setCurrentClass(this);
         String className = name.getName().getName();
+
+        System.err.println("pointer on the VMT is : " + this.getClassDefinition().getVMTablesAddr());
         
         // 1. Generate initialization code for fields
         generateInitialization(compiler, className);
