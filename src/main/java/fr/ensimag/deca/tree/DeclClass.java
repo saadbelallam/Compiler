@@ -89,12 +89,12 @@ public class DeclClass extends AbstractDeclClass {
         ClassDefinition superClassDef = superClass.getClassDefinition();
         currentClass.setNumberOfFields(superClassDef.getNumberOfFields());
         currentClass.setNumberOfMethods(superClassDef.getNumberOfMethods());
-
+        
         fields.verifyListDeclFieldMembers(compiler, name.getClassDefinition());
         methods.verifyListDeclMethodMembers(compiler, name.getClassDefinition());
     }
     
-    @Override
+    @Override   
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
         // throw new UnsupportedOperationException("not yet implemented");
         fields.verifyListDeclFieldBody(compiler, this.getClassDefinition().getMembers(), name.getClassDefinition());
@@ -107,9 +107,16 @@ public class DeclClass extends AbstractDeclClass {
         compiler.setCurrentClass(this);
         String className = name.getName().getName();
 
-        System.err.println("pointer on the VMT is : " + this.getClassDefinition().getVMTablesAddr());
+        //System.err.println("pointer on the VMT is : " + this.getClassDefinition().getVMTablesAddr());
         
+
+
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("|                  Class "+name.getName().getName()+"                 |");
+        compiler.addComment("--------------------------------------------------");
         // 1. Generate initialization code for fields
+        
+        
         generateInitialization(compiler, className);
         
         // 2. Generate code for methods
@@ -120,8 +127,8 @@ public class DeclClass extends AbstractDeclClass {
         Label initLabel = new Label("init." + className);
         compiler.addLabel(initLabel);
         compiler.addComment("Initialisation des champs de "+className);
-        String superClass = this.getSuperClassName();
-        if (superClass == "Object") {
+        String superClassName = this.getSuperClassName();
+        if (superClassName.equals("Object")) {
             fields.codeGenListField(compiler);   
         }else{
             fields.codeGenListFieldExtends(compiler);
@@ -137,10 +144,10 @@ public class DeclClass extends AbstractDeclClass {
             compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
         }
     
-        for (AbstractDeclField field : fields.getList()) {
+        /* for (AbstractDeclField field : fields.getList()) {
             field.codeGenField(compiler);
-        } */
-
+        }
+ */
         for (AbstractDeclMethod method : methods.getList()) {
             method.codeGenMethod(compiler);
         }

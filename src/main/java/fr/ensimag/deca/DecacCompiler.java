@@ -294,6 +294,9 @@ public class DecacCompiler {
         addInstruction(new WNL());
         addInstruction(new ERROR());
          */
+        addComment("--------------------------------------------------");
+        addComment("|                  ERROR Handling                |");
+        addComment("--------------------------------------------------");
         setupErrorHandling();
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
@@ -347,6 +350,17 @@ public class DecacCompiler {
                 addInstruction(new WNL());
                 addInstruction(new ERROR());
             }
+            Label nullError = new Label("null_deref");
+            addLabel(nullError);
+            addInstruction(new WSTR("Erreur : dereferencement de null"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
+
+            Label tasError = new Label("tas_plein");
+            addLabel(tasError);
+            addInstruction(new WSTR("Erreur : tas_plein"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
 
         }
 

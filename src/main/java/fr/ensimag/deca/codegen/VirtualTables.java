@@ -16,8 +16,11 @@ import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -103,6 +106,31 @@ public class VirtualTables {
         
         objectClassDef.setVMTableAddr(objectVMT);
         objectClassDef.addMethod(EQUALS_METHOD, equalsLabel, 1);
+    }
+
+
+    public void generateObjectEquals(DecacCompiler compiler) {
+        // Create label for Object.equals method
+        compiler.addLabel(new Label("code.Object.equals"));
+        
+        // Get parameters:
+        // -2(LB) contains 'this' reference
+        // -3(LB) contains parameter to compare with
+        
+        // Load 'this' into R1
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        
+        // Load parameter into R0
+        compiler.addInstruction(new LOAD(new RegisterOffset(-3, Register.LB), Register.R0));
+        
+        // Compare the references
+        compiler.addInstruction(new CMP(Register.R0, Register.R1));
+        
+        // Set result to 1 if equal, 0 if not
+        compiler.addInstruction(new SEQ(Register.R0));
+        
+        // Return (result is in R0)
+        compiler.addInstruction(new RTS());
     }
 
     

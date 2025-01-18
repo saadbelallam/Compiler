@@ -64,14 +64,21 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         LOG.debug("verify listClassBody: end");
     }
 
-    public void codeGenListClass(DecacCompiler compiler) {
+    public void codeGenListVMTs(DecacCompiler compiler){
         compiler.getVTables().codeGenVMTforObject(compiler);
         for (AbstractDeclClass c : this.getList()) {
             compiler.getVTables().codeGenVMT(compiler, c);
         }
+    }
+
+    public void codeGenListClass(DecacCompiler compiler) {
+        
         for (AbstractDeclClass c : this.getList()) {
             c.codeGenClass(compiler);
         }
+          compiler.addComment("|------ code.Object.equals --------|");
+       compiler.getVTables().generateObjectEquals(compiler);
+
 }
 
 

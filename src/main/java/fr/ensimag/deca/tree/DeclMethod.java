@@ -64,7 +64,7 @@ public class DeclMethod extends AbstractDeclMethod {
                 + body.getMaxExpressionDepth();
             
         compiler.addInstruction(new TSTO(d1));
-        compiler.addInstruction(new BOV(new Label("stack_overflow")));
+        compiler.addInstruction(new BOV(new Label("stack_overflow_error")));
         compiler.addInstruction(new ADDSP(d2));
        
         compiler.getMangerR().SaveRegIntoStack(compiler);

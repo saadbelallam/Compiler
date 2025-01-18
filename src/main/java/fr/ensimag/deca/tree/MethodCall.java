@@ -10,9 +10,22 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 
 public class MethodCall extends AbstractExpr {
 
@@ -52,10 +65,10 @@ public class MethodCall extends AbstractExpr {
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
        
-        /* MethodDefinition methodDef = methodName.getMethodDefinition();
+        MethodDefinition methodDef = methodName.getMethodDefinition();
         int paramCount = listExpr.size() + 1; 
-        
         GPRegister paramReg = compiler.getMangerR().allocateRegister();
+        compiler.addInstruction(new ADDSP(paramCount));
         classM.codeGenVal(compiler, paramReg);
         compiler.addInstruction(new STORE(paramReg, new RegisterOffset(0, Register.SP)));
         
@@ -68,7 +81,7 @@ public class MethodCall extends AbstractExpr {
     
         compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), paramReg));
         
-        Label nullError = new Label("null_deref." + compiler.getMangerL().newLabel());
+        Label nullError = new Label("null_deref");
         compiler.addInstruction(new CMP(new NullOperand(), paramReg));
         compiler.addInstruction(new BEQ(nullError));
 
@@ -80,10 +93,7 @@ public class MethodCall extends AbstractExpr {
         compiler.getMangerR().freeRegister(paramReg);
         
 
-        compiler.addLabel(nullError);
-        compiler.addInstruction(new WSTR("Erreur : dereferencement de null"));
-        compiler.addInstruction(new WNL());
-        compiler.addInstruction(new ERROR()); */
+       
     }
 
     @Override

@@ -48,21 +48,33 @@ public class Assign extends AbstractBinaryExpr {
         return "=";
     }
     
-    @Override
+     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-         compiler.addComment("Assignment to " + getLeftOperand());
-        // Generate right operand value first
-        GPRegister reg = compiler.getMangerR().allocateRegister();
-        getRightOperand().codeGenVal(compiler, reg); 
         
-        AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
-        DAddr addr = ident.getExpDefinition().getOperand();
+    
+        GPRegister valueReg = compiler.getMangerR().allocateRegister();
+        getRightOperand().codeGenVal(compiler, valueReg);
         
-        compiler.addInstruction(new STORE(reg, addr));
+        if (getLeftOperand() instanceof Selection) {
+            // this.x 
+            Selection selection = (Selection) getLeftOperand();
+            compiler.addComment("Assignment: " + getLeftOperand());
+            GPRegister objReg = compiler.getMangerR().allocateRegister();
+            selection.codeGenVal(compiler, objReg);
+            
+            compiler.getMangerR().freeRegister(objReg);
+            
+        } else if (getLeftOperand() instanceof AbstractIdentifier) {
+            compiler.addComment("Assignment: " + getLeftOperand());
+            
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            DAddr addr = ident.getExpDefinition().getOperand();
+            compiler.addInstruction(new STORE(valueReg, addr));
+        } 
         
-        compiler.getMangerR().freeRegister(reg);
-}
-
+        compiler.getMangerR().freeRegister(valueReg);
+        
+    }
 
 
     
