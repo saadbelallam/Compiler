@@ -14,6 +14,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -71,7 +72,7 @@ public class Selection extends AbstractLValue {
         
         //Vérification que l'objet n'est pas null
         Label derefError = new Label("dereferencement_null");
-        compiler.addInstruction(new CMP(new ImmediateInteger(0), destReg)); // Compare l'adresse de l'objet avec null
+        compiler.addInstruction(new CMP(new NullOperand(), destReg)); // Compare l'adresse de l'objet avec null
         compiler.addInstruction(new BEQ(derefError)); // Saute à une gestion d'erreur si l'objet est null
 
         //Chargement de l'adresse du champ
