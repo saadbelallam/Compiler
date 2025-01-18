@@ -25,7 +25,7 @@ public class ManagerOfMemory {
     private int currentOffset;
     private static final int WORD_SIZE = 1; // 32-bit words
     private static final int STACK_RESERVE = 16; // Reserve space for register spilling
-    private int currentOffsetParam  = -2;
+    private int currentOffsetParam  = 0;
     
 
     public ManagerOfMemory() {
@@ -51,7 +51,7 @@ public class ManagerOfMemory {
     
     // TO REST THE OFFEST FOR AN OTHER CALLED METHOD
     public void resetOffsetParam() {
-        currentOffsetParam = -2;
+        currentOffsetParam = 0;
     }
     
     // size of the 
@@ -74,7 +74,11 @@ public class ManagerOfMemory {
     }
 
     public int getCurrentOffsetPram() {
-        return currentOffsetParam;
+        return -currentOffsetParam;
+    }
+
+    public void InCurrentOffsetPram() {
+           this.currentOffsetParam--;
     }
 
     public int getTotalSpace() {
