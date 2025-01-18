@@ -51,18 +51,16 @@ public class Return extends AbstractInst {
         }
         
         Type actualType = expr.verifyExpr(compiler, localEnv, currentClass);
-        
         if (actualType == null) {
             throw new ContextualError("Cannot determine type of return expression", getLocation());
         }
-        if (!compiler.getEnvironmentType().assignCompatible(actualType, returnType)) {
+        if (!compiler.getEnvironmentType().assignCompatible(returnType, actualType)) {
             throw new ContextualError(
                 "Incompatible return type: expected " + returnType.getName() + 
                 ", got " + actualType.getName(),
                 getLocation()); 
         }
-
-        expr.setType(actualType);
+        setExpr(expr.verifyRValue(compiler, localEnv, currentClass, returnType));
     }
 
     public AbstractExpr getexpr() {

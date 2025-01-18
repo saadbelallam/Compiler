@@ -68,7 +68,7 @@ public class EnvironmentType {
     private final Map<Symbol, TypeDefinition> envTypes;
 
     public boolean castCompatible(Type sourceType, Type targetType) {
-        if (sourceType.sameType(targetType)) {
+        if (sourceType.equals(targetType)) {
             return true;
         }
        
@@ -111,16 +111,13 @@ public class EnvironmentType {
         return false;
     }
 
-    public boolean assignCompatible(Type t1, Type t2) {
-        if (t1 == null || t2 == null) {
-            return false;
-        }
 
-        if (t1.isNull() && t2.isClass()) {
+    
+    public boolean assignCompatible(Type t1, Type t2) {
+        if (t1.isFloat() && t2.isInt()) {
             return true;
         }
-
-        return subType(t1, t2);
+        return subType(t2, t1);
     }
 
     public TypeDefinition defOfType(Symbol s) {
