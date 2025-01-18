@@ -72,10 +72,9 @@ public class Return extends AbstractInst {
         
         if (expr != null) {
            
-            expr.codeGenVal(compiler, Register.R0);
+                expr.codeGenVal(compiler, Register.R0);
+            }
             
-            
-        }
         compiler.addInstruction(new BRA(returnLabel));
     }
 
