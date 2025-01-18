@@ -18,6 +18,7 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class Selection extends AbstractLValue {
     
@@ -77,6 +78,31 @@ public class Selection extends AbstractLValue {
 
         //Chargement de l'adresse du champ
         compiler.addInstruction(new LOAD(new RegisterOffset(field.getFieldDefinition().getIndex(), destReg), destReg));
+    }
+
+    @Override
+    protected void codeGenStore(DecacCompiler compiler, GPRegister srcReg) {
+        GPRegister objReg = compiler.getMangerR().allocateRegister();
+        // value of x is in srcReg offsetOfXinHeap(srcReg) is the adress of the feild
+        // objReg  will be the register of the object
+        try {
+            // hadnle the case c.q.x 
+            classM.codeGenVal(compiler, objReg);
+            
+            
+            compiler.addInstruction(new CMP(new NullOperand(), srcReg));
+            compiler.addInstruction(new BEQ(new Label("null_deref")));
+            
+            
+            int fieldOffset = field.getFieldDefinition().getIndex();
+            compiler.addInstruction(new STORE(
+                objReg,
+                new RegisterOffset(fieldOffset, srcReg)
+            ));
+
+        } finally {
+            compiler.getMangerR().freeRegister(objReg);
+        }
     }
 
 

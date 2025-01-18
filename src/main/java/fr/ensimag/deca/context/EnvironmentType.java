@@ -90,6 +90,10 @@ public class EnvironmentType {
         if (t1.isNull() && t2.isClass()) {
             return true;
         }
+        
+        if (t1.isInt() && t2.isFloat()) {
+            return true;
+        }
 
         if (t2.isClass()) {
             if (!t1.isClass()) {

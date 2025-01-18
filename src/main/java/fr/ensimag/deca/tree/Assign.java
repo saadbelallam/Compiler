@@ -48,32 +48,34 @@ public class Assign extends AbstractBinaryExpr {
         return "=";
     }
     
-     @Override
+    @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        GPRegister valueReg = compiler.getMangerR().allocateRegister();
+        
+        try {
+            // valeur de x means offsetOfXinHeap(valueReg) is the adress of the feild
+            getRightOperand().codeGenVal(compiler, valueReg);
+            System.err.println("Assignment " + getRightOperand());
+            
+            if (getLeftOperand() instanceof Selection) {
+                // this.x
+                Selection selection = (Selection) getLeftOperand();
+                compiler.addComment("Assignment to field: " + getLeftOperand());
+                
+               // value of x is in valueReg
+                selection.codeGenStore(compiler, valueReg);
+                
+            } else if (getLeftOperand() instanceof AbstractIdentifier) {
         
     
-        GPRegister valueReg = compiler.getMangerR().allocateRegister();
-        getRightOperand().codeGenVal(compiler, valueReg);
-        
-        if (getLeftOperand() instanceof Selection) {
-            // this.x 
-            Selection selection = (Selection) getLeftOperand();
-            compiler.addComment("Assignment: " + getLeftOperand());
-            GPRegister objReg = compiler.getMangerR().allocateRegister();
-            selection.codeGenVal(compiler, objReg);
-            
-            compiler.getMangerR().freeRegister(objReg);
-            
-        } else if (getLeftOperand() instanceof AbstractIdentifier) {
-            compiler.addComment("Assignment: " + getLeftOperand());
-            
-            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
-            DAddr addr = ident.getExpDefinition().getOperand();
-            compiler.addInstruction(new STORE(valueReg, addr));
-        } 
-        
-        compiler.getMangerR().freeRegister(valueReg);
-        
+                compiler.addComment("Assignment to variable: " + getLeftOperand());
+                AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+                DAddr addr = ident.getExpDefinition().getOperand();
+                compiler.addInstruction(new STORE(valueReg, addr));
+            }
+        } finally {
+            compiler.getMangerR().freeRegister(valueReg);
+        }
     }
 
 

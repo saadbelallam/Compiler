@@ -63,39 +63,43 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenInst(DecacCompiler compiler) {
-       
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         MethodDefinition methodDef = methodName.getMethodDefinition();
-        int paramCount = listExpr.size() + 1; 
-        GPRegister paramReg = compiler.getMangerR().allocateRegister();
+        int paramCount = listExpr.size() + 1;
+
         compiler.addInstruction(new ADDSP(paramCount));
-        classM.codeGenVal(compiler, paramReg);
-        compiler.addInstruction(new STORE(paramReg, new RegisterOffset(0, Register.SP)));
+        
+        GPRegister objReg = compiler.getMangerR().allocateRegister();
+        classM.codeGenVal(compiler, objReg);
+        compiler.addInstruction(new STORE(objReg, new RegisterOffset(0, Register.SP)));
         
         int offset = -1;
         for (AbstractExpr arg : listExpr.getList()) {
-            arg.codeGenVal(compiler, paramReg);
-            compiler.addInstruction(new STORE(paramReg, new RegisterOffset(offset, Register.SP)));
+            arg.codeGenVal(compiler, objReg);
+            compiler.addInstruction(new STORE(objReg, new RegisterOffset(offset, Register.SP)));
             offset--;
         }
-    
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), paramReg));
-        
+
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), objReg));
         Label nullError = new Label("null_deref");
-        compiler.addInstruction(new CMP(new NullOperand(), paramReg));
+        compiler.addInstruction(new CMP(new NullOperand(), objReg));
         compiler.addInstruction(new BEQ(nullError));
-
-        compiler.addInstruction(new LOAD(new RegisterOffset(0, paramReg), paramReg));
-        System.err.println("method name = " + methodDef.getType().getName()+"index = "+ methodDef.getIndex());
-        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, paramReg)));
-        
+    
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, objReg), objReg));
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, objReg)));
+        compiler.addInstruction(new LOAD(Register.R0, destReg));
+    
         compiler.addInstruction(new SUBSP(paramCount));
-
-        compiler.getMangerR().freeRegister(paramReg);
         
-
-       
+        compiler.getMangerR().freeRegister(objReg);
     }
+
+    @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+        GPRegister reg = compiler.getMangerR().getScratchRegister(1);
+        codeGenVal(compiler, reg);
+    }
+
 
     @Override
     public void decompile(IndentPrintStream s) {
