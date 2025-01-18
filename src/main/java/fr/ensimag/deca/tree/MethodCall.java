@@ -142,7 +142,7 @@ public class MethodCall extends AbstractExpr {
                 listExpr.set(numParams, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(numParams)));
                 numParams++;
             } else {
-                throw new ContextualError("Expecting " + signature.size() + " parameter(s), but found  " + listExpr.getList().size() 
+                throw new ContextualError("Expecting " + signature.size() + " parameter(s), but found " + listExpr.getList().size() 
                                         + " parameter(s) in method : " + methodName + ", class : " + classM.getType(), getLocation());
             }
         }
