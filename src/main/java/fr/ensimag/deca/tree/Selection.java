@@ -11,7 +11,13 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 public class Selection extends AbstractLValue {
     
@@ -57,6 +63,21 @@ public class Selection extends AbstractLValue {
         setType(field.getDefinition().getType());
         return getType();
     }
+
+
+    @Override
+    public void codeGenVal(DecacCompiler compiler , GPRegister destReg) {
+        classM.codeGenVal(compiler, destReg);
+        
+        //Vérification que l'objet n'est pas null
+        Label derefError = new Label("dereferencement_null");
+        compiler.addInstruction(new CMP(new ImmediateInteger(0), destReg)); // Compare l'adresse de l'objet avec null
+        compiler.addInstruction(new BEQ(derefError)); // Saute à une gestion d'erreur si l'objet est null
+
+        //Chargement de l'adresse du champ
+        compiler.addInstruction(new LOAD(new RegisterOffset(field.getFieldDefinition().getIndex(), destReg), destReg));
+    }
+
 
     @Override
     public void decompile(IndentPrintStream s) {
