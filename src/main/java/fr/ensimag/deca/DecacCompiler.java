@@ -10,6 +10,7 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.AbstractProgram;
 import fr.ensimag.deca.tree.LocationException;
 import fr.ensimag.deca.codegen.ManagerOfRegisters;
+import fr.ensimag.deca.codegen.ManagerOfTas;
 import fr.ensimag.deca.codegen.ManagerOfLabel;
 import fr.ensimag.deca.codegen.ManagerOfMemory;
 import fr.ensimag.ima.pseudocode.AbstractLine;
@@ -159,6 +160,7 @@ public class DecacCompiler {
     private final ManagerOfMemory memoryManger = new ManagerOfMemory();
     private final ManagerOfLabel labelManger = new ManagerOfLabel();
     private final VirtualTables vTables = new VirtualTables();
+    private final ManagerOfTas tasManger = new ManagerOfTas();
     private AbstractDeclClass currentClass;
 
 
@@ -185,6 +187,10 @@ public class DecacCompiler {
 
     public ManagerOfLabel getMangerL(){
         return labelManger;
+    }
+
+    public ManagerOfTas getMangerT(){
+        return tasManger;
     }
 
 

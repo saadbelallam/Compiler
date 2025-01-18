@@ -7,6 +7,7 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.DVal;
 import fr.ensimag.ima.pseudocode.Label;
 
 /**
@@ -124,6 +125,11 @@ public class ClassDefinition extends TypeDefinition {
         }
         members = new EnvironmentExp(parent);
         this.superClass = superClass;
+    }
+
+    public Label getInitLabel() {
+        Label initLabel = new Label("init." + this.getType().getName().getName());
+        return initLabel;
     }
     
 }
