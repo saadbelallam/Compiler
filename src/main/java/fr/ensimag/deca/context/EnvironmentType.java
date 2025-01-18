@@ -68,7 +68,7 @@ public class EnvironmentType {
     private final Map<Symbol, TypeDefinition> envTypes;
 
     public boolean castCompatible(Type sourceType, Type targetType) {
-        if (sourceType.equals(targetType)) {
+        if (sourceType.sameType(targetType)) {
             return true;
         }
        
@@ -83,31 +83,44 @@ public class EnvironmentType {
     }
 
     public boolean subType(Type t1, Type t2) {
-        if (t1.sameType(t2) && !t1.isClass() && !t2.isClass()) {
+        if (t1 == null || t2 == null) {
+            return false;
+        }
+        if (t1.sameType(t2)) {
             return true;
+        }
+
+        // Int is a subtype of float
+        if (t1.isInt() && t2.isFloat()) {
+            return true;
+        }
+
+        // Handle class hierarchy
+        if (t1.isClass() && t2.isClass()) {
+            ClassDefinition def1 = ((ClassType) t1).getDefinition();
+            ClassDefinition def2 = ((ClassType) t2).getDefinition();
+            
+            while (def1 != null) {
+                if (def1 == def2) {
+                    return true;
+                }
+                def1 = def1.getSuperClass();
+            }
+        }
+
+        return false;
+    }
+
+    public boolean assignCompatible(Type t1, Type t2) {
+        if (t1 == null || t2 == null) {
+            return false;
         }
 
         if (t1.isNull() && t2.isClass()) {
             return true;
         }
 
-        if (t2.isClass()) {
-            if (!t1.isClass()) {
-                return false;
-            }
-            ClassType t1ClassType = (ClassType) t1;
-            ClassType t2ClassType = (ClassType) t2;
-            return t1ClassType.isSubClassOf(t2ClassType);
-        }
-        return false;
-    }
-
-    
-    public boolean assignCompatible(Type t1, Type t2) {
-        if (t1.isFloat() && t2.isInt()) {
-            return true;
-        }
-        return subType(t2, t1);
+        return subType(t1, t2);
     }
 
     public TypeDefinition defOfType(Symbol s) {
