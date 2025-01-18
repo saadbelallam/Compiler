@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -118,7 +119,16 @@ public class DeclClass extends AbstractDeclClass {
     private void generateInitialization(DecacCompiler compiler, String className) {
         Label initLabel = new Label("init." + className);
         compiler.addLabel(initLabel);
-        
+        compiler.addComment("Initialisation des champs de "+className);
+        String superClass = this.getSuperClassName();
+        if (superClass == "Object") {
+            fields.codeGenListField(compiler);   
+        }else{
+            fields.codeGenListFieldExtends(compiler);
+        }
+        compiler.addInstruction(new RTS());
+
+
         /* compiler.addFirst(new BOV(new Label("pile_pleine")));
         
         compiler.getMangerR().SaveRegIntoStack(compiler);
@@ -180,5 +190,11 @@ public class DeclClass extends AbstractDeclClass {
     public ListDeclMethod  getMethods(){
         return methods;
     }
-          
+
+    //getter for name
+    public String getClassName(){
+        return name.getName().getName();
     }
+          
+    
+}

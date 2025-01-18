@@ -9,6 +9,18 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.*;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class DeclField extends AbstractDeclField {
 
@@ -33,10 +45,72 @@ public class DeclField extends AbstractDeclField {
 
 
     @Override
-    protected void codeGenField(DecacCompiler compiler) {
+    protected void codeGenField(DecacCompiler compiler ) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'codeGenField'");
+        //throw new UnsupportedOperationException("Unimplemented method 'codeGenField'");
+        GPRegister reg = Register.R0;
+        RegisterOffset address = compiler.getMangerT().allocateField();
+        fieldName.getExpDefinition().setOperand(address);   
+       
+        if (initialization instanceof Initialization) {
+            AbstractExpr initExpr = ((Initialization) initialization).getExpression();
+            try {
+                // Use the potentially converted expression
+                initExpr.codeGenVal(compiler, reg);
+                compiler.addInstruction(new STORE(reg, address), fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+            } finally{}            
+        }else{
+            // Determine the value to initialize the field with
+            switch (type.getName().getName()) {
+                case "int":
+                    // Initialize integers to 0
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0), reg));
+                    break;
+                case "float":
+                    // Initialize floats to 0.0
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), reg));
+                    break;
+                case "boolean":
+                    // Initialize booleans to false (0)
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0),reg));
+                    break;
+                default:
+                    // Initialize objects (references) to null
+                    compiler.addInstruction(new LOAD(new NullOperand(), reg));
+                    break;
+            }
+            compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+        }
+    } 
+
+    
+   
+    @Override
+    protected void codeGenFieldExends(DecacCompiler compiler) {
+        // TODO Auto-generated method stub
+        //throw new UnsupportedOperationException("Unimplemented method 'codeGenFieldExends'");
+        RegisterOffset address = compiler.getMangerT().allocateField();
+        fieldName.getExpDefinition().setOperand(address);  
+        compiler.addInstruction(new STORE(Register.R0, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+            
     }
+
+    @Override
+    protected void codeGenFieldExendsExplicit(DecacCompiler compiler) {
+        GPRegister reg = Register.R0;
+        DAddr address = fieldName.getExpDefinition().getOperand();
+        String className = compiler.getCurrentCass().getClassName();
+        // initialisation explicite des champs de la classe courante
+        if (initialization instanceof Initialization) {
+            AbstractExpr initExpr = ((Initialization) initialization).getExpression();
+            try {
+                compiler.addComment("Initialisation explicite de "+className+"."+fieldName.getName());
+                initExpr.codeGenVal(compiler, reg);
+                compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+            } finally{}     
+        }
+    }
+    
 
     @Override
     protected Visibility verifyDeclFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
@@ -101,5 +175,9 @@ public class DeclField extends AbstractDeclField {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
     }
-    
+
+
+   
+
+   
 }
