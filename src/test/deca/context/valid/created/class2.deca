@@ -1,0 +1,16 @@
+// Description:
+//    Classe avec un champ et une méthode protégée.
+//
+// Résultats:
+//    Pas d'erreur syntaxique.
+//
+// Historique:
+//    créé le 14/01/2025
+
+class Classe2 {
+    protected int variable;
+
+    void method() {
+        println("Hello World!");
+    }
+}
