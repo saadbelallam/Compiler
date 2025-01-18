@@ -14,6 +14,7 @@ import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 
@@ -78,10 +79,13 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     protected void codeGenParam(DecacCompiler compiler) {
+        int paramOffset = -(3 + compiler.getMangerM().getCurrentOffsetPram());
+    
+        RegisterOffset paramLoc = new RegisterOffset(paramOffset, Register.LB);
+        //RegisterOffset paramLocation = compiler.getMangerM().allocateParam();
 
-        RegisterOffset paramLocation = compiler.getMangerM().allocateParam();
-        
-        paramName.getExpDefinition().setOperand(paramLocation);
+        compiler.getMangerM().InCurrentOffsetPram();
+        paramName.getExpDefinition().setOperand(paramLoc);
         
     }
 

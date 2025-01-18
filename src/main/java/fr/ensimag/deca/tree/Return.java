@@ -49,7 +49,7 @@ public class Return extends AbstractInst {
             }
             return;
         }
-        
+
         Type actualType = expr.verifyExpr(compiler, localEnv, currentClass);
         if (actualType == null) {
             throw new ContextualError("Cannot determine type of return expression", getLocation());
@@ -71,7 +71,10 @@ public class Return extends AbstractInst {
     protected void codeGenInst(DecacCompiler compiler) {
         
         if (expr != null) {
+           
             expr.codeGenVal(compiler, Register.R0);
+            
+            
         }
         compiler.addInstruction(new BRA(returnLabel));
     }

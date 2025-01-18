@@ -51,22 +51,23 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
         GPRegister valueReg = compiler.getMangerR().allocateRegister();
-        
+        compiler.addComment("Assignment to field: " + getLeftOperand());
         try {
             // valeur de x means offsetOfXinHeap(valueReg) is the adress of the feild
             getRightOperand().codeGenVal(compiler, valueReg);
-            System.err.println("Assignment " + getRightOperand());
+           
             
             if (getLeftOperand() instanceof Selection) {
+               
                 // this.x
                 Selection selection = (Selection) getLeftOperand();
-                compiler.addComment("Assignment to field: " + getLeftOperand());
+                
                 
                // value of x is in valueReg
                 selection.codeGenStore(compiler, valueReg);
                 
             } else if (getLeftOperand() instanceof AbstractIdentifier) {
-        
+               
     
                 compiler.addComment("Assignment to variable: " + getLeftOperand());
                 AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();

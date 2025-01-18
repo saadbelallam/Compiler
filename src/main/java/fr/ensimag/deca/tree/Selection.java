@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -70,43 +71,59 @@ public class Selection extends AbstractLValue {
     }
 
 
-    @Override
-    public void codeGenVal(DecacCompiler compiler , GPRegister destReg) {
-        classM.codeGenVal(compiler, destReg);
-        
-        //Vérification que l'objet n'est pas null
-        Label derefError = new Label("null_deref");
-        compiler.addInstruction(new CMP(new NullOperand(), destReg)); // Compare l'adresse de l'objet avec null
-        compiler.addInstruction(new BEQ(derefError)); // Saute à une gestion d'erreur si l'objet est null
-
-        //Chargement de l'adresse du champ
-        compiler.addInstruction(new LOAD(new RegisterOffset(field.getFieldDefinition().getIndex(), destReg), destReg));
-    }
-
-    @Override
-    protected void codeGenStore(DecacCompiler compiler, GPRegister srcReg) {
+   @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
+        // Get a temporary register for the object reference
         GPRegister objReg = compiler.getMangerR().allocateRegister();
-        // value of x is in srcReg offsetOfXinHeap(srcReg) is the adress of the feild
-        // objReg  will be the register of the object
+        
         try {
-            // hadnle the case c.q.x 
+            // Evaluate the object expression into objReg
             classM.codeGenVal(compiler, objReg);
             
+            // Add null check
+            Label errorLabel = new Label("null_deref");
+            compiler.addInstruction(new CMP(new NullOperand(), objReg));
+            compiler.addInstruction(new BEQ(errorLabel));
             
-            compiler.addInstruction(new CMP(new NullOperand(), srcReg));
-            compiler.addInstruction(new BEQ(new Label("null_deref")));
+            // Get the field offset from the identifier definition
+            FieldDefinition fieldDef = field.getFieldDefinition();
+            int offset = fieldDef.getIndex();
             
+            // Load field value from object's memory location into destReg
+            compiler.addInstruction(new LOAD(new RegisterOffset(offset, objReg), destReg));
             
-            int fieldOffset = field.getFieldDefinition().getIndex();
-            compiler.addInstruction(new STORE(
-                objReg,
-                new RegisterOffset(fieldOffset, srcReg)
-            ));
-
         } finally {
+            // Free the temporary register
             compiler.getMangerR().freeRegister(objReg);
         }
     }
+    
+    @Override
+    protected void codeGenStore(DecacCompiler compiler, GPRegister srcReg) {
+        // Get a temporary register for the object reference
+        GPRegister objReg = compiler.getMangerR().allocateRegister();
+        
+        try {
+            // Evaluate the object expression into objReg
+            classM.codeGenVal(compiler, objReg);
+            
+            // Add null check
+            Label errorLabel = new Label("null_deref");
+            compiler.addInstruction(new CMP(new NullOperand(), objReg));
+            compiler.addInstruction(new BEQ(errorLabel));
+            
+            // Get field offset
+            int fieldOffset = field.getFieldDefinition().getIndex();
+            
+            // Store srcReg value into object's field
+            compiler.addInstruction(new STORE(srcReg, new RegisterOffset(fieldOffset, objReg)));
+            
+        } finally {
+            // Free the temporary register
+            compiler.getMangerR().freeRegister(objReg);
+        }
+    }
+
 
 
     @Override

@@ -160,6 +160,8 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrint(DecacCompiler compiler) {
         GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
+        System.err.println("i'm in codeGenPrint ");
+
         compiler.addComment("Load in R1 to be able to display");
         this.codeGenVal(compiler, tmpReg);
         // 3. Print based on type
