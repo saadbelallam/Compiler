@@ -24,4 +24,21 @@ public class Signature {
         return args.size();
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Signature) {
+            Signature otherSig = (Signature) other;
+            if (args.size() != otherSig.args.size()) {
+                return false;
+            }
+            for (int i = 0; i < args.size(); i++) {
+                if (!args.get(i).sameType(otherSig.args.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 }
