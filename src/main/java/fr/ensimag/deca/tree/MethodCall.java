@@ -86,7 +86,8 @@ public class MethodCall extends AbstractExpr {
         compiler.addInstruction(new BEQ(nullError));
 
         compiler.addInstruction(new LOAD(new RegisterOffset(0, paramReg), paramReg));
-        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex(), paramReg)));
+        System.err.println("method name = " + methodDef.getType().getName()+"index = "+ methodDef.getIndex());
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, paramReg)));
         
         compiler.addInstruction(new SUBSP(paramCount));
 
