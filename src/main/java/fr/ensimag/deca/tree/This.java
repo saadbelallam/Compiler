@@ -12,10 +12,10 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 public class This extends AbstractExpr {
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        Type type = currentClass.getType();
+        this.setType(type);
+        return type;
     }
 
     @Override

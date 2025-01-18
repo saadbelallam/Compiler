@@ -16,14 +16,24 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'decompile'");
     }
+
+    void verifyListDeclMethodMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify listDeclMethodMembers: start");
+        for (AbstractDeclMethod declMethod : getList()) {
+            declMethod.verifyDeclMethodMembers(compiler, currentClass);
+        }
+        LOG.debug("verify listDeclMethodMembers: end");
+    }    
     
     void verifyListDeclMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        LOG.debug("verify listDeclMethod: start");
+        LOG.debug("verify listDeclMethodBody: start");
         for (AbstractDeclMethod declMethod : getList()) {
             declMethod.verifyDeclMethodBody(compiler, localEnv, currentClass);
         }
-        LOG.debug("verify listDeclMethod: end");
+        LOG.debug("verify listDeclMethodBody: end");
     }     
+
+    
     //méthode pour calculer le nombre de variable global (utile pour la taille de la pile)
     public int getNombreMethods() {
         return this.getList().size();

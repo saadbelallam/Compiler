@@ -200,7 +200,7 @@ public class Identifier extends AbstractIdentifier {
         this.setType(type);
         LOG.debug("verify identifier: end");
         return type;
-        }
+    }
 
 
     /**

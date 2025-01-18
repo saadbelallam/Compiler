@@ -11,7 +11,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
@@ -43,39 +43,33 @@ public class DeclParam extends AbstractDeclParam {
     }
 
     @Override
-    protected void verifyParamBody(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError {
-        LOG.debug("verify declParamBody: start");
-
-
-        /* 
-
-        enventually passe 2 :
-
+    protected Type verifyParamMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify declParamMembers: start");
         // Étape 1 : Vérification du type
         Type paramType = this.type.verifyType(compiler);
+        this.type.setType(paramType);
 
         // Étape 2 : Vérifier que le type n'est pas void
         if (paramType.isVoid()) {
-            throw new ContextualError("Parameter cannot have type void", this.getLocation());
+            throw new ContextualError("Parameter " + paramName.getName() + "cannot have type void" + " // class : " + currentClass.getType() , this.getLocation());
         }
 
+        LOG.debug("verify declParamMembers: end");
+        return paramType;
+    }
 
-        */
-
-        
-        // Étape 1 : Vérification du type
-        Type paramType = this.type.verifyType(compiler); // passe 2 (?)
-
-
+    @Override
+    protected void verifyParamBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify declParamBody: start");
         // Étape 3 : Mise à jour de l'environnement
         Symbol name = this.paramName.getName();
         ParamDefinition paramDef = new ParamDefinition(type.getType(), paramName.getLocation());
         paramName.setDefinition(paramDef);
-        paramName.setType(paramType);
+        paramName.setType(type.getType());
         try {
             localEnv.declare(name, paramDef);
         } catch (DoubleDefException e) {
-            throw new ContextualError("Parameter " + name + " is already used ", this.getLocation());
+            throw new ContextualError("Parameter " + name + " is already used " + " // class : " + currentClass.getType(), this.getLocation());
         }
         LOG.debug("verify declParamBody: end");
     }

@@ -11,21 +11,26 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-public class New extends AbstractExpr{
+public class New extends AbstractExpr {
 
     final private AbstractIdentifier ident;
 
     public New(AbstractIdentifier ident){
         Validate.notNull(ident);
-        this.ident =  ident;
+        this.ident = ident;
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        // Règle syntaxe contextuelle : (3.42)
+        Type type = ident.verifyType(compiler);
+        if (!type.isClass()) {
+            throw new ContextualError("Identifier " + type + " is not a class", getLocation());
+        }
+        setType(type);
+        return type;
     }
+
     
 
     @Override

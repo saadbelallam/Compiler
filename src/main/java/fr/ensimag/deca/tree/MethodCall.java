@@ -9,10 +9,12 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
-public class MethodCall extends AbstractExpr{
+public class MethodCall extends AbstractExpr {
 
     private static final Logger LOG = Logger.getLogger(AbstractExpr.class);
 
@@ -22,7 +24,7 @@ public class MethodCall extends AbstractExpr{
     final private ListExpr listExpr;
      
 
-    public MethodCall(AbstractExpr classM,AbstractIdentifier methodName,ListExpr listExpr ) {
+    public MethodCall(AbstractExpr classM, AbstractIdentifier methodName, ListExpr listExpr ) {
         Validate.notNull(methodName);
         Validate.notNull(listExpr);
         Validate.notNull(classM);
@@ -31,7 +33,7 @@ public class MethodCall extends AbstractExpr{
         this.classM =classM;
     }
 
-    public MethodCall(AbstractIdentifier methodName,ListExpr listExpr) {
+    public MethodCall(AbstractIdentifier methodName, ListExpr listExpr) {
         Validate.notNull(methodName);
         Validate.notNull(listExpr);
         this.methodName = methodName;
@@ -47,29 +49,42 @@ public class MethodCall extends AbstractExpr{
         return maxArgDepth + listExpr.size() + 3;
     }
 
-    /* @Override
-    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        methodCallCount++; // Increment counter when generating code for method call
+    @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+       
+        /* MethodDefinition methodDef = methodName.getMethodDefinition();
+        int paramCount = listExpr.size() + 1; 
         
-        // Push arguments onto stack in reverse order
-        for (int i = arguments.size() - 1; i >= 0; i--) {
-            GPRegister argReg = compiler.getRegisterManager().allocateRegister();
-            arguments.getList().get(i).codeGenVal(compiler, argReg);
-            compiler.addInstruction(new PUSH(argReg));
-            compiler.getRegisterManager().freeRegister(argReg);
+        GPRegister paramReg = compiler.getMangerR().allocateRegister();
+        classM.codeGenVal(compiler, paramReg);
+        compiler.addInstruction(new STORE(paramReg, new RegisterOffset(0, Register.SP)));
+        
+        int offset = -1;
+        for (AbstractExpr arg : listExpr.getList()) {
+            arg.codeGenVal(compiler, paramReg);
+            compiler.addInstruction(new STORE(paramReg, new RegisterOffset(offset, Register.SP)));
+            offset--;
         }
+    
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, Register.SP), paramReg));
+        
+        Label nullError = new Label("null_deref." + compiler.getMangerL().newLabel());
+        compiler.addInstruction(new CMP(new NullOperand(), paramReg));
+        compiler.addInstruction(new BEQ(nullError));
 
-        // Call the method
-        compiler.addInstruction(new BSR(method.getMethodDefinition().getLabel()));
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, paramReg), paramReg));
+        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex(), paramReg)));
+        
+        compiler.addInstruction(new SUBSP(paramCount));
 
-        // Pop result into destination register
-        compiler.addInstruction(new POP(destReg));
+        compiler.getMangerR().freeRegister(paramReg);
+        
 
-        // Clean up arguments from stack
-        if (arguments.size() > 0) {
-            compiler.addInstruction(new SUBSP(arguments.size()));
-        }
-    } */
+        compiler.addLabel(nullError);
+        compiler.addInstruction(new WSTR("Erreur : dereferencement de null"));
+        compiler.addInstruction(new WNL());
+        compiler.addInstruction(new ERROR()); */
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {
@@ -96,10 +111,46 @@ public class MethodCall extends AbstractExpr{
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        LOG.debug("verify MethodCall: start");
+        classM.verifyExpr(compiler, localEnv, currentClass);
+        Type typeClass = classM.getType();
+
+        if (typeClass == null || !typeClass.isClass()) {
+            throw new ContextualError("Method call '" + methodName.getName() + "' is not associated with any class", getLocation());
+        } 
+
+        
+
+        ClassDefinition classDef = (ClassDefinition) compiler.environmentType.get(typeClass.getName());
+        if (classDef == null) {
+            throw new ContextualError("Class not found: " + typeClass.getName(), getLocation());
+        }
+
+        ExpDefinition def = classDef.getMembers().get(methodName.getName());
+        if (def == null || !def.isMethod()) {
+            throw new ContextualError("Method '" + methodName.getName() + 
+                                    "' not found in class " + classDef.getType().getName(), 
+                                    getLocation());
+        }
+        methodName.verifyExpr(compiler, classDef.getMembers(), currentClass);
+        Signature signature = methodName.getMethodDefinition().getSignature();
+        int numParams = 0;
+
+        for (AbstractExpr expr : listExpr.getList()) {
+            if (numParams < signature.size()) {
+                listExpr.set(numParams, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(numParams)));
+                numParams++;
+            } else {
+                throw new ContextualError("Expecting " + signature.size() + " parameter(s), but found  " + listExpr.getList().size() 
+                                        + " parameter(s) in method : " + methodName + ", class : " + classM.getType(), getLocation());
+            }
+        }
+
+        setType(methodName.getType());
+        LOG.debug("verify MethodCall: end");
+        return methodName.getType();
     }
-    
 }
+
+    

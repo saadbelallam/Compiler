@@ -113,7 +113,7 @@ public class DeclField extends AbstractDeclField {
     
 
     @Override
-    protected void verifyDeclFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
+    protected Visibility verifyDeclFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify declFieldMembers: start");
 
         // Étape 1 : Vérification du type
@@ -143,8 +143,8 @@ public class DeclField extends AbstractDeclField {
         } catch (DoubleDefException e) {
             throw new ContextualError("Field name already used", this.getLocation());
         }
-        
         LOG.debug("verify declFieldMembers: end");
+        return visibility;
     }
 
     @Override
