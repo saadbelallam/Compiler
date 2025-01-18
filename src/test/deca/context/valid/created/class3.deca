@@ -6,6 +6,8 @@
 // Historique:
 //    créé le 14/01/2025
 
+class ParentClass {}
+
 class FilleClass extends ParentClass {
     int i = 7;
 }
