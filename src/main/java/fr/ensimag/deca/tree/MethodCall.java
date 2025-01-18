@@ -35,6 +35,7 @@ public class MethodCall extends AbstractExpr {
     private AbstractExpr classM;
     final private AbstractIdentifier methodName;
     final private ListExpr listExpr;
+    private Location location;
      
 
     public MethodCall(AbstractExpr classM, AbstractIdentifier methodName, ListExpr listExpr ) {
@@ -166,6 +167,13 @@ public class MethodCall extends AbstractExpr {
         LOG.debug("verify MethodCall: end");
         return methodName.getType();
     }
+
+     @Override
+    public Location getLocation() {
+        return location;
+    }
+
+   
 }
 
     
