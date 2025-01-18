@@ -52,6 +52,9 @@ public class Selection extends AbstractLValue {
  
         if (field.getFieldDefinition().getVisibility() == Visibility.PROTECTED) {
             // Vérifie si la classe courante est un sous-type de la classe où le champ protégé est déclaré.
+            if (currentClass == null) {
+                throw new ContextualError("The field is protected and cannot be accessed", getLocation());
+            }
             if (!compiler.environmentType.subType(currentClass.getType(), field.getFieldDefinition().getContainingClass().getType())) {
                 throw new ContextualError("The field is protected and cannot be accessed",  getLocation());
             }
