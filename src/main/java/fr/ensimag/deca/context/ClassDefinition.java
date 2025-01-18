@@ -131,5 +131,13 @@ public class ClassDefinition extends TypeDefinition {
         Label initLabel = new Label("init." + this.getType().getName().getName());
         return initLabel;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof ClassDefinition) {
+            return this.getType().getName().equals(((ClassDefinition) other).getType().getName());
+        }
+        return false;
+    }
     
 }

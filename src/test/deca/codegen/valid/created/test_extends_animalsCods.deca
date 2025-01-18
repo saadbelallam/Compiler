@@ -1,0 +1,53 @@
+// Description : 
+//              testing the polymorphism definition of the functions
+/// Results    :
+//              Animal ID: 101 makes sound:
+//              Animal sound code: 1
+//             Animal ID: 102 makes sound:
+//             Animal sound code: 2
+
+
+class Animal {
+    int id ;
+
+    void setId(int id) {
+        this.id = id ;
+    }
+
+    int getId() {
+        return this.id ;
+    }
+
+    void makeSound() {
+        println("Animal sound code: 0") ; 
+    }
+}
+
+class Dog extends Animal {
+    
+    void makeSound() {
+        println("Animal sound code: 1") ;
+    }
+}
+
+class Cat extends Animal {
+    
+    void makeSound() {
+        println("Animal sound code: 2") ; 
+    }
+}
+
+{
+   
+    Animal dog = new Dog() ;
+    Animal cat = new Cat() ;
+
+    dog.setId(101) ;
+    cat.setId(102) ;
+
+    println("Animal ID: ", dog.getId(), " makes sound:") ;
+    dog.makeSound();
+    
+    println("Animal ID: ", cat.getId(), " makes sound:") ;
+    cat.makeSound(); 
+}
