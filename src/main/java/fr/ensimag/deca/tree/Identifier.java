@@ -261,7 +261,7 @@ public class Identifier extends AbstractIdentifier {
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
     
 
-        DAddr address = getVariableDefinition().getOperand();
+        DAddr address = this.getExpDefinition().getOperand();
         compiler.addInstruction(new LOAD(address, dest));
 }
 

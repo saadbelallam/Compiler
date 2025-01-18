@@ -36,7 +36,7 @@ public class MethodBody extends AbstractMethodBody {
          for (AbstractDeclVar var : declVariables.getList()) {
             if (var instanceof DeclVar) {
                 DeclVar declVar = (DeclVar) var;
-             //declVar.codeGenLocalVar(compiler);
+             declVar.codeGenLocalVar(compiler);
              }
         }
         if (instructions != null) {

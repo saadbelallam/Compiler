@@ -11,7 +11,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
@@ -101,11 +100,10 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     protected void codeGenLocalVar(DecacCompiler compiler){
         RegisterOffset address = compiler.getMangerM().allocateLocalVariable();
-        System.err.println("Local Variable declaration: " + varName.getName());
         compiler.addComment("Local Variable declaration: " + varName.getName());
         varName.getExpDefinition().setOperand(address);
         
-        /* if (initialization instanceof Initialization) {
+        if (initialization instanceof Initialization) {
             AbstractExpr initExpr = ((Initialization) initialization).getExpression();
             
             // Add explicit conversion if initializing float with int
@@ -122,7 +120,7 @@ public class DeclVar extends AbstractDeclVar {
                 compiler.addComment("release R"+reg.getNumber());
                 compiler.getMangerR().freeRegister(reg);
             }
-        } */}
+        }}
 
 
     

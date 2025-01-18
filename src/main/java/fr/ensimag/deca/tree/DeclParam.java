@@ -6,14 +6,15 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 
 // this class was made to deal at the first place with params of the methode !
@@ -76,8 +77,12 @@ public class DeclParam extends AbstractDeclParam {
    
 
     @Override
-    protected  void codeGenParam(DecacCompiler compiler){
-        throw new UnsupportedOperationException("not yet implemented");
+    protected void codeGenParam(DecacCompiler compiler) {
+
+        RegisterOffset paramLocation = compiler.getMangerM().allocateParam();
+        
+        paramName.getExpDefinition().setOperand(paramLocation);
+        
     }
 
     @Override

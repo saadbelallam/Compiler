@@ -1,6 +1,6 @@
 package fr.ensimag.deca.context;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 

@@ -6,9 +6,15 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentType;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.Signature;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
@@ -21,8 +27,6 @@ public class DeclMethod extends AbstractDeclMethod {
     final private AbstractIdentifier type;
     final private AbstractIdentifier methodName;
     final private ListDeclParam listParams;
-    //final private ListDeclVar listDeclVar;
-    //final private ListInst listInst;
     final private AbstractMethodBody body;
     
 
@@ -31,14 +35,13 @@ public class DeclMethod extends AbstractDeclMethod {
         Validate.notNull(methodName);
         Validate.notNull(listParams);
         Validate.notNull(body);
-        //Validate.notNull(listInst);
+
 
         this.type = type;
         this.methodName = methodName;
         this.listParams =listParams;
         this.body = body;
-        //this.listDeclVar = listDeclVar;
-        //this.listInst = listInst;
+
     }
     
     @Override
@@ -53,7 +56,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
         int paramCount = listParams.size();
         
-        int d2 = body.getLocalVarCount() + listParams.size();
+        int d2 = body.getLocalVarCount() + paramCount;
     
         // d1 = d2 + register saves + method call overhead + expression depth
         int d1 = d2 + 
@@ -66,7 +69,7 @@ public class DeclMethod extends AbstractDeclMethod {
        
         compiler.getMangerR().SaveRegIntoStack(compiler);
 
-        //listParams.codeGenListParm(compiler);
+        listParams.codeGenListParam(compiler);
 
         Label endLabel = new Label("fin." + ClassName+ "." + methodName);
 
@@ -74,14 +77,10 @@ public class DeclMethod extends AbstractDeclMethod {
             body.setLabelLabel(endLabel);
             body.codeGenBody(compiler);
         }
-
-       
         
         compiler.addLabel(endLabel);
         
         compiler.getMangerR().RestoreSavedRegisters(compiler);
-
-        
         compiler.addInstruction(new RTS());
     }
 
@@ -90,7 +89,7 @@ public class DeclMethod extends AbstractDeclMethod {
     protected void verifyDeclMethodMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
         // Récupérer l'environnement des types
         EnvironmentType envTypes = compiler.environmentType;
-
+       
         // Récupérer l'environnement des expressions de la super-classe (si elle existe)
         ClassDefinition superClass = currentClass.getSuperClass();
         EnvironmentExp envExpSuper = (superClass != null) ? superClass.getMembers() : null;
@@ -117,6 +116,8 @@ public class DeclMethod extends AbstractDeclMethod {
             return;
         }
 
+       
+
         // Si une méthode existe dans la super-classe, vérifier les règles de redéfinition
         if (!(superMethodDef instanceof MethodDefinition)) {
             throw new ContextualError("The method" + methodName + " cannot be redefined in class : " + currentClass.getType(), this.getLocation());
@@ -139,6 +140,7 @@ public class DeclMethod extends AbstractDeclMethod {
         MethodDefinition methodDef = new MethodDefinition(methodType, this.getLocation(), methodSignature, superMethodIndex);
         try {
             currentClass.getMembers().declare(methodName.getName(), methodDef);
+            
         } catch (EnvironmentExp.DoubleDefException e) {
             throw new ContextualError("The method " + methodName + " is already defined in class : " + currentClass.getType(), this.getLocation());
         }
