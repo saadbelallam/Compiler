@@ -1,0 +1,11 @@
+// Description:
+//    Classe avec champ vide.
+//
+// Résultats:
+//    Pas d'erreur syntaxique.
+//
+// Historique:
+//    créé le 14/01/2025
+
+class ChampsVide {
+}
