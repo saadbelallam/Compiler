@@ -1,0 +1,17 @@
+// Description:
+//    Une classe avec méthode et attribut de même nom.
+// Résultats:
+//    Valide syntaxiquement et contextuellement.
+//
+// Historique:
+//    créé le 16/01/2025
+
+
+class A {
+    protected int A ;
+
+    void A(int A) {
+        this.A = A ;
+    }
+
+}

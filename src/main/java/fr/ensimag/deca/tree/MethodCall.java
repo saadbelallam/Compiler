@@ -41,7 +41,6 @@ public class MethodCall extends AbstractExpr {
     public MethodCall(AbstractExpr classM, AbstractIdentifier methodName, ListExpr listExpr ) {
         Validate.notNull(methodName);
         Validate.notNull(listExpr);
-        Validate.notNull(classM);
         this.methodName = methodName;
         this.listExpr = listExpr;
         this.classM =classM;
@@ -129,6 +128,9 @@ public class MethodCall extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify MethodCall: start");
+        if (classM == null){
+            classM = new This();
+        }
         classM.verifyExpr(compiler, localEnv, currentClass);
         Type typeClass = classM.getType();
 

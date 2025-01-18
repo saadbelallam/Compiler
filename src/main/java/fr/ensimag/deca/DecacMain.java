@@ -1,6 +1,14 @@
 package fr.ensimag.deca;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -48,11 +56,37 @@ public class DecacMain {
             options.displayUsage();
         }
         if (options.getParallel()) {
-            // A FAIRE : instancier DecacCompiler pour chaque fichier à
-            // compiler, et lancer l'exécution des méthodes compile() de chaque
-            // instance en parallèle. Il est conseillé d'utiliser
-            // java.util.concurrent de la bibliothèque standard Java.
-            throw new UnsupportedOperationException("Parallel build not yet implemented");
+            int numberOfProcessors = Runtime.getRuntime().availableProcessors();
+            ExecutorService executorService = Executors.newFixedThreadPool(numberOfProcessors);
+            List<Future<Boolean>> futures = new ArrayList<>();
+            try {
+                for (File source : options.getSourceFiles()) {
+                    futures.add(executorService.submit(() -> {
+                        DecacCompiler compiler = new DecacCompiler(options, source);
+                        return compiler.compile();
+                    }));
+                }
+
+                for (Future<Boolean> future : futures) {
+                    try {
+                        if (future.get()) {
+                            error = true;
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
+                        break;
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (error) {
+                    throw new IllegalStateException("One or more files failed to compile during parallel execution.");
+                }
+            } finally {
+                executorService.shutdown();
+            }
+
         } else {
             for (File source : options.getSourceFiles()) {
                 DecacCompiler compiler = new DecacCompiler(options, source);
