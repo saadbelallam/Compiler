@@ -107,6 +107,10 @@ public class EnvironmentType {
                 def1 = def1.getSuperClass();
             }
         }
+        
+        if (t1.isNull() && t2.isClass()) {
+            return true;
+        }
 
         return false;
     }
