@@ -43,6 +43,7 @@ public class Return extends AbstractInst {
             throw new ContextualError("Return type cannot be void", this.getLocation());
         }
 
+        expr.verifyExpr(compiler, localEnv, currentClass);
         if (!compiler.environmentType.assignCompatible(returnType, expr.getType())) {
             throw new ContextualError("Type " + expr.getType().getName() + " is not compatible with return type " + returnType, this.getLocation());
         }

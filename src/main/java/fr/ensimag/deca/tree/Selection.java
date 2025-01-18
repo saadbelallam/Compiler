@@ -54,8 +54,9 @@ public class Selection extends AbstractLValue {
                 throw new ContextualError("The field is protected and cannot be accessed", getLocation());
             }
         }
-        setType(field.getDefinition().getType());
-        return getType();
+        Type fieldType = field.getType();
+        setType(fieldType);
+        return fieldType;
     }
 
     @Override
