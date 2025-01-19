@@ -1,0 +1,21 @@
+// Description:
+//    Création de plusieurs objets avec `new` avec attributs.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class A {
+    int x;
+}
+
+class B {
+    A a = new A();
+}
+
+{
+    B b = new B();
+    b.a.x = 1;
+}
