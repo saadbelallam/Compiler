@@ -43,6 +43,7 @@ public class MethodBody extends AbstractMethodBody {
             for (AbstractInst inst : instructions.getList()) {
                 if (inst instanceof Return) {
                     ((Return)inst).setReturnLabel(returnLabel);
+                    this.setHasReturn(true);
                 }
                 inst.codeGenInst(compiler);
             }

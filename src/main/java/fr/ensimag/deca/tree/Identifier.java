@@ -261,7 +261,7 @@ public class Identifier extends AbstractIdentifier {
     }
     @Override 
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
-        // Get the definition of this identifier
+       
         ExpDefinition def = this.getExpDefinition();
         
         if (def.isField()) {
@@ -272,14 +272,13 @@ public class Identifier extends AbstractIdentifier {
                 new RegisterOffset(-2, Register.LB),
                 dest
             ));
-            
-            // Load field value using field's offset from object base
+           
             compiler.addInstruction(new LOAD(
                 new RegisterOffset(fieldDef.getIndex(), dest),
                 dest
             ));
         } else {
-            // Regular variable or parameter - use original code
+          
             DAddr address = def.getOperand();
             compiler.addInstruction(new LOAD(address, dest));
         }
@@ -287,7 +286,7 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     public void codeGenIdent(DecacCompiler compiler, DAddr address) {
-        // For fields, we don't set the operand since they're accessed via object + offset
+      
         if (!this.getExpDefinition().isField()) {
             if (this.getExpDefinition() != null) {
                 this.getExpDefinition().setOperand(address);

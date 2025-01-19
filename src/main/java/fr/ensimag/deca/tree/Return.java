@@ -13,6 +13,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 
 public class Return extends AbstractInst {
     private static final Logger LOG = Logger.getLogger(AbstractInst.class);
@@ -69,13 +70,18 @@ public class Return extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        
+       
         if (expr != null) {
-           
-                expr.codeGenVal(compiler, Register.R0);
-            }
             
-        compiler.addInstruction(new BRA(returnLabel));
+            expr.codeGenVal(compiler, Register.R0);
+        }
+    
+        if (returnLabel != null) {
+            compiler.addInstruction(new BRA(returnLabel));
+        } else {
+           
+            compiler.addInstruction(new RTS());
+        }
     }
 
     @Override
