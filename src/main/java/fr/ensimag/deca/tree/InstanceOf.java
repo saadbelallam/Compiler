@@ -20,28 +20,36 @@ public class InstanceOf extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass)
-            throws ContextualError {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'verifyExpr'");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        Type type1 = expr.verifyExpr(compiler, localEnv, currentClass);
+        Type type2 = type.verifyType(compiler);
+        if (!type1.isClassOrNull()) {
+            throw new ContextualError("Expression must be a class or null", expr.getLocation());
+        }
+        if (!type2.isClass()) {
+            throw new ContextualError("Type must be a class", type.getLocation());
+        }
+        setType(compiler.environmentType.BOOLEAN);
+        return compiler.environmentType.BOOLEAN;
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.print("(");
+        expr.decompile(s);
+        s.print(" instanceof ");
+        type.decompile(s);
+        s.print(")");
     }
-
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // TODO Auto-generated method stub
         expr.prettyPrint(s, prefix, false);
         type.prettyPrint(s, prefix, true);  
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        expr.iter(f);
+        type.iter(f);
     }
 }
