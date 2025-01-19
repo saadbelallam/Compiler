@@ -86,8 +86,9 @@ public class Return extends AbstractInst {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.print("return ");
+        expr.decompile(s);
+        s.println(";");
     }
 
     @Override

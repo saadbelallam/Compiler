@@ -1,0 +1,20 @@
+// Description:
+//    Création d'un objet et affectation d'une valeur à son attribut.
+//
+// Résultats:
+//    Valide syntaxiquement et contextuellement.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class TestClass {
+    int val;
+}
+
+class Main {
+    void main() {
+        TestClass o = new TestClass();
+        o.val = 7;
+        println("La valeur de l'objet est de: ", o.val);
+    }
+}

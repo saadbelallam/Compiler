@@ -1,0 +1,17 @@
+// Description:
+//    Mauvaise réation d'un objet.
+//
+// Résultats:
+//    Invalide syntaxiquement : absence de parenthéses lors de l'instanciation du nouveau objet.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class TestClass {
+    int val;
+}
+
+{
+    TestClass o = new TestClass;
+    
+}

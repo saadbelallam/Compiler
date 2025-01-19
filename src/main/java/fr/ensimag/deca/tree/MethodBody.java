@@ -28,6 +28,13 @@ public class MethodBody extends AbstractMethodBody {
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
         this.declVariables.verifyListDeclVariable(compiler, localEnv, currentClass);
         this.instructions.verifyListInst(compiler, localEnv, currentClass, returnType);
+
+        // check s'il y a un return
+        for (AbstractInst inst : instructions.getList()) {
+            if (inst instanceof Return) {
+                this.setHasReturn(true);
+            }
+        }
     }
 
     @Override
@@ -95,14 +102,18 @@ public class MethodBody extends AbstractMethodBody {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        declVariables.iter(f);
+        instructions.iter(f);
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.println("{");
+        s.indent();
+        declVariables.decompile(s);
+        instructions.decompile(s);
+        s.unindent();
+        s.println("}");
     }
 
    @Override

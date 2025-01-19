@@ -41,7 +41,9 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("{ ... A FAIRE ... }");
+        type.decompile(s);
+        s.print(" ");
+        paramName.decompile(s);
     }
 
     @Override
@@ -98,7 +100,8 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        throw new UnsupportedOperationException("Not yet supported");
+        type.iter(f);
+        paramName.iter(f);
     }
 
 }

@@ -109,7 +109,7 @@ public class DeclMethod extends AbstractDeclMethod {
             try {
                 currentClass.getMembers().declare(methodName.getName(), methodDef);
             } catch (EnvironmentExp.DoubleDefException e) {
-                throw new ContextualError("The method " + methodName + " is already defined in class : " + currentClass.getType(), this.getLocation());
+                throw new ContextualError("The method " + methodName + " is already defined in class : " + currentClass.getType() + " as a " + currentClass.getMembers().get(methodName.getName()), this.getLocation());
             }
             this.methodName.setDefinition(methodDef);
             this.methodName.setType(methodType);
@@ -154,13 +154,21 @@ public class DeclMethod extends AbstractDeclMethod {
         LOG.debug("verify declMethodBody: start");
         EnvironmentExp envExpParams = listParams.verifyListParamBody(compiler, localEnv, currentClass);
         body.verifyMethodBody(compiler, envExpParams, currentClass, type.getType());  
+        if (!(type.getName() == compiler.createSymbol("void")) && !this.body.hasReturn()) {
+            throw new ContextualError("The method " + methodName + " must have a return statement in class : " + currentClass.getType(), this.getLocation());
+        }
         LOG.debug("verify declMethodBody: end");
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        type.decompile(s);
+        s.print(" ");
+        methodName.decompile(s);
+        s.print("(");
+        listParams.decompile(s);
+        s.println(") ");
+        body.decompile(s);
     }
 
     @Override
@@ -175,8 +183,10 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        type.iter(f);
+        methodName.iter(f);
+        listParams.iter(f);
+        body.iter(f);
     }
 
     public String getName() {
