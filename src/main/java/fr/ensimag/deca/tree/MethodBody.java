@@ -28,6 +28,13 @@ public class MethodBody extends AbstractMethodBody {
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
         this.declVariables.verifyListDeclVariable(compiler, localEnv, currentClass);
         this.instructions.verifyListInst(compiler, localEnv, currentClass, returnType);
+
+        // check s'il y a un return
+        for (AbstractInst inst : instructions.getList()) {
+            if (inst instanceof Return) {
+                this.setHasReturn(true);
+            }
+        }
     }
 
     @Override
