@@ -71,8 +71,6 @@ Results :
                 )
             );
     
-    println("Result of nested AND: ", result);
-    
     
     result = a || (
                 b || (
@@ -102,8 +100,6 @@ Results :
                 )
             );
     
-    println("Result of nested OR: ", result);
-    
     
     result = a && (
                 b || (
@@ -132,6 +128,4 @@ Results :
                     )
                 )
             );
-    
-    println("Result of mixed AND/OR: ", result);
 }

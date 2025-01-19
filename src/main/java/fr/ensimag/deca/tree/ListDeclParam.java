@@ -43,7 +43,9 @@ public class ListDeclParam extends TreeList<AbstractDeclParam>{
     public void decompile(IndentPrintStream s) {
         for (AbstractDeclParam declParam : getList()) {
             declParam.decompile(s);
-            s.println();
+            if (getList().indexOf(declParam) != getList().size() - 1) {
+                s.print(", ");
+            }
         }
     }
 

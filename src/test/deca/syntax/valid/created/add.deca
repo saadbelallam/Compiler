@@ -1,0 +1,17 @@
+// Description:
+//    Boucles imbriquées.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 19/01/2025
+
+{
+    int a = 7;
+
+    float b = 3.0;
+    println(a + b);
+
+    println("Fin");
+}

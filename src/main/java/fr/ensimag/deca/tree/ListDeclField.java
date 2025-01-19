@@ -27,12 +27,11 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'decompile'");
         for (AbstractDeclField declField : getList()) {
             declField.decompile(s);
             s.println();
         }
+        s.println();
     }
 
 

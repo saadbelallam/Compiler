@@ -1,0 +1,14 @@
+// Description : 
+//    Vérifie la validité des références croisées entre deux classes et la gestion des parcours pour éviter des boucles infinies.
+//
+// Résultats : 
+//    Le programme doit lever une erreur car la classe est définie dans le main.
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+{
+    class A {
+        int a;
+    }
+}

@@ -35,7 +35,6 @@ Results :
     
     // Test 1: Maximum register pressure
     result = (a < b && c < d) || (e < f && g < h);
-    println("Complex expression result:", result);
 
     // Test 2: Deep nesting
     x = 10;
@@ -59,5 +58,4 @@ Results :
     s = false;
     
     result = p && q || r && !s || p && !q;
-    println("Chain result:", result);
 }
