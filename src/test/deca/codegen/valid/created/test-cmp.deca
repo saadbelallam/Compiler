@@ -38,7 +38,7 @@ Results :
     
     // Test 1: Complex boolean expression with AND/OR
     result = (a && b) || (c && !b);
-    println("Test 1 - Complex boolean: ", result); // Should be true
+    println("Test 1 - Complex boolean: "); // Should be true
     
     // Test 2: While loop with compound condition
     while (x > 0 && y >= 0) {
@@ -46,20 +46,20 @@ Results :
         if ((x > 8 && y > 3) || (z < 5 && !b)) {
             z = z + 1;
             a = !a && c;  // Test boolean assignment
-            println("Branch 1: z=", z, " a=", a);
+            println("Branch 1: z=", z);
         } else if (x % 2 == 0 || y % 2 == 0) {
             z = z + 2;
             b = !b || a;  // More boolean operations
-            println("Branch 2: z=", z, " b=", b);
+            println("Branch 2: z=", z);
         } else {
             z = z + 3;
             c = !(a || b);  // Test NOT with OR
-            println("Branch 3: z=", z, " c=", c);
+            println("Branch 3: z=", z);
         }
         
         // Complex boolean expression inside while
         result = (a && !b) || (c && (x > y));
-        println("Loop iteration - x=", x, " y=", y, " result=", result);
+        println("Loop iteration - x=", x, " y=", y);
         
         // Update counters
         x = x - 1;
@@ -68,11 +68,8 @@ Results :
     
     // Test 3: Final complex boolean expression
     result = (a && b && c) || (!a && !b && !c) || (x == y && z > 0);
-    println("Test 3 - Final result: ", result);
     
     // Print final values
     println("Final values:");
     println("x=", x, " y=", y, " z=", z);
-    println("a=", a, " b=", b, " c=", c);
-    println("result=", result);
 }

@@ -12,9 +12,5 @@
     printx(2.0);    // Instruction PRINTX
     printlnx(2.0);  // Instruction PRINTLNX
     printx(2);
-    printlnx(2); 
-    print(false);
-    println(false);
-    printx(true);
-    printlnx(true); 
+    printlnx(2);
 }
