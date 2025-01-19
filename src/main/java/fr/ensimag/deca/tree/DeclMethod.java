@@ -167,7 +167,7 @@ public class DeclMethod extends AbstractDeclMethod {
         methodName.decompile(s);
         s.print("(");
         listParams.decompile(s);
-        s.println(") ");
+        s.print(") ");
         body.decompile(s);
     }
 
