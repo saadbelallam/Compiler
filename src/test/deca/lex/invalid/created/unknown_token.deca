@@ -1,1 +1,12 @@
-?
+// Description : 
+//    Vérifie la gestion d'un caractère non reconnu dans le programme.
+//
+// Résultats : 
+//   token recognition error at: '?'
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+{
+    ?;
+}
