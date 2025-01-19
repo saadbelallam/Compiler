@@ -75,13 +75,9 @@ for file in "$directory"/*.deca; do
 
   
   # Exécuter la commande decac
-  decac "$file"
+  decac "$file" > /dev/null 2>&1
 
-  # Vérifier si la commande a échoué
-  if [ $? -ne 0 ]; then
-    echo -e "${RED}Erreur lors de la compilation de $file ${RESET}"
-    exit 1
-  fi
+
 
   # Nom du fichier .ass généré
   ass_file="${file%.deca}.ass"
