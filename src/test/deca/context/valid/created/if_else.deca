@@ -1,0 +1,18 @@
+// Description:
+//    Condition avec if-else.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 19/01/2025
+
+{
+    int x = 7;
+
+    if (x > 5) {
+        println("ouiiii");
+    } else {
+        println("nonnn");
+    }
+}
