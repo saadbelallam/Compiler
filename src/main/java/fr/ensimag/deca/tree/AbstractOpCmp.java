@@ -25,7 +25,6 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     }
 
     @Override
-
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify op cmp: start");
         Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
@@ -46,11 +45,8 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
             }
         } else if (type1.isBoolean() && type2.isBoolean()) {
               // nothing
-        } else {
-            throw new ContextualError(
-                "Operands must be of the same type and either numeric (int/float) or Boolean",
-                this.getLocation()
-            );
+        } else if (!(this instanceof AbstractOpExactCmp && (type1.isClass() || type1.isNull()) && (type2.isClass() || type2.isNull()))) {
+            throw new ContextualError("Operands must be either null or class object",this.getLocation());
         }
 
         Type type = compiler.environmentType.BOOLEAN;
