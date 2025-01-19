@@ -22,10 +22,22 @@ public class This extends AbstractExpr {
         return type;
     }
 
+    
+    
     @Override
-    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-           
-           compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), destReg));    
+    public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
+        // For value generation, we do the same as address generation
+        // since 'this' is a reference
+        codeGenAddr(compiler, dest);
+    }
+
+    @Override
+    public void codeGenAddr(DecacCompiler compiler, GPRegister dest) {
+        // Load address of 'this' from stack (-2(LB) contains the object address)
+        compiler.addInstruction(new LOAD(
+            new RegisterOffset(-2, Register.LB),
+            dest
+        ));
     }
 
     @Override

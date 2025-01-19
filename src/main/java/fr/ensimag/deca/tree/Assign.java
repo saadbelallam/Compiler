@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
@@ -50,34 +51,48 @@ public class Assign extends AbstractBinaryExpr {
     
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
+        compiler.addComment("Assignment");
+        
+        // Register for the value to be assigned
         GPRegister valueReg = compiler.getMangerR().allocateRegister();
-        compiler.addComment("Assignment to field: " + getLeftOperand());
+        getRightOperand().codeGenVal(compiler, valueReg);
         try {
-            // valeur de x means offsetOfXinHeap(valueReg) is the adress of the feild
-            getRightOperand().codeGenVal(compiler, valueReg);
-           
+            // Generate code for right operand value
+            
             
             if (getLeftOperand() instanceof Selection) {
-               
-                // this.x
+                // Handle field selection (e.g. (obj1.obj2).x)
                 Selection selection = (Selection) getLeftOperand();
                 
-                
-               // value of x is in valueReg
-                selection.codeGenStore(compiler, valueReg);
+                // Get address of the field
+                GPRegister addrReg = compiler.getMangerR().allocateRegister(); ///r3
+                try {
+                    // This will handle the entire chain of selections and null checks
+                    selection.codeGenAddr(compiler, addrReg); //r3
+            
+                    // Store the value at the computed address
+                    compiler.addInstruction(new STORE(valueReg, 
+                    new RegisterOffset(selection.getFeildSelc().getFieldDefinition().getIndex(), addrReg)));
+                    
+                } finally {
+                    compiler.getMangerR().freeRegister(addrReg);
+                }
                 
             } else if (getLeftOperand() instanceof AbstractIdentifier) {
-               
-    
+                // Simple variable assignment
                 compiler.addComment("Assignment to variable: " + getLeftOperand());
                 AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
                 DAddr addr = ident.getExpDefinition().getOperand();
                 compiler.addInstruction(new STORE(valueReg, addr));
             }
+            
         } finally {
             compiler.getMangerR().freeRegister(valueReg);
         }
-    }
+        
+        
+}
+
 
 
     

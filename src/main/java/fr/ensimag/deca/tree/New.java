@@ -61,6 +61,11 @@ public class New extends AbstractExpr {
         compiler.addInstruction(new BSR(classDef.getInitLabel())); // Appeler init.Classe
         compiler.addInstruction(new POP(destReg)); // Récupérer l'adresse dans destReg
     }
+    @Override
+    public void codeGenAddr(DecacCompiler compiler, GPRegister destReg) {
+             codeGenVal(compiler, destReg);
+    }
+   
 
     @Override
     public void decompile(IndentPrintStream s) {

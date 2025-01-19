@@ -160,7 +160,6 @@ public abstract class AbstractExpr extends AbstractInst {
      */
     protected void codeGenPrint(DecacCompiler compiler) {
         GPRegister tmpReg = compiler.getMangerR().getScratchRegister(1); 
-        System.err.println("i'm in codeGenPrint ");
 
         compiler.addComment("Load in R1 to be able to display");
         this.codeGenVal(compiler, tmpReg);
@@ -230,6 +229,11 @@ public abstract class AbstractExpr extends AbstractInst {
     public DVal getVal(DecacCompiler compiler){
         return null;
     }
+
+    public void codeGenAddr(DecacCompiler compiler, GPRegister dest) {
+        throw new UnsupportedOperationException("codeGenAddr not implemented for " + 
+            getClass().getName());
+    }
      
 
     public void codeGenCondition(DecacCompiler compiler, Label label, boolean jump) {
@@ -277,4 +281,6 @@ public abstract class AbstractExpr extends AbstractInst {
         // Base case for simple expressions
         return 1;
     }
+
+    
 }

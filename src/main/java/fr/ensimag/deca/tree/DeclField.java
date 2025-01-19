@@ -6,20 +6,22 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
-import fr.ensimag.deca.context.*;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class DeclField extends AbstractDeclField {
@@ -45,11 +47,11 @@ public class DeclField extends AbstractDeclField {
 
 
     @Override
-    protected void codeGenField(DecacCompiler compiler ) {
+    protected void codeGenField(DecacCompiler compiler, GPRegister FRegister ) {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'codeGenField'");
-        GPRegister reg = Register.R0;
-        RegisterOffset address = compiler.getMangerT().allocateField();
+        GPRegister reg = compiler.getMangerR().allocateRegister();
+        RegisterOffset address = compiler.getMangerT().allocateField(FRegister);
         fieldName.getExpDefinition().setOperand(address);   
        
         if (initialization instanceof Initialization) {
@@ -86,18 +88,39 @@ public class DeclField extends AbstractDeclField {
     
    
     @Override
-    protected void codeGenFieldExends(DecacCompiler compiler) {
+    protected void codeGenFieldExends(DecacCompiler compiler, GPRegister regF) {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'codeGenFieldExends'");
-        RegisterOffset address = compiler.getMangerT().allocateField();
+        RegisterOffset address = compiler.getMangerT().allocateField(regF);
         fieldName.getExpDefinition().setOperand(address);  
-        compiler.addInstruction(new STORE(Register.R0, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+        GPRegister reg = Register.R0;
+        // Determine the value to initialize the field with
+            switch (type.getName().getName()) {
+                case "int":
+                    // Initialize integers to 0
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0), reg));
+                    break;
+                case "float":
+                    // Initialize floats to 0.0
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), reg));
+                    break;
+                case "boolean":
+                    // Initialize booleans to false (0)
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0),reg));
+                    break;
+                default:
+                    // Initialize objects (references) to null
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0), reg));
+                    break;
+            }
+            compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+        }
             
-    }
+
 
     @Override
     protected void codeGenFieldExendsExplicit(DecacCompiler compiler) {
-        GPRegister reg = Register.R0;
+        GPRegister reg = compiler.getMangerR().allocateRegister();
         DAddr address = fieldName.getExpDefinition().getOperand();
         String className = compiler.getCurrentCass().getClassName();
         // initialisation explicite des champs de la classe courante

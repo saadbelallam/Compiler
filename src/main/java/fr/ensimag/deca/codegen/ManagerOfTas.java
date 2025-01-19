@@ -23,8 +23,8 @@ public class ManagerOfTas {
         this.currentOffset = 1;
     }
 
-    public RegisterOffset allocateField() {
-        RegisterOffset location = new RegisterOffset(currentOffset, Register.R1);
+    public RegisterOffset allocateField(Register reg) {
+        RegisterOffset location = new RegisterOffset(currentOffset, reg);
         currentOffset += WORD_SIZE;
         return location;
     }
@@ -35,5 +35,9 @@ public class ManagerOfTas {
 
     public int getTotalSpace() {
         return Math.abs(currentOffset - 1);
+    }
+    public void restOffset(){
+        this.currentOffset = 1;
+
     }
 }
