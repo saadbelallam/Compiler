@@ -1,0 +1,13 @@
+// Description:
+//    Classe avec héritage
+// Résultats:
+//    valide syntaxiquement.
+//
+// Historique:
+//    créé le 14/01/2025
+
+class ParentClass {}
+
+class FilleClass extends ParentClass {
+    int i = 7;
+}
