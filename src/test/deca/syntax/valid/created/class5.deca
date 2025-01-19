@@ -1,0 +1,21 @@
+// Description:
+//    Création d'un nouvel objet avec `new` avec appel d'une méthode.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class TestNvClass {
+    void methHello() {
+        println("Hello!");
+    }
+}
+
+class Main {
+    void main() {
+        TestNvClass hello = new TestNvClass();
+        hello.methHello();
+    }
+}
