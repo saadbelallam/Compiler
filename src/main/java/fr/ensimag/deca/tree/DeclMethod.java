@@ -162,8 +162,13 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        type.decompile(s);
+        s.print(" ");
+        methodName.decompile(s);
+        s.print("(");
+        listParams.decompile(s);
+        s.println(") ");
+        body.decompile(s);
     }
 
     @Override
@@ -178,8 +183,10 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        type.iter(f);
+        methodName.iter(f);
+        listParams.iter(f);
+        body.iter(f);
     }
 
     public String getName() {

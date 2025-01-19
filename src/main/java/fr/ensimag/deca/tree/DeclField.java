@@ -156,14 +156,18 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        if (visibility == Visibility.PROTECTED) {
+            s.print("protected ");
+        }
+        type.decompile(s);
+        s.print(" ");
+        fieldName.decompile(s);
+        initialization.decompile(s);
+        s.println(";");
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'prettyPrintChildren'");
         type.prettyPrint(s, prefix, false);
         fieldName.prettyPrint(s, prefix, false);
         initialization.prettyPrint(s, prefix, true);
@@ -171,13 +175,16 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+    protected String prettyPrintNode() {
+        return "[visibility=" + visibility.toString() + "] " + this.getClass().getSimpleName();
+
     }
 
+    @Override
+    protected void iterChildren(TreeFunction f) {
+        type.iter(f);
+        fieldName.iter(f);
+        initialization.iter(f);
+    }
 
-   
-
-   
 }

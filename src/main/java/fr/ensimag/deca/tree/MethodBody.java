@@ -102,14 +102,18 @@ public class MethodBody extends AbstractMethodBody {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        declVariables.iter(f);
+        instructions.iter(f);
     }
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.println("{");
+        s.indent();
+        declVariables.decompile(s);
+        instructions.decompile(s);
+        s.unindent();
+        s.println("}");
     }
 
    @Override

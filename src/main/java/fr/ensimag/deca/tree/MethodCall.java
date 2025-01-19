@@ -105,26 +105,32 @@ public class MethodCall extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        if (classM != null){
+            classM.decompile(s);
+            s.print(".");
+        }
+        methodName.decompile(s);
+        s.print("(");
+        listExpr.decompile(s);
+        s.print(")");
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // TODO Auto-generated method stub
-        methodName.prettyPrint(s, prefix, false);
-        listExpr.prettyPrint(s, prefix, false);
         if (classM != null){
             classM.prettyPrint(s, prefix, false);
         }
-
-
+        methodName.prettyPrint(s, prefix, false);
+        listExpr.prettyPrint(s, prefix, false);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        if (classM != null){
+            classM.iter(f);
+        }
+        methodName.iter(f);
+        listExpr.iter(f);
     }
 
     @Override
