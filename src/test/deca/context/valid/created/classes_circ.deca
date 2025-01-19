@@ -1,0 +1,30 @@
+// Description : 
+//    Vérifie la gestion des références croisées entre deux classes et le parcours récursif entre instances des classes A et B.
+//
+// Résultats : 
+//    Le programme doit être valide syntaxiquement.
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+class A {
+    B b;
+}
+
+class B {
+    A a;
+}
+
+class Parcours {
+    void parcoursA(A a) {
+        if (a != null) {
+            parcoursB(a.b);
+        }
+    }
+
+    void parcoursB(B b) {
+        if (b != null) {
+            parcoursA(b.a);
+        }
+    }
+}
