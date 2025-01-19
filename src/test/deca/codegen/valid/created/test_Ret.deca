@@ -1,0 +1,22 @@
+// Description
+//             Testing Return 
+// Results:
+//           abs(-4.00000e+00) = 4.00000e+00 
+
+
+
+class Q {
+   float abs(float x) {
+     if (x < 0.0) {
+       return -x;
+       }
+}}
+
+
+
+{
+    Q p = new Q();
+    float x = -4.0f;
+    println("abs(",x,") = ", p.abs(x));
+
+}
