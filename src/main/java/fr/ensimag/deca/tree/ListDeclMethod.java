@@ -13,8 +13,10 @@ public class ListDeclMethod extends TreeList<AbstractDeclMethod> {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        for (AbstractDeclMethod declMethod : getList()) {
+            declMethod.decompile(s);
+            s.println();
+        }
     }
 
     void verifyListDeclMethodMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
