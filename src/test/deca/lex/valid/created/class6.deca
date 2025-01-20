@@ -1,0 +1,27 @@
+// Description
+//    Création d'un nouvel objet avec new avec méthodes get et set.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class A {
+    protected int x ;
+
+    int getX() {
+        return x ;
+    }
+    void setX(int x) {
+        this.x = x ;
+    }
+}
+
+{
+    A a = new A() ;
+
+    a.setX(1) ;
+    
+    println("a.getX() = ", a.getX()) ;
+}

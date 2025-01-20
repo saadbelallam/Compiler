@@ -1,0 +1,42 @@
+class A {
+    int x;
+    int y; 
+    float z;
+    
+    void init() {
+        x = 0;
+        y = 0;
+        z = 0.0;
+    }
+}
+
+class C extends A {
+    A a;
+    
+    void init() {
+        a = new A();
+        a.init();
+        x = 0; 
+        y = 0;
+        z = 0.0;
+    }
+}
+
+class D {
+    A a;
+    C c;
+    
+    void init() {
+        a = new A();
+        c = new C();
+        a.init();
+        c.init();
+    }
+}
+
+{
+    C c = new C();
+    D d = new D();
+    c.init();
+    d.init();
+}

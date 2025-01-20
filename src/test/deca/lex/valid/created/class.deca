@@ -1,0 +1,14 @@
+// Description:
+//    Vérifie les erreurs de type entre les méthodes.
+//
+// Résultats:
+//    aucune erreur de syntaxe
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class TypeErrorExample {
+    int getNumber() {
+        return "hello"; // Erreur de type contextuel
+    }
+}

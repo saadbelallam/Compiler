@@ -1,0 +1,11 @@
+class A{
+       int x;
+       void assembleur() asm("LOAD #5, R1
+                               LOAD #4, R2
+                               ADD R2, R1
+                               WINT");
+   }
+   {
+       A a = new A();
+       a.assembleur();
+   }
