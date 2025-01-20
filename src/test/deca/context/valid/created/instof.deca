@@ -1,0 +1,25 @@
+// Description:
+//    Upcasting explicite avec utilisation de instanceof
+//
+// Résultats:
+//    Pas d'erreur syntaxique et contextuelle.
+//
+// Historique:
+//    créé le 17/01/2025
+
+class A {
+    int a;
+}
+
+class B extends A {
+    int b;
+}
+
+{
+    B o = new B();
+    A obj;
+    if (o instanceof A) {
+        obj = (A) (o);
+        o.a = 7;
+    }
+}
