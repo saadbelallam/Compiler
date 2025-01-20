@@ -1,0 +1,13 @@
+// Description :
+//    Teste l'assignation de la valeur null à une variable de type Object.
+//
+// Résultats :
+//    Le programme doit se compiler et s'exécuter sans erreur.
+//    La variable `a` est initialisée à null.
+//
+// Historique :
+//    Créé le 19/01/2025.
+
+{
+    Object a = null;
+}
