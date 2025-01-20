@@ -8,10 +8,12 @@ import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
-import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
@@ -27,6 +29,7 @@ public class DeclClass extends AbstractDeclClass {
     private final AbstractIdentifier superClass;
     private final ListDeclField fields;
     private final ListDeclMethod methods;
+     private int fieldOffset = 1;
 
     public DeclClass(AbstractIdentifier name, AbstractIdentifier superClass,
     ListDeclMethod methods, ListDeclField fields) {
@@ -153,27 +156,43 @@ public class DeclClass extends AbstractDeclClass {
 
         compiler.getMangerR().SaveRegIntoStack(compiler);
         
-        // Load object address (this)
-        //compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-   
-        fields.codeGenListField(compiler);
-        
-        if (superClass != null && !superClass.getName().getName().equals("Object")) {
-         
-            compiler.addInstruction(new PUSH(Register.R1));
-            
-            compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
-            
 
-            compiler.addInstruction(new SUBSP(1));
+        for (AbstractDeclField field : fields.getList()) {
+            DeclField f = (DeclField) field;
+            f.setFieldOffset(fieldOffset++);
         }
-
-        compiler.addInstruction(new POP(Register.R1));
         
+
+        GPRegister thisReg = compiler.getMangerR().allocateRegister();
+        try {
+
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), thisReg));
+            
+
+            fields.codeGenListField(compiler);
+            
+
+            if (superClass != null && !superClass.getName().getName().equals("Object")) {
+    
+                compiler.addInstruction(new PUSH(thisReg));
+                
+             
+                compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
+                
+       
+                compiler.addInstruction(new SUBSP(1));
+            }
+        } finally {
+            compiler.getMangerR().freeRegister(thisReg);
+        }
+        
+
         compiler.getMangerR().RestoreSavedRegisters(compiler);
+        
+
         compiler.addInstruction(new RTS());
-    } 
- 
+    }
+
     private void generateMethods(DecacCompiler compiler) {
         for (AbstractDeclMethod method : methods.getList()) {
             method.codeGenMethod(compiler);

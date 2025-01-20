@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -52,51 +53,114 @@ public class Assign extends AbstractBinaryExpr {
     @Override
    protected void codeGenInst(DecacCompiler compiler) {
         compiler.addComment("Assignment");
-        
-        // Register for the value to be assigned
+
         GPRegister valueReg = compiler.getMangerR().allocateRegister();
-        getRightOperand().codeGenVal(compiler, valueReg);
+        
         try {
-            // Generate code for right operand value
+          
+            getRightOperand().codeGenVal(compiler, valueReg);
             
+            AbstractLValue leftOp = getLeftOperand();
             
-            if (getLeftOperand() instanceof Selection) {
-                // Handle field selection (e.g. (obj1.obj2).x)
-                Selection selection = (Selection) getLeftOperand();
+            if (leftOp instanceof Selection) {
+
+                Selection selection = (Selection) leftOp;
                 
-                // Get address of the field
-                GPRegister addrReg = compiler.getMangerR().allocateRegister(); ///r3
+       
+                GPRegister addrReg = compiler.getMangerR().allocateRegister();
                 try {
-                    // This will handle the entire chain of selections and null checks
-                    selection.codeGenAddr(compiler, addrReg); //r3
-            
-                    // Store the value at the computed address
+
+                    selection.codeGenAddr(compiler, addrReg);
+                    
+                    
                     compiler.addInstruction(new STORE(valueReg, 
-                    new RegisterOffset(selection.getFeildSelc().getFieldDefinition().getIndex(), addrReg)));
+                        new RegisterOffset(selection.getFeildSelc().getFieldDefinition().getIndex(), 
+                                         addrReg)));
                     compiler.getMangerR().addNbrStores();
                     
                 } finally {
                     compiler.getMangerR().freeRegister(addrReg);
                 }
+            } else if (leftOp instanceof Identifier) {
                 
-            } else if (getLeftOperand() instanceof AbstractIdentifier) {
-                // Simple variable assignment
-                compiler.addComment("Assignment to variable: " + getLeftOperand());
-                AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
-                DAddr addr = ident.getExpDefinition().getOperand();
-                compiler.addInstruction(new STORE(valueReg, addr));
-                compiler.getMangerR().addNbrStores();
+                Identifier ident = (Identifier) leftOp;
+                
+                if (ident.getDefinition().isField()) {
+                 
+                    GPRegister thisReg = compiler.getMangerR().allocateRegister();
+                    try {
+                        // Load this pointer
+                        compiler.addInstruction(new LOAD(
+                            new RegisterOffset(-2, Register.LB), thisReg));
+                        
+                        // Store value in field
+                        compiler.addInstruction(new STORE(valueReg, 
+                            new RegisterOffset(ident.getFieldDefinition().getIndex(), thisReg)));
+                        compiler.getMangerR().addNbrStores();
+                        
+                    } finally {
+                        compiler.getMangerR().freeRegister(thisReg);
+                    }
+                } else {
+                    // Local variable or parameter
+                    DAddr addr = ident.getExpDefinition().getOperand();
+                    compiler.addInstruction(new STORE(valueReg, addr));
+                    compiler.getMangerR().addNbrStores();
+                }
             }
             
         } finally {
-            compiler.getMangerR().freeRegister(valueReg); }
+            compiler.getMangerR().freeRegister(valueReg);
         }
+    }
+   
        
-
-        
+    /* @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+    compiler.addComment("Assignment");
+    
+    // Register for the value to be assigned
+    GPRegister valueReg = compiler.getMangerR().allocateRegister();
+    getRightOperand().codeGenVal(compiler, valueReg);
+    
+    try {
+        if (getLeftOperand() instanceof Selection) {
+            Selection selection = (Selection) getLeftOperand();
+            
+            // Get address of the object containing the field
+            GPRegister objReg = compiler.getMangerR().allocateRegister();
+            try {
+                selection.codeGenAddr(compiler, objReg);
+                
+                // Store the value in the field using the correct offset
+                DeclField f = (DeclField)field;
+                compiler.addInstruction(new STORE(valueReg, 
+                    new RegisterOffset(selection.getFeildSelc().get, 
+                                     objReg)));
+            } finally {
+                compiler.getMangerR().freeRegister(objReg);
+            }
+        } else if (getLeftOperand() instanceof AbstractIdentifier) {
+            // Simple variable assignment
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            DAddr addr = ident.getExpDefinition().getOperand();
+            compiler.addInstruction(new STORE(valueReg, addr));
+        }
+    } finally {
+        compiler.getMangerR().freeRegister(valueReg);
+    }
+}
+         */
 
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
+        // First generate the assignment
+        codeGenInst(compiler);
+        
+        // Then load the assigned value into destination register
+        getLeftOperand().codeGenVal(compiler, dest);
+    }
+    /* public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
         GPRegister reg = compiler.getMangerR().allocateRegister();
         try {
             getRightOperand().codeGenVal(compiler, reg);
@@ -111,7 +175,7 @@ public class Assign extends AbstractBinaryExpr {
         } finally {
             compiler.getMangerR().freeRegister(reg);
         }
-    }
+    } */
 
     @Override
     public int getMaxExpressionDepth() {

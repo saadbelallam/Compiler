@@ -14,8 +14,11 @@ import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class DeclField extends AbstractDeclField {
 
@@ -85,12 +88,33 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     protected void codeGenField(DecacCompiler compiler) {
-  
-        int fieldOffset1 = fieldName.getFieldDefinition().getIndex();
-        RegisterOffset fieldAddr = new RegisterOffset(fieldOffset1, Register.R1);
+        // Allocate registers for object address and value
+        GPRegister objReg = compiler.getMangerR().allocateRegister();
+        GPRegister valueReg = compiler.getMangerR().allocateRegister();
         
-        // Use R0 for initialization value
-        initialization.codeGenInit(compiler, Register.R0, fieldAddr);
+        try {
+            // Get object address from parameter (-2(LB))
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), objReg));
+            
+            if (initialization != null) {
+                // If there's an initialization expression, evaluate it
+                if (initialization instanceof Initialization) {
+                    AbstractExpr expr = ((Initialization)initialization).getExpression();
+                    expr.codeGenVal(compiler, valueReg);
+                } else {
+                    // Default initialization to 0
+                    compiler.addInstruction(new LOAD(0, valueReg));
+                }
+                
+                // Store the value in the field
+                compiler.addInstruction(new STORE(valueReg, 
+                    new RegisterOffset(fieldName.getFieldDefinition().getIndex(), objReg)));
+                setFieldOffset(fieldOffset);
+            }
+        } finally {
+            compiler.getMangerR().freeRegister(valueReg);
+            compiler.getMangerR().freeRegister(objReg);
+        }
     }
 
 
@@ -136,8 +160,6 @@ public class DeclField extends AbstractDeclField {
                 // Use the potentially converted expression
                 initExpr.codeGenVal(compiler, reg);
                 compiler.addInstruction(new STORE(reg, address), fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
-                compiler.getMangerR().addNbrStores();
-
             } finally{}            
         }else{
             // Determine the value to initialize the field with
@@ -160,7 +182,6 @@ public class DeclField extends AbstractDeclField {
                     break;
             }
             compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
-            compiler.getMangerR().addNbrStores();
         }
     } 
 
@@ -193,7 +214,6 @@ public class DeclField extends AbstractDeclField {
                     break;
             }
             compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
-            compiler.getMangerR().addNbrStores();
         }
 
 
@@ -210,7 +230,6 @@ public class DeclField extends AbstractDeclField {
                 compiler.addComment("Initialisation explicite de "+className+"."+fieldName.getName());
                 initExpr.codeGenVal(compiler, reg);
                 compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
-                compiler.getMangerR().addNbrStores();
             } finally{}     
         }
     } */
@@ -267,6 +286,7 @@ public class DeclField extends AbstractDeclField {
         s.print(" ");
         fieldName.decompile(s);
         initialization.decompile(s);
+        s.println(";");
     }
 
     @Override

@@ -9,7 +9,6 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
-import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
@@ -19,6 +18,7 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class Selection extends AbstractLValue {
     
@@ -69,82 +69,19 @@ public class Selection extends AbstractLValue {
         return fieldType;
     }
 
-
-   @Override
-    public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        //GPRegister reg = compiler.getMangerR().allocateRegister();
-        
-        if(classM instanceof Selection){
-            classM.codeGenAddr(compiler,destReg);
-            FieldDefinition fieldDef = field.getFieldDefinition();
-            int offset = fieldDef.getIndex();
-            compiler.addInstruction(new LOAD(new RegisterOffset(offset, destReg), destReg));
-        }
-        else{
-            classM.codeGenVal(compiler, destReg);
-
-          
-        }
-        }
-
-
-    
-    
     @Override
-    protected void codeGenStore(DecacCompiler compiler, GPRegister srcReg) {
-       
-    }
-     @Override
-    public void codeGenAddr(DecacCompiler compiler, GPRegister destReg) {
-        // For expressions like obj1.obj2.x, we need to:
-        // 1. Get address of obj1
-        // 2. Load obj2's offset from obj1
-        // 3. Continue until we reach the final object that contains field x
-        
-        try {
-            // Get the base object's address
-            if (classM instanceof Selection) {
-                // Recursively get address for nested selections (obj1.obj2...)
-                classM.codeGenAddr(compiler, destReg);
-                System.err.println("hhhhh = "+ classM.getType().getName());
-                
-            } else {
-                // Base case: simple identifier
-                System.err.println("hhhhh = "+ classM.getType().getName());
-
-                classM.codeGenVal(compiler, destReg);
-                
-                Label errorLabel = new Label("null_deref");
-                compiler.addInstruction(new CMP(new NullOperand(), destReg));
-                compiler.addInstruction(new BEQ(errorLabel));
-                // Load the address of the field into destination register
-                //compiler.addInstruction(new LOAD(new RegisterOffset(offset, destReg), destReg));
-                // Null pointer check
-            }
-           
-            // Get field offset
-           
-            
-        } finally {
-            compiler.getMangerR().freeRegister(destReg);
-        }
-    }
-
-
-    /* @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        // Get object address first
+
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         try {
-            // Generate code to get object address
+           
             classM.codeGenVal(compiler, objReg);
             
-            // Null check
+  
             compiler.addInstruction(new CMP(new NullOperand(), objReg));
-            Label nullLabel = new Label("null_deref");
-            compiler.addInstruction(new BEQ(nullLabel));
+            compiler.addInstruction(new BEQ(new Label("null_deref")));
             
-            // Load field value into destination register
+         
             int fieldOffset = field.getFieldDefinition().getIndex();
             compiler.addInstruction(new LOAD(new RegisterOffset(fieldOffset, objReg), destReg));
             
@@ -155,18 +92,17 @@ public class Selection extends AbstractLValue {
 
     @Override
     public void codeGenStore(DecacCompiler compiler, GPRegister srcReg) {
-        // Get object address first
+
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         try {
-            // Generate code to get object address
+
             classM.codeGenVal(compiler, objReg);
             
-            // Null check
+
             compiler.addInstruction(new CMP(new NullOperand(), objReg));
-            Label nullLabel = new Label("null_deref");
-            compiler.addInstruction(new BEQ(nullLabel));
+            compiler.addInstruction(new BEQ(new Label("null_deref")));
             
-            // Store value from srcReg into field
+
             int fieldOffset = field.getFieldDefinition().getIndex();
             compiler.addInstruction(new STORE(srcReg, new RegisterOffset(fieldOffset, objReg)));
             
@@ -174,7 +110,22 @@ public class Selection extends AbstractLValue {
             compiler.getMangerR().freeRegister(objReg);
         }
     }
- */
+
+
+   @Override
+    public void codeGenAddr(DecacCompiler compiler, GPRegister dest) {
+
+        classM.codeGenVal(compiler, dest);
+        
+
+        compiler.addInstruction(new CMP(new NullOperand(), dest));
+        compiler.addInstruction(new BEQ(new Label("null_deref")));
+    }
+
+
+    public AbstractIdentifier getField() {
+        return field;
+    }
 
 
 
@@ -211,6 +162,12 @@ public class Selection extends AbstractLValue {
     public AbstractIdentifier getFeildSelc(){
 
         return field;
+
+    }
+
+    public AbstractExpr getObject(){
+
+        return classM;
 
     }
 }
