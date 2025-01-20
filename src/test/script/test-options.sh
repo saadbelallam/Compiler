@@ -40,6 +40,9 @@ decac -v src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
 decac -p src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
 decac -v -p src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
 decac -p -v a src/test/deca/codegen/valid/created/if.deca > /dev/null 2>&1
+decac -P src/test/deca/codegen/valid/created/if.deca src/test/deca/codegen/valid/created/42_int.deca > /dev/null 2>&1
+
+rm -f src/test/deca/codegen/valid/created/*.ass
 
 decac > /dev/null 2>&1
 echo -e "${GREEN}[PASS] Résultat correct pour decac ${RESET}"
@@ -110,6 +113,24 @@ rm -f src/test/deca/codegen/valid/created/*.ass
 
 
 echo -e "${GREEN}[PASS] Résultat correct pour decac -r ${RESET}"
+
+
+# Parcourir tous les fichiers .deca dans le répertoire
+for file in "$directory"/*.deca; do
+  # Vérifier si le fichier existe (en cas de répertoire vide)
+  if [ ! -e "$file" ]; then
+    exit 1
+  fi
+
+  # Exécuter decac -r 10 sans générer de fichier .ass
+  decac -n "$file" > /dev/null 2>&1 && rm -f "${file%.deca}.ass"
+done
+
+rm -f src/test/deca/codegen/valid/created/*.ass
+
+
+echo -e "${GREEN}[PASS] Résultat correct pour decac -n ${RESET}"
+
 
 
 
