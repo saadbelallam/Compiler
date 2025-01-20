@@ -1,0 +1,13 @@
+// Description :
+//    Teste l'utilisation d'une chaîne de caractères multilignes non valide dans une fonction `println`.
+//
+// Résultats :
+//    extraneous input '"This is a\n    multiline string"' expecting ')'
+//
+// Historique :
+//    Créé le 19/01/2025.
+
+{
+    println("This is a
+    multiline string");
+}

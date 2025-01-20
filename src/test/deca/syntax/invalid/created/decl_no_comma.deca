@@ -1,3 +1,11 @@
+// Description : 
+//    Test de déclaration multiple sans séparation correcte entre les variables.
+//
+// Résultats : 
+//    extraneous input 'b' expecting ';'
+//
+// Historique : 
+//    Modifié le 19/01/2025.
 {
     int a b;
 }
