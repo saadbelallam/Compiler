@@ -82,7 +82,8 @@ run_invalid_test() {
         if [ -f "$invalid_file" ]; then
             # Exécuter la commande decac
             result=$(ima "$invalid_file" 2>&1)
-            if echo "$result" | grep -q -e "Error" -e "\*\* IMA \*\*"; then
+	if echo "$result" | grep -q -e "Error" -e "\*\* IMA \*\*" -e "Erreur : dereferencement de null"; then
+
                 echo -e "${GREEN}[PASS] Erreur détectée comme attendu pour ${invalid_file%.ass}.deca.${RESET}"
                 ((success_count++))
             else

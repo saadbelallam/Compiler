@@ -71,21 +71,21 @@ public class CompilerOptions {
                 switch (args[i]) {
                     case "-b":
                         if (args.length > 1) {
-                            throw new CLIException("Option -b incompatible avec d'autres options");
+                            throw new CLIException("Option -b incompatible with other options");
                         }
                         printBanner = true;
                         break;
         
                     case "-p":
                         if (this.verify) {
-                            throw new CLIException("Option -p incompatible avec -v");
+                            throw new CLIException("Option -p incompatible with -v");
                         }
                         this.parse = true;
                         break;
         
                     case "-v":
                         if (this.parse) {
-                            throw new CLIException("Option -v incompatible avec -p");
+                            throw new CLIException("Option -v incompatible with -p");
                         }
                         this.verify = true;
                         break;
@@ -102,13 +102,13 @@ public class CompilerOptions {
                                 try {
                                     maxReg = Integer.parseInt(args[++i]);
                                 if (maxReg < 4 || maxReg > 16) {
-                                    throw new CLIException("Valeur pour -r invalide : " + maxReg);
+                                    throw new CLIException("Invalid value for -r : " + maxReg);
                                 }
                             } catch (NumberFormatException e) {
-                                throw new CLIException("Valeur pour -r invalide : " + args[i]);
+                                throw new CLIException("Invalid value for -r : " + args[i]);
                             }
                         } else {
-                            throw new CLIException("Option -r nécessite une valeur.");
+                            throw new CLIException("Option -r requires a value.");
                         }
                         break;
                         }
@@ -125,7 +125,7 @@ public class CompilerOptions {
                         // Traite les fichiers source
                         File sourceFile = new File(args[i]);
                         if (!sourceFile.exists() || !sourceFile.isFile()) {
-                            throw new CLIException("Fichier source introuvable ou invalide : " + args[i]);
+                            throw new CLIException("Invalid source file : " + args[i]);
                         }
                         sourceFiles.add(sourceFile);
                         break;
