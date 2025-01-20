@@ -323,7 +323,7 @@ public class DecacCompiler {
      
     public void setupErrorHandling() {
            
-            if (branchStackOverflow){
+            if (branchStackOverflow || true){
             addLabel(new Label("stack_overflow_error"));
             addInstruction(new WSTR("Error: Stack Overflow"));
             addInstruction(new WNL());
