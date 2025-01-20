@@ -1,5 +1,5 @@
 // Description : 
-//    Test d'une instruction `print` avec une parenthèse fermante en excès.
+//    Test d'une instruction print avec une parenthèse fermante en excès.
 //
 // Résultats : 
 //    extraneous input ')' expecting ';'
