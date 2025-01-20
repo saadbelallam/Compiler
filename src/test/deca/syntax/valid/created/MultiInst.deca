@@ -1,0 +1,15 @@
+// Description :
+//    Teste la prise en charge de lignes contenant plusieurs instructions dans un contexte valide.
+//
+// Résultats :
+//    Le programme doit afficher :
+//      First line
+//      Second line
+//
+// Historique :
+//    Créé le 19/01/2025.
+
+{
+    println("First line");
+    println("Second line");
+}
