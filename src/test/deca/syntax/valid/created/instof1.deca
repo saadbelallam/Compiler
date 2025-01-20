@@ -1,0 +1,19 @@
+// Description:
+//    Classes avec utilisation de instanceof
+//
+// Résultats:
+//    Pas d'erreur syntaxique et contextuelle.
+//
+// Historique:
+//    créé le 17/01/2025
+
+
+{
+    Object o = 7;
+    if (o instanceof int) {
+        println("Ok");
+    }
+    else {
+        println("Pas ok");
+    }
+}
