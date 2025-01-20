@@ -14,8 +14,6 @@ import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.POP;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -65,7 +63,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
 
     public void codeGenListField(DecacCompiler compiler) {
       
-         compiler.addInstruction(new PUSH(Register.getR(2)));
+        /*  compiler.addInstruction(new PUSH(Register.getR(2)));
         compiler.addInstruction(new PUSH(Register.getR(3)));
         compiler.addInstruction(new PUSH(Register.getR(4)));
         compiler.addInstruction(new PUSH(Register.getR(5)));
@@ -78,7 +76,8 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         compiler.addInstruction(new PUSH(Register.getR(12)));
         compiler.addInstruction(new PUSH(Register.getR(13)));
         compiler.addInstruction(new PUSH(Register.getR(14)));
-        compiler.addInstruction(new PUSH(Register.getR(15)));
+        compiler.addInstruction(new PUSH(Register.getR(15))); */
+        compiler.getMangerR().SaveRegIntoStack(compiler);
         // Allocate registers for object address and value
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         GPRegister valueReg = compiler.getMangerR().allocateRegister();
@@ -122,7 +121,7 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
             compiler.getMangerR().freeRegister(objReg);
         }
 
-         compiler.addInstruction(new POP(Register.getR(15)));
+        /*  compiler.addInstruction(new POP(Register.getR(15)));
          compiler.addInstruction(new POP(Register.getR(14)));
          compiler.addInstruction(new POP(Register.getR(13)));
          compiler.addInstruction(new POP(Register.getR(12)));
@@ -135,7 +134,9 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
          compiler.addInstruction(new POP(Register.getR(5)));
          compiler.addInstruction(new POP(Register.getR(4)));
          compiler.addInstruction(new POP(Register.getR(3)));
-         compiler.addInstruction(new POP(Register.getR(2)));
+         compiler.addInstruction(new POP(Register.getR(2))); */
+        compiler.getMangerR().RestoreSavedRegisters(compiler);
+
     }
 
 
