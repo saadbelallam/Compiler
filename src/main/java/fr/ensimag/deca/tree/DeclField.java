@@ -102,8 +102,6 @@ public class DeclField extends AbstractDeclField {
                     AbstractExpr expr = ((Initialization)initialization).getExpression();
                     expr.codeGenVal(compiler, valueReg);
                 } else {
-                    // Default initialization to 0
-                    compiler.addInstruction(new LOAD(0, valueReg));
                 }
                 
                 // Store the value in the field
