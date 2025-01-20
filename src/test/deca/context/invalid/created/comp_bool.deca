@@ -1,0 +1,17 @@
+// Description:
+//    Vérifie les déclarations de type et leur compatibilité.
+//
+// Résultats:
+//    no viable alternative at input 'y'
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+{
+    int x;
+    x = "hello";  // Erreur de type
+    float y;
+    y = 3.14;
+    boolean z;
+    z = x > y;  // Incompatibilité de type
+}
