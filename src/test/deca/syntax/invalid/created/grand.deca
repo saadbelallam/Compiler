@@ -1,3 +1,12 @@
+// Description : 
+//    Test de déclaration et d'initialisation d'une variable avec une valeur trop grande.
+//
+// Résultats : 
+//    Number format exception
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 {
-    int a = 10000000000 ;
+    int a = 10000000000;
 }
