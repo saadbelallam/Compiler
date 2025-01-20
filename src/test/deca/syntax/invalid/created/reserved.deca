@@ -1,3 +1,12 @@
+// Description : 
+//    Test de déclaration d'une variable avec un mot-clé réservé (while).
+//
+// Résultats : 
+//    no viable alternative at input 'while'
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 {
     int while;
 }
