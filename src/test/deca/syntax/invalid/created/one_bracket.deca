@@ -1,2 +1,11 @@
+// Description : 
+//    Test d'une instruction print avec une parenthèse fermante manquante.
+//
+// Résultats : 
+//    missing '}' at '<EOF>'
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
 {
     print("gl24");
