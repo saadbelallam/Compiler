@@ -1,7 +1,14 @@
-//Resultat:
-//      Erreur syntaxique : ligne 2
+// Description : 
+//    Test d'une condition invalide avec comparaison entre un float, une chaîne et des opérateurs mal placés.
+//
+// Résultats : 
+//    mismatched input '=' expecting {'false', 'new', 'null', 'readInt', 'readFloat', 'this', 'true', '-', '(', '!', IDENT, INT, FLOAT, STRING}
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 {
-if ( 3.2 < = = "hello"){
-   println("this shouldn't be printed");
-}
+    if (3.2 < = = "hello") {
+        println("this shouldn't be printed");
+    }
 }
