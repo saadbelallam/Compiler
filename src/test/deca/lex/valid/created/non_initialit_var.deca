@@ -1,0 +1,15 @@
+// Description :
+//    Teste l'affichage d'une variable non initialisée.
+//
+// Résultats :
+//    Syntaxe : Valide.
+//    Contexte : Valide.
+//    Compilation : Échec avec un message d'erreur signalant que la variable `x` n'est pas initialisée.
+//
+// Historique :
+//    Créé le 19/01/2025.
+
+{
+    int x;
+    println(x);
+}
