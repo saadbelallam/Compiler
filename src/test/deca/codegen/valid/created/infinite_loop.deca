@@ -12,9 +12,9 @@
     i = 0;
     while (i < 10) {
         if (i % 2 == 0) {
-            println("Pair: " + i);
+            println("Pair: ");
         } else {
-            println("Impair: " + i);
+            println("Impair: ");
         }
         i = i + 1;
     }
