@@ -1,3 +1,12 @@
+// Description : 
+//    Test d'une instruction `print` avec une parenthèse fermante en excès.
+//
+// Résultats : 
+//    extraneous input ')' expecting ';'
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 {
     print());
 }
