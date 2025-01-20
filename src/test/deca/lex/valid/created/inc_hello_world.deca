@@ -1,2 +1,14 @@
+// Description :
+//    Teste l'inclusion de plusieurs fichiers en utilisant la directive #include.
+//    Les fichiers inclus sont censés contenir du code valide pour être compilés correctement.
+//
+// Résultats :
+//    Si les fichiers "hello.decah" et "world.decah" existent et contiennent du code valide, 
+//    le programme doit se compiler et s'exécuter sans erreur. 
+//    Sinon, une erreur doit être signalée.
+//
+// Historique :
+//    Créé le 19/01/2025.
+
 #include "hello.decah"
 #include "world.decah"
