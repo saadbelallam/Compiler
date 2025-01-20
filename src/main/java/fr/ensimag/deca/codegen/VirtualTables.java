@@ -44,6 +44,7 @@ public class VirtualTables {
         
         RegisterOffset tableAddr = compiler.getMangerM().allocateVariable();
         compiler.addInstruction(new STORE(Register.R0, tableAddr));
+        compiler.getMangerR().addNbrStores();;
 
         classDef.setVMTableAddr(tableAddr);
 
@@ -80,6 +81,7 @@ public class VirtualTables {
         
             compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
             compiler.addInstruction(new STORE(Register.R0, compiler.getMangerM().allocateVariable()));
+            compiler.getMangerR().addNbrStores();
         }
     }
     public void codeGenVMTforObject(DecacCompiler compiler) {
@@ -98,11 +100,13 @@ public class VirtualTables {
         
         RegisterOffset objectVMT = compiler.getMangerM().allocateVariable();
         compiler.addInstruction(new STORE(Register.R0, objectVMT));
+        compiler.getMangerR().addNbrStores();
         
         Label equalsLabel = new Label("code.Object.equals");
         compiler.addInstruction(new LOAD(new LabelOperand(equalsLabel), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, 
         compiler.getMangerM().allocateVariable()));
+        compiler.getMangerR().addNbrStores();
         
         objectClassDef.setVMTableAddr(objectVMT);
         objectClassDef.addMethod(EQUALS_METHOD, equalsLabel, 1);

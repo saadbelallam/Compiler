@@ -73,6 +73,7 @@ public class Assign extends AbstractBinaryExpr {
                     // Store the value at the computed address
                     compiler.addInstruction(new STORE(valueReg, 
                     new RegisterOffset(selection.getFeildSelc().getFieldDefinition().getIndex(), addrReg)));
+                    compiler.getMangerR().addNbrStores();
                     
                 } finally {
                     compiler.getMangerR().freeRegister(addrReg);
@@ -84,6 +85,7 @@ public class Assign extends AbstractBinaryExpr {
                 AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
                 DAddr addr = ident.getExpDefinition().getOperand();
                 compiler.addInstruction(new STORE(valueReg, addr));
+                compiler.getMangerR().addNbrStores();
             }
             
         } finally {
@@ -105,6 +107,8 @@ public class Assign extends AbstractBinaryExpr {
             AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
             DAddr addr = ident.getExpDefinition().getOperand();
             compiler.addInstruction(new STORE(reg, addr));
+            compiler.getMangerR().addNbrStores();
+
             
             compiler.addInstruction(new LOAD(addr, dest));
         } finally {

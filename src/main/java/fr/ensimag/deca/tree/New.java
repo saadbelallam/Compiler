@@ -55,6 +55,8 @@ public class New extends AbstractExpr {
         // On charger la table des méthodes de la classe 
         compiler.addInstruction(new LEA(classDef.getVMTablesAddr(), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(0, destReg)));
+        compiler.getMangerR().addNbrStores();
+
 
         //Appeler l'initialisation
         compiler.addInstruction(new PUSH(destReg)); // Empiler l'adresse de l'objet

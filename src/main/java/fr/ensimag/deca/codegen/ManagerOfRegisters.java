@@ -18,6 +18,7 @@ public class ManagerOfRegisters {
     private int nbOfUsedRegisiters = 0;
     private int nbTemporaires = 0;
     private int maxTemporaires = 0;
+    private int nbrStores = 0;
     private boolean[] savedRegisters;
 
     public ManagerOfRegisters(int maxReg) {
@@ -125,6 +126,14 @@ public class ManagerOfRegisters {
         for (int i = FIRST_REG; i <= maxReg; i++) {
             savedRegisters[i] = false;
         }
+    }   
+
+    public void addNbrStores() {
+            nbrStores++;
+    }
+
+    public int getNbrStores() {
+        return nbrStores;
     }
 
 }
