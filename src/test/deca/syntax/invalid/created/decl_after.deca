@@ -1,3 +1,12 @@
+// Description : 
+//    Test d'initialisation et de déclaration d'une variable dans un ordre incorrect.
+//
+// Résultats : 
+//    no viable alternative at input 'i'
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 {
     i = 5;
     int i;

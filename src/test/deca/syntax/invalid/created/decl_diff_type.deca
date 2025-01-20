@@ -1,3 +1,11 @@
+// Description : 
+//    Test de déclaration multiple avec des types incompatibles sur une même ligne.
+//
+// Résultats : 
+//    Erreur syntaxique : Types incompatibles dans la déclaration multiple.
+//
+// Historique : 
+//    Modifié le 19/01/2025.
 {
     int a, float b;
 }
