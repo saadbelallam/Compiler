@@ -1,1 +1,12 @@
-#include
+// Description : 
+//    Vérifie la gestion des directives de préprocesseur non valides dans un programme Deca.
+//
+// Résultats : 
+//    token recognition error at: '#include\n'
+//
+// Historique : 
+//    Créé le 04/01/2025.
+
+{
+    #include
+}

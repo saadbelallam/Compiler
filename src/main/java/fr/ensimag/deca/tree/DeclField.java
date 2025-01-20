@@ -136,6 +136,8 @@ public class DeclField extends AbstractDeclField {
                 // Use the potentially converted expression
                 initExpr.codeGenVal(compiler, reg);
                 compiler.addInstruction(new STORE(reg, address), fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+                compiler.getMangerR().addNbrStores();
+
             } finally{}            
         }else{
             // Determine the value to initialize the field with
@@ -158,6 +160,7 @@ public class DeclField extends AbstractDeclField {
                     break;
             }
             compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+            compiler.getMangerR().addNbrStores();
         }
     } 
 
@@ -190,6 +193,7 @@ public class DeclField extends AbstractDeclField {
                     break;
             }
             compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+            compiler.getMangerR().addNbrStores();
         }
 
 
@@ -206,6 +210,7 @@ public class DeclField extends AbstractDeclField {
                 compiler.addComment("Initialisation explicite de "+className+"."+fieldName.getName());
                 initExpr.codeGenVal(compiler, reg);
                 compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
+                compiler.getMangerR().addNbrStores();
             } finally{}     
         }
     } */
@@ -262,7 +267,6 @@ public class DeclField extends AbstractDeclField {
         s.print(" ");
         fieldName.decompile(s);
         initialization.decompile(s);
-        s.println(";");
     }
 
     @Override

@@ -1,0 +1,15 @@
+// Description : 
+//    Vérifie la validité de la déclaration et de l'utilisation d'une instance locale avec le même nom que la classe.
+//
+// Résultats : 
+//    Le programme doit être valide syntaxiquement.
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+class A {
+    void f() {
+        A A = new A();
+        A.f();
+    }
+}

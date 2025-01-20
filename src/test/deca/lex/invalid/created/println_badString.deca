@@ -1,12 +1,11 @@
-
-/*
-
-This file make sure we define correctly
-our input string, it's an invalide test.
-
-*/
-
-
+// Description : 
+//    Vérifie la gestion d'une chaîne de caractères non terminée dans le code source.
+//
+// Résultats : 
+//    token recognition error at: '"Unclosed string);\n}\n'
+//
+// Historique : 
+//    Créé le 19/01/2025.
 
 {
     println("Unclosed string);

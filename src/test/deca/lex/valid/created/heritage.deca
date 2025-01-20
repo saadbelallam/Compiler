@@ -1,0 +1,27 @@
+// Description:
+//    Vérifie l'utilisation de l'héritage pour redéfinir des méthodes.
+//
+// Résultats:
+//    Le programme doit afficher "Animal sound" puis "Dog barks".
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class Animal {
+    void makeSound() {
+        println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    void makeSound() {
+        println("Dog barks");
+    }
+}
+
+{Animal animal = new Animal();
+Dog dog = new Dog();
+
+animal.makeSound(); // Animal sound
+dog.makeSound();    // Dog barks
+}

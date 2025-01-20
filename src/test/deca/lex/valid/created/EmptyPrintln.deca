@@ -1,6 +1,12 @@
-// An empty println will not print anything
-
-
+// Description :
+//    Vérifie le comportement de la fonction println avec une chaîne vide.
+//    Le test s'assure qu'un println avec une chaîne vide ne produit aucune erreur.
+//
+// Résultats :
+//    Une ligne vide doit être affichée dans la sortie.
+//
+// Historique :
+//    Créé le 11/01/2025.
 
 {
     println("");

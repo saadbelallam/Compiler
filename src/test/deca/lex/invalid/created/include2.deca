@@ -1,1 +1,12 @@
-#include "inexistant.decah"
+// Description : 
+//    Vérifie le comportement du compilateur lorsqu'un fichier inclus via #include n'existe pas.
+//
+// Résultats : 
+//    include file not found
+//
+// Historique : 
+//    Créé le 04/01/2025.
+
+{
+    #include "inexistant.decah"
+}

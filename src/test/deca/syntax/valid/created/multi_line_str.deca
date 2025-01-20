@@ -1,0 +1,16 @@
+// Description:
+//    Utilisation du multi-line string avec ASM.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 19/01/2025
+
+class TestMultiLine {
+    void main() asm("
+        LOAD R1, #10
+        LOAD R2, #10
+        ADD R1, R2
+    ");
+}

@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -72,7 +73,7 @@ public class Assign extends AbstractBinaryExpr {
                     // Store the value at the computed address
                     compiler.addInstruction(new STORE(valueReg, 
                     new RegisterOffset(selection.getFeildSelc().getFieldDefinition().getIndex(), addrReg)));
-       
+                    compiler.getMangerR().addNbrStores();
                     
                 } finally {
                     compiler.getMangerR().freeRegister(addrReg);
@@ -84,26 +85,33 @@ public class Assign extends AbstractBinaryExpr {
                 AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
                 DAddr addr = ident.getExpDefinition().getOperand();
                 compiler.addInstruction(new STORE(valueReg, addr));
-
+                compiler.getMangerR().addNbrStores();
             }
             
         } finally {
             compiler.getMangerR().freeRegister(valueReg); }
         }
-        @Override
-        public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
-        // First generate the assignment
-        codeGenInst(compiler);
-        
-        // Then load the assigned value into destination register
-        getLeftOperand().codeGenVal(compiler, dest);
-   
-        
-}
-        
-        
-      
+       
 
+        
+
+    @Override
+    public void codeGenVal(DecacCompiler compiler, GPRegister dest) {
+        GPRegister reg = compiler.getMangerR().allocateRegister();
+        try {
+            getRightOperand().codeGenVal(compiler, reg);
+            
+            AbstractIdentifier ident = (AbstractIdentifier) getLeftOperand();
+            DAddr addr = ident.getExpDefinition().getOperand();
+            compiler.addInstruction(new STORE(reg, addr));
+            compiler.getMangerR().addNbrStores();
+
+            
+            compiler.addInstruction(new LOAD(addr, dest));
+        } finally {
+            compiler.getMangerR().freeRegister(reg);
+        }
+    }
 
     @Override
     public int getMaxExpressionDepth() {

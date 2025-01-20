@@ -1,1 +1,12 @@
-"gl\\\24"
+// Description : 
+//    Vérifie la gestion des chaînes de caractères contenant des séquences d'échappement invalides.
+//
+// Résultats : 
+//    token recognition error at: '"gl\\\2'
+//
+// Historique : 
+//    Créé le 04/01/2025.
+
+{
+    "gl\\\24";
+}

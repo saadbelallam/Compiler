@@ -1,1 +1,12 @@
-à
+// Description : 
+//    Vérifie la gestion d'un caractère non reconnu dans le programme Deca.
+//
+// Résultats : 
+//    token recognition error at: 'à'
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+{
+    à;
+}

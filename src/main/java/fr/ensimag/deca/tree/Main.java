@@ -40,26 +40,20 @@ public class Main extends AbstractMain {
         LOG.debug("verify Main: end");
     }
     
-    // Gestion de l'erreur de débordement de pile
-    //compiler.addLabel(new Label("stack_overflow_error"));
-    //compiler.addInstruction(new WSTR("Error: Stack Overflow"));
-    //compiler.addInstruction(new WNL());
-    //compiler.addInstruction(new ERROR());
 
     //Calcule de la taille de la pile 
     private void StackSize(DecacCompiler compiler) {
         //à compléter
         int variables = declVariables.getNombreVariables();
         int temporaires = compiler.getMangerR().getMaxTemporaires();
+        int Stores = compiler.getMangerR().getNbrStores();
         //System.out.print(temporaires);
-        int stackSize = variables + temporaires;
+        int stackSize = variables + temporaires + Stores;
 
-        if(temporaires > 0){
-            compiler.addFirst(new ADDSP(variables));
-        }
         if(stackSize > 0){
+        compiler.addFirst(new ADDSP(variables + Stores));
         compiler.addFirst(new BOV(new Label("stack_overflow_error")));
-        compiler.addFirst(new TSTO(new ImmediateInteger(stackSize)),temporaires + " (temporaires) " + variables + (" (variables)"));
+        compiler.addFirst(new TSTO(new ImmediateInteger(stackSize)),temporaires + " (temporaires) " + variables + (" (variables)" ) + Stores + " (Stores) ");
         compiler.setBranchStackOverflow();
         }
         compiler.addFirst(null,"start main program");

@@ -72,11 +72,14 @@ public class MethodCall extends AbstractExpr {
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         classM.codeGenVal(compiler, objReg);
         compiler.addInstruction(new STORE(objReg, new RegisterOffset(0, Register.SP)));
+        compiler.getMangerR().addNbrStores();
+
         
         int offset = -1;
         for (AbstractExpr arg : listExpr.getList()) {
             arg.codeGenVal(compiler, objReg);
             compiler.addInstruction(new STORE(objReg, new RegisterOffset(offset, Register.SP)));
+            compiler.getMangerR().addNbrStores();
             offset--;
         }
 

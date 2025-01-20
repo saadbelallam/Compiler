@@ -55,6 +55,8 @@ public class New extends AbstractExpr {
         // On charger la table des méthodes de la classe 
         compiler.addInstruction(new LEA(classDef.getVMTablesAddr(), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(0, destReg)));
+        compiler.getMangerR().addNbrStores();
+
 
         //Appeler l'initialisation
         compiler.addInstruction(new PUSH(destReg)); // Empiler l'adresse de l'objet
@@ -69,20 +71,19 @@ public class New extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'decompile'");
+        s.print("new ");
+        ident.decompile(s);
+        s.print("()");
     }
 
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
-        // TODO Auto-generated method stub
         ident.prettyPrint(s, prefix, false);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        ident.iter(f);
     }
     
 }

@@ -1,0 +1,13 @@
+// Description:
+//    Affectation d'un calcul complexe.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 17/01/2025
+
+{
+    float res = 7 * (7 + 7) / 7.0;
+    println(res);
+}

@@ -1,5 +1,5 @@
 // Description:
-//    Création d'un nouvel objet avec `new` avec appel d'une méthode.
+//    Création d'un nouvel objet avec new avec appel d'une méthode.
 //
 // Résultats:
 //    Valide syntaxiquement.

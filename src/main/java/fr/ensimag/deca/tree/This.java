@@ -52,8 +52,7 @@ public class This extends AbstractExpr {
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterChildren'");
+        // Nothing to do
     }
     
 }

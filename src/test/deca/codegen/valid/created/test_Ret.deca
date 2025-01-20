@@ -10,6 +10,7 @@ class Q {
      if (x < 0.0) {
        return -x;
        }
+      return x;
 }}
 
 

@@ -1,1 +1,12 @@
-"invalid "string"
+// Description : 
+//    Vérifie la gestion d'une chaîne de caractères contenant des guillemets non échappés.
+//
+// Résultats : 
+//    token recognition error at: '");\n}\n'
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
+{
+    println("invalid "string");
+}

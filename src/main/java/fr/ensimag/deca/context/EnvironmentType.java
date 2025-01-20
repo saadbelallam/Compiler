@@ -68,6 +68,9 @@ public class EnvironmentType {
     private final Map<Symbol, TypeDefinition> envTypes;
 
     public boolean castCompatible(Type sourceType, Type targetType) {
+        if (sourceType.isVoid()) {
+            return false;
+        }
         return assignCompatible(sourceType, targetType) || assignCompatible(targetType, sourceType);
     }
 

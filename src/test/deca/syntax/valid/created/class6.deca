@@ -1,5 +1,5 @@
-// Description:
-//    Création d'un nouvel objet avec `new` avec méthodes get et set.
+// Description
+//    Création d'un nouvel objet avec new avec méthodes get et set.
 //
 // Résultats:
 //    Valide syntaxiquement.
