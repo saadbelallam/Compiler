@@ -1,0 +1,31 @@
+// Description:
+//    Vérifie les appels de méthodes simples dans une classe avec des opérations arithmétiques.
+//
+// Résultats:
+//    Le programme doit afficher 30, 15 et 50.
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class Arithmetic {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    int subtract(int a, int b) {
+        return a - b;
+    }
+
+    int multiply(int a, int b) {
+        return a * b;
+    }
+}
+
+{Arithmetic arith = new Arithmetic();
+int sum = arith.add(10, 20);
+int diff = arith.subtract(20, 5);
+int prod = arith.multiply(10, 5);
+println(sum); // 30
+println(diff); // 15
+println(prod); // 50
+}
