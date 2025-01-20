@@ -15,6 +15,9 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -102,6 +105,24 @@ public class DeclField extends AbstractDeclField {
                     AbstractExpr expr = ((Initialization)initialization).getExpression();
                     expr.codeGenVal(compiler, valueReg);
                 } else {
+                     switch (type.getName().getName()) {
+                case "int":
+                    // Initialize integers to 0
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0), valueReg));
+                    break;
+                case "float":
+                    // Initialize floats to 0.0
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), valueReg));
+                    break;
+                case "boolean":
+                    // Initialize booleans to false (0)
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0),valueReg));
+                    break;
+                default:
+                    // Initialize objects (references) to null
+                    compiler.addInstruction(new LOAD(new NullOperand(), valueReg));
+                    break;
+            }
                 }
                 
                 // Store the value in the field
