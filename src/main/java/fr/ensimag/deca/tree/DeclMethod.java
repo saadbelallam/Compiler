@@ -61,7 +61,7 @@ public class DeclMethod extends AbstractDeclMethod {
         // d1 = d2 + register saves + method call overhead + expression depth
         int d1 = d2 + 
                 compiler.getMangerR().getnbOfUsedRegisiters() +
-                + body.getMaxExpressionDepth();
+                + body.getMaxExpressionDepth() ;
             
         compiler.addInstruction(new TSTO(d1));
         compiler.addInstruction(new BOV(new Label("stack_overflow_error")));

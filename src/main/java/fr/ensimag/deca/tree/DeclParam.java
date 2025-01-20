@@ -84,8 +84,7 @@ public class DeclParam extends AbstractDeclParam {
         int paramOffset = -(3 + compiler.getMangerM().getCurrentOffsetPram());
     
         RegisterOffset paramLoc = new RegisterOffset(paramOffset, Register.LB);
-        //RegisterOffset paramLocation = compiler.getMangerM().allocateParam();
-
+        
         compiler.getMangerM().InCurrentOffsetPram();
         paramName.getExpDefinition().setOperand(paramLoc);
         

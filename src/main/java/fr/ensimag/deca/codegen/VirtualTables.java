@@ -110,6 +110,20 @@ public class VirtualTables {
 
 
     public void generateObjectEquals(DecacCompiler compiler) {
+          // Generate initialization label for Object
+        Label initLabel = new Label("init.Object");
+        compiler.addLabel(initLabel);
+         Definition objectDef = compiler.getEnvironmentType().get(
+            compiler.createSymbol("Object")
+        );
+        ClassDefinition objectClassDef = (ClassDefinition) objectDef;
+        // Initialize Object's vtable
+        compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
+        
+
+        compiler.addInstruction(new STORE(Register.R0, objectClassDef.getVMTablesAddr()));
+        compiler.addInstruction(new RTS());
+
         // Create label for Object.equals method
         compiler.addLabel(new Label("code.Object.equals"));
         

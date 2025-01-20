@@ -9,7 +9,12 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 
 /**
  * Declaration of a class (<code>class name extends superClass {members}<code>).
@@ -111,60 +116,97 @@ public class DeclClass extends AbstractDeclClass {
     }
 
 
+    /* @Override
+    public void codeGenClass(DecacCompiler compiler) {
+        compiler.setCurrentClass(this);
+        String className = name.getName().getName();
+
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("|                  Class "+name.getName().getName()+"                 |");
+        compiler.addComment("--------------------------------------------------");
+    
+        
+        generateInitialization(compiler, className);
+        
+    } */
+
     @Override
     public void codeGenClass(DecacCompiler compiler) {
         compiler.setCurrentClass(this);
         String className = name.getName().getName();
 
-        //System.err.println("pointer on the VMT is : " + this.getClassDefinition().getVMTablesAddr());
+        compiler.addComment("----------------------------------------");
+        compiler.addComment("             Class " + className);
+        compiler.addComment("----------------------------------------");
         
-
-
-        compiler.addComment("--------------------------------------------------");
-        compiler.addComment("|                  Class "+name.getName().getName()+"                 |");
-        compiler.addComment("--------------------------------------------------");
-        // 1. Generate initialization code for fields
+        // Generate initialization code
+        generateInitialization(compiler);
         
-        
-        generateInitialization(compiler, className);
-        
-        // 2. Generate code for methods
-        //generateMethods(compiler, className);
+        // Generate method code
+        generateMethods(compiler);
     }
 
-    private void generateInitialization(DecacCompiler compiler, String className) {
-        Label initLabel = new Label("init." + className);
+    private void generateInitialization(DecacCompiler compiler) {
+        Label initLabel = new Label("init." + name.getName().getName());
         compiler.addLabel(initLabel);
-        compiler.addComment("Initialisation des champs de "+className);
-        String superClassName = this.getSuperClassName();
-        if (superClassName.equals("Object")) {
-            fields.codeGenListField(compiler);   
-        }else{
-            fields.codeGenListFieldExtends(compiler);
-        }
-        compiler.addInstruction(new RTS());
-
-
-        /* compiler.addFirst(new BOV(new Label("pile_pleine")));
         
+
         compiler.getMangerR().SaveRegIntoStack(compiler);
         
-        if (superClass != null) {
+        // Load object address (this)
+        //compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+   
+        fields.codeGenListField(compiler);
+        
+        if (superClass != null && !superClass.getName().getName().equals("Object")) {
+         
+            compiler.addInstruction(new PUSH(Register.R1));
+            
             compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
+            
+
+            compiler.addInstruction(new SUBSP(1));
         }
-    
-        /* for (AbstractDeclField field : fields.getList()) {
-            field.codeGenField(compiler);
-        }
- */
+
+        compiler.addInstruction(new POP(Register.R1));
+        
+        compiler.getMangerR().RestoreSavedRegisters(compiler);
+        compiler.addInstruction(new RTS());
+    } 
+ 
+    private void generateMethods(DecacCompiler compiler) {
         for (AbstractDeclMethod method : methods.getList()) {
             method.codeGenMethod(compiler);
         }
-         
-       /*  compiler.getMangerR().RestoreSavedRegisters(compiler);
-        
-        compiler.addInstruction(new RTS()); */
     }
+
+
+   /*  @Override
+    protected void codeGenInit(DecacCompiler compiler) {
+
+        Label initLabel = new Label("init." + name.getName());
+        compiler.addLabel(initLabel);
+        
+        // Save registers
+        compiler.addInstruction(new PUSH(Register.R1));
+        
+        // Load object address
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        
+        // Initialize all fields in optimal batches
+        fields.codeGenListField(compiler);
+        
+        // Call superclass init if needed
+        if (superClass != null) {
+            compiler.addInstruction(new BSR(new Label("init." + superClass.getName())));
+        }
+        
+        // Restore registers and return
+        compiler.addInstruction(new POP(Register.R1));
+        compiler.addInstruction(new RTS());
+    } */
+    
+
 
 
 

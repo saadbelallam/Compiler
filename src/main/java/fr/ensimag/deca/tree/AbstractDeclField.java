@@ -4,7 +4,6 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.ima.pseudocode.GPRegister;
 
 public abstract class AbstractDeclField extends Tree {
 
@@ -21,12 +20,12 @@ public abstract class AbstractDeclField extends Tree {
      * @param currentClass 
      *          corresponds to the "class" attribute (null in the main bloc).
      */ 
-    protected abstract  void codeGenField(DecacCompiler compiler, GPRegister FRegister );   
+    protected abstract  void codeGenField(DecacCompiler compiler);   
     protected abstract Visibility verifyDeclFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
     protected abstract void verifyDeclFieldBody(DecacCompiler compiler,
             EnvironmentExp localEnv, ClassDefinition currentClass)
             throws ContextualError;
-    protected abstract void codeGenFieldExends(DecacCompiler compiler, GPRegister FRegister );
-    protected abstract void codeGenFieldExendsExplicit(DecacCompiler compiler);
+    //protected abstract void codeGenFieldExends(DecacCompiler compiler, GPRegister FRegister );
+    //protected abstract void codeGenFieldExendsExplicit(DecacCompiler compiler);
 
 }

@@ -11,8 +11,10 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 
 /**
@@ -70,20 +72,18 @@ public class Initialization extends AbstractInitialization {
         return expression.getType();
     }
 
-    @Override
-    public void codeGenInit(DecacCompiler compiler, GPRegister reg, DAddr address) {
-        /* if (expression != null) {
-            // Check if we need float conversion
-            if (expression.getType().isInt() && getType().isFloat()) {
-                System.err.println("I'm here");
-                // Create a ConvFloat wrapper around the expression
-                ConvFloat convFloat = new ConvFloat(expression);
-                convFloat.codeGenVal(compiler, reg);
-            } else {
-                expression.codeGenVal(compiler, reg);
+     @Override
+        public void codeGenInit(DecacCompiler compiler, GPRegister dest, RegisterOffset address) {
+            if (expression != null) {
+                expression.codeGenVal(compiler, dest);
+                compiler.addInstruction(new STORE(dest, address));
             }
-            compiler.addInstruction(new STORE(reg, address));
-        } */
-    }
-}
+        }
+    
+
+    public void codeGenInitObject(DecacCompiler compiler) {
+        // Generate code to evaluate the initialization expression
+        // Result will be stored in R0
+        expression.codeGenVal(compiler, Register.R0);
+    }}
    

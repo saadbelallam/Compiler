@@ -23,6 +23,7 @@ import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 
@@ -283,6 +284,7 @@ public class Identifier extends AbstractIdentifier {
             compiler.addInstruction(new LOAD(address, dest));
         }
     }
+    
 
     @Override
     public void codeGenIdent(DecacCompiler compiler, DAddr address) {
@@ -295,9 +297,8 @@ public class Identifier extends AbstractIdentifier {
     }
     @Override
     public void codeGenAddr(DecacCompiler compiler, GPRegister dest) {
-       /*  // For identifiers, load their memory address
-        DAddr addr = getExpDefinition().getOperand();
-        compiler.addInstruction(new LEA(addr, dest)); */
+        compiler.addInstruction(new LOAD(this.getExpDefinition().getOperand(), dest));
+
     }
 
  

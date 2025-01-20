@@ -14,15 +14,8 @@ import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.DAddr;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class DeclField extends AbstractDeclField {
 
@@ -32,6 +25,7 @@ public class DeclField extends AbstractDeclField {
     final private AbstractIdentifier type;
     final private AbstractIdentifier fieldName;
     final private AbstractInitialization initialization;
+    private int fieldOffset;
 
 
     public DeclField(Visibility visibility, AbstractIdentifier type, AbstractIdentifier fieldName, AbstractInitialization initialization) {
@@ -45,8 +39,90 @@ public class DeclField extends AbstractDeclField {
         this.initialization = initialization;
     }
 
+    public AbstractInitialization getInitialization(){
+        return initialization;
+
+    }
+    
+
+  /*  @Override
+   protected void codeGenField(DecacCompiler compiler, AbstractIdentifier className) {
+    ClassDefinition currentClass = className.getClassDefinition();
+    ClassDefinition fieldClass = fieldName.getFieldDefinition().getContainingClass();
+    
+    // Get field's offset from object start
+    int fieldOffset = fieldName.getFieldDefinition().getIndex();
+    
+    // R1 contains the object address (passed at -2(LB))
+    GPRegister objReg = compiler.getMangerR().getScratchRegister(1);
+    GPRegister tmpReg = compiler.getMangerR().getScratchRegister(0);
+    
+    compiler.addComment("Initializing field " + fieldName.getName() + " at offset " + fieldOffset);
+    
+    // Check if field is inherited
+    if (fieldClass != currentClass) {
+        compiler.addComment("Field inherited from " + fieldClass.getType().getName());
+        // We need to ensure we don't reinitialize fields that were already initialized by parent
+        if (initialization != null) {
+            // Only override parent initialization if explicitly initialized in child
+            initialization.codeGenInit(compiler, tmpReg, 
+                new RegisterOffset(fieldOffset, objReg));
+        }
+    } else {
+        // Field belongs to current class
+        if (initialization != null) {
+            // Explicit initialization exists
+            initialization.codeGenInit(compiler, tmpReg, 
+                new RegisterOffset(fieldOffset, objReg));
+        } else {
+            // Default initialization (0, false, or null)
+            compiler.addInstruction(new LOAD(0, tmpReg));
+            compiler.addInstruction(new STORE(tmpReg, 
+                new RegisterOffset(fieldOffset, objReg)));
+        }
+    }
+} */
 
     @Override
+    protected void codeGenField(DecacCompiler compiler) {
+  
+        int fieldOffset1 = fieldName.getFieldDefinition().getIndex();
+        RegisterOffset fieldAddr = new RegisterOffset(fieldOffset1, Register.R1);
+        
+        // Use R0 for initialization value
+        initialization.codeGenInit(compiler, Register.R0, fieldAddr);
+    }
+
+
+    public void setFieldOffset(int offset) {
+        this.fieldOffset = offset;
+    }
+
+    public int getFieldOffset(){
+        return fieldOffset;
+    }
+
+
+    private boolean isConstructor() {
+        return fieldName.getName().equals(type.getName());
+    }
+
+    public AbstractIdentifier getFieldName() {
+        return fieldName;
+    }
+
+    public AbstractIdentifier getType() {
+        return type;
+    }
+
+   
+
+    public Visibility getVisibility() {
+        return visibility;
+    }
+
+
+    /* @Override
     protected void codeGenField(DecacCompiler compiler, GPRegister FRegister ) {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'codeGenField'");
@@ -115,7 +191,7 @@ public class DeclField extends AbstractDeclField {
             }
             compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
         }
-            
+
 
 
     @Override
@@ -132,7 +208,7 @@ public class DeclField extends AbstractDeclField {
                 compiler.addInstruction(new STORE(reg, address),fieldName.getExpDefinition().getOperand()+"est l'adresse de "+fieldName.getName());
             } finally{}     
         }
-    }
+    } */
     
 
     @Override

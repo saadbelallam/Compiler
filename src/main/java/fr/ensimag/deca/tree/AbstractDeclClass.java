@@ -40,4 +40,8 @@ public abstract class AbstractDeclClass extends Tree {
 
     protected abstract String getClassName();
 
+    protected void codeGenInit(DecacCompiler compiler){
+        
+    }
+
 }

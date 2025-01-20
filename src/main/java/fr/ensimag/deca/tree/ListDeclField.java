@@ -7,14 +7,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.PUSH;
-import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -60,8 +56,44 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         return this.getList().size();
     }
 
-    
-    public void codeGenListField(DecacCompiler compiler){
+
+    public void codeGenListField(DecacCompiler compiler) {
+        // First set all fields to default values (0/false/null)
+        for (AbstractDeclField field : getList()) {
+            DeclField f = (DeclField)field;
+            int fieldOffset = f.getFieldName().getFieldDefinition().getIndex();
+            
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+            compiler.addInstruction(new LOAD(0, Register.R0));
+            compiler.addInstruction(new STORE(Register.R0, 
+                new RegisterOffset(fieldOffset, Register.R1)));
+        }
+        
+        // Then handle explicit initializations
+        for (AbstractDeclField field : getList()) { 
+            field.codeGenField(compiler);
+        }
+    }
+
+
+
+   /*  public void codeGenListField(DecacCompiler compiler) {
+        // First set all fields to default values (0/false/null)
+        for (AbstractDeclField field : getList()) {
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+            compiler.addInstruction(new LOAD(0, Register.R0));
+            compiler.addInstruction(new STORE(Register.R0, 
+                new RegisterOffset(((DeclField)field).getFieldOffset()
+                , Register.R1)));
+        }
+        
+        // Then handle explicit initializations
+        for (AbstractDeclField field : getList()) {
+            field.codeGenField(compiler);
+        }
+    }
+     */
+   /*  public void codeGenListField(DecacCompiler compiler){
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'decompile'");
         //Charger l'adresse de l'objet (-2(LB)) dans un registre
@@ -101,7 +133,9 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
                 field.codeGenFieldExendsExplicit(compiler);
             }
             compiler.getMangerR().RestoreSavedRegisters(compiler);
+        compiler.getMangerR().freeRegister(reg);
+
 
        
-    }
+    } */
 }

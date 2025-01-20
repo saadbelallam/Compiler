@@ -8,8 +8,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 
 /**
  * Absence of initialization (e.g. "int x;" as opposed to "int x =
@@ -50,10 +50,12 @@ public class NoInitialization extends AbstractInitialization {
         // leaf node => nothing to do
     }
 
-    @Override
-    protected  void codeGenInit(DecacCompiler compiler,GPRegister AllocatedR ,DAddr regOf){
-        
+     @Override
+    public void codeGenInit(DecacCompiler compiler, GPRegister dest, RegisterOffset address) {
+ 
     }
+
+ 
 
     @Override
     public Type getType() {
