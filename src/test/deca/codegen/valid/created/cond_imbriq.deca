@@ -1,0 +1,26 @@
+// Description:
+//    Vérifie les méthodes avec des conditions imbriquées complexes.
+//
+// Résultats:
+//    Le programme doit afficher "pair" ou "impair" pour chaque itération.
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class Estpair {
+    void checkNumber(int n) {
+        if (n % 2 == 0) {
+            println(n);
+        } else {
+            println(n);
+        }
+    }
+}
+
+{Estpair checker = new Estpair();
+int i = 0;
+while (i < 10) {
+    checker.checkNumber(i);
+    i = i + 1;
+}
+}
