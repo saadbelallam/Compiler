@@ -1,0 +1,25 @@
+// Description:
+//    Utilisation de instanceof entre des classes sans relation d'héritage.
+//
+// Résultats:
+//    Valide syntaxiquement.
+//
+// Historique:
+//    créé le 18/01/2025
+
+class A {}
+
+class B {}
+
+class Main {
+    void main() {
+        A o = new A();
+
+        if (o instanceof B) {
+            println("Je m'appelle A, je ne supporte pas B");
+        }
+
+    }
+    
+}
+
