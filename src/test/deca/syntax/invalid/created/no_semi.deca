@@ -1,3 +1,12 @@
+// Description : 
+//    Test d'une instruction print sans argument.
+//
+// Résultats : 
+//    missing ';' at '}'
+//
+// Historique : 
+//    Créé le 19/01/2025.
+
 {
     print()
 }
