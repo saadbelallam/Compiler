@@ -1,0 +1,29 @@
+// Description:
+//    Vérifie la validité de structures syntaxiques imbriquées et complexes.
+//
+// Résultats:
+//    Le programme devrait se terminer avec succès.
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class TestComplex {
+    void execute() {
+        int x;
+        x = 42;
+        if (true) {
+            while (x > 0) {
+                x = x - 1;
+                if (x % 2 == 0) {
+                    println(x);
+                }
+            }
+        } else {
+            println("Condition non satisfaite");
+        }
+    }
+}
+
+{TestComplex t = new TestComplex();
+t.execute();
+}
