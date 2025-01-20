@@ -46,21 +46,22 @@ public class CompilerOptions {
             return verify;
         }
     
-        public boolean getNoCheck() {
+        public static boolean getNoCheck() {
             return noCheck;
         }
-
+            
         public int getMaxReg(){
             return maxReg;
         }
-    
+
+        
         private int debug = 0;
         private boolean parallel = false;
         private boolean printBanner = false;
         private List<File> sourceFiles = new ArrayList<File>();
         private boolean parse = false;
         private boolean verify = false;
-        private boolean noCheck = false;
+        private static boolean noCheck = true;
     
         
         public void parseArgs(String[] args) throws CLIException {
@@ -90,7 +91,7 @@ public class CompilerOptions {
                         break;
         
                     case "-n":
-                        noCheck = true;
+                        noCheck = false;
                         break;
                     
                         //-r X (registers) : limite les registres banalisés disponibles à R0 ... R{X-1}, avec 4 <= X <= 16
