@@ -1,2 +1,11 @@
+// Description : 
+//    Test d'une syntaxe incorrecte avec deux blocs non fermés consécutifs.
+//
+// Résultats : 
+//    no viable alternative at input '}'
+//
+// Historique : 
+//    Modifié le 19/01/2025.
+
 }
 {
