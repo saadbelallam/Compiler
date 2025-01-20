@@ -1,0 +1,30 @@
+// Description:
+//    Vérifie la surcharge des méthodes avec des paramètres différents.
+//
+// Résultats:
+//    Le programme doit afficher "Hello", "Bonjour", et "Hola".
+//
+// Historique:
+//    Créé le 19/01/2025.
+
+class Greeter {
+    void greet(String name) {
+        println("Hello, " + name);
+    }
+
+    void greet(String name, String language) {
+        if (language == "fr") {
+            println("Bonjour, " + name);
+        } else if (language == "es") {
+            println("Hola, " + name);
+        } else {
+            greet(name);
+        }
+    }
+}
+
+{Greeter greeter = new Greeter();
+greeter.greet("Alice");
+greeter.greet("Alice", "fr");
+greeter.greet("Alice", "es");
+}
