@@ -72,7 +72,7 @@
         </task>
       </task>
     </task>
-    <task id="12" name="Compilateur sans objet" note="" work="806400" start="20241230T000000Z" end="20250110T170000Z" work-start="20241230T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="12" name="Compilateur sans objet" note="" work="662400" start="20241230T000000Z" end="20250107T170000Z" work-start="20241230T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20241223T000000Z"/>
       <task id="13" name="Etape A" note="" work="115200" start="20241230T000000Z" end="20241231T170000Z" work-start="20241230T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
@@ -96,43 +96,43 @@
           <constraint type="must-start-on" time="20250105T000000Z"/>
         </task>
       </task>
-      <task id="20" name="Etape C" note="" work="518400" start="20250103T000000Z" end="20250110T170000Z" work-start="20250103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="20" name="Etape C" note="" work="374400" start="20250103T000000Z" end="20250107T170000Z" work-start="20250103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <task id="21" name="G&#xE9;n&#xE9;ration du code" note="" work="288000" start="20250103T000000Z" end="20250107T170000Z" work-start="20250103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
           <constraint type="must-start-on" time="20250103T000000Z"/>
         </task>
-        <task id="22" name="Tests unitaires associ&#xE9;s" note="" work="230400" start="20250103T000000Z" end="20250110T170000Z" work-start="20250103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="22" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250103T000000Z" end="20250105T170000Z" work-start="20250103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
           <constraint type="must-start-on" time="20250103T000000Z"/>
         </task>
       </task>
     </task>
-    <task id="23" name="Compilateur essentiel" note="" work="892800" start="20250110T000000Z" end="20250117T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="24" name="Etape A" note="" work="201600" start="20250110T000000Z" end="20250114T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-        <task id="25" name="Compl&#xE9;tion du lexeur" note="" work="28800" start="20250110T000000Z" end="20250110T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="must-start-on" time="20250110T000000Z"/>
+    <task id="23" name="Compilateur essentiel" note="" work="835200" start="20250106T000000Z" end="20250116T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="24" name="Etape A" note="" work="201600" start="20250106T000000Z" end="20250108T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="25" name="Compl&#xE9;tion du lexeur" note="" work="28800" start="20250106T000000Z" end="20250106T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="must-start-on" time="20250106T000000Z"/>
         </task>
-        <task id="26" name="Compl&#xE9;tion du parser" note="" work="86400" start="20250110T000000Z" end="20250114T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="must-start-on" time="20250110T000000Z"/>
+        <task id="26" name="Compl&#xE9;tion du parser" note="" work="86400" start="20250106T000000Z" end="20250108T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="must-start-on" time="20250106T000000Z"/>
         </task>
-        <task id="27" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250110T000000Z" end="20250114T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="must-start-on" time="20250110T000000Z"/>
-        </task>
-      </task>
-      <task id="28" name="Etape B" note="" work="259200" start="20250110T000000Z" end="20250117T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-        <task id="29" name="Compl&#xE9;tion des r&#xE8;gles contextuelles" note="" work="172800" start="20250110T000000Z" end="20250117T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="must-start-on" time="20250110T000000Z"/>
-        </task>
-        <task id="30" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250112T000000Z" end="20250115T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="start-no-earlier-than" time="20250112T000000Z"/>
+        <task id="27" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250106T000000Z" end="20250108T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="must-start-on" time="20250106T000000Z"/>
         </task>
       </task>
-      <task id="31" name="Etape C" note="" work="432000" start="20250112T000000Z" end="20250117T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-        <task id="32" name="G&#xE9;n&#xE9;ration du code" note="" work="288000" start="20250112T000000Z" end="20250117T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-          <constraint type="start-no-earlier-than" time="20250112T000000Z"/>
+      <task id="28" name="Etape B" note="" work="259200" start="20250109T000000Z" end="20250116T170000Z" work-start="20250109T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="29" name="Compl&#xE9;tion des r&#xE8;gles contextuelles" note="" work="172800" start="20250109T000000Z" end="20250116T170000Z" work-start="20250109T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="must-start-on" time="20250109T000000Z"/>
+        </task>
+        <task id="30" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250110T000000Z" end="20250114T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20250110T000000Z"/>
+        </task>
+      </task>
+      <task id="31" name="Etape C" note="" work="374400" start="20250110T000000Z" end="20250116T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="32" name="G&#xE9;n&#xE9;ration du code" note="" work="288000" start="20250110T000000Z" end="20250116T170000Z" work-start="20250110T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20250110T000000Z"/>
           <predecessors>
             <predecessor id="1" predecessor-id="5" type="FS"/>
           </predecessors>
         </task>
-        <task id="33" name="Tests unitaires associ&#xE9;s" note="" work="144000" start="20250113T000000Z" end="20250117T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="33" name="Tests unitaires associ&#xE9;s" note="" work="86400" start="20250113T000000Z" end="20250115T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
           <constraint type="start-no-earlier-than" time="20250113T000000Z"/>
         </task>
       </task>
@@ -140,42 +140,42 @@
     <task id="34" name="Rendu version interm&#xE9;diaire" note="" work="0" duration="0" start="20250113T000000Z" end="20250113T000000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-duration">
       <constraint type="must-start-on" time="20250113T000000Z"/>
     </task>
-    <task id="35" name="Extension" note="" work="806400" start="20250113T000000Z" end="20250122T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="35" name="Extension" note="" work="633600" start="20250106T000000Z" end="20250120T170000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <constraint type="must-start-on" time="20250113T000000Z"/>
-      <task id="36" name="Specs" note="" work="115200" start="20250113T000000Z" end="20250114T104000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="36" name="Specs" note="" work="115200" start="20250106T000000Z" end="20250107T104000Z" work-start="20250106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="must-start-on" time="20250106T000000Z"/>
+      </task>
+      <task id="37" name="Code" note="" work="288000" start="20250113T000000Z" end="20250117T170000Z" work-start="20250113T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250113T000000Z"/>
       </task>
-      <task id="37" name="Code" note="" work="345600" start="20250115T000000Z" end="20250122T170000Z" work-start="20250115T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-        <constraint type="must-start-on" time="20250115T000000Z"/>
-      </task>
-      <task id="38" name="Documentation" note="" work="345600" start="20250115T000000Z" end="20250122T170000Z" work-start="20250115T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="38" name="Documentation" note="" work="230400" start="20250115T000000Z" end="20250120T170000Z" work-start="20250115T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250115T000000Z"/>
       </task>
     </task>
-    <task id="39" name="Documentation" note="" work="921600" start="20250117T000000Z" end="20250124T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="40" name="Manuel utilisateur avant 20h" note="" work="57600" start="20250117T000000Z" end="20250120T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="39" name="Documentation" note="" work="720000" start="20250117T000000Z" end="20250121T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="40" name="Manuel utilisateur " note="" work="57600" start="20250117T000000Z" end="20250120T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
       <task id="41" name="Conception" note="" work="172800" start="20250117T000000Z" end="20250120T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
-      <task id="42" name="Validation" note="" work="172800" start="20250117T000000Z" end="20250121T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="42" name="Validation" note="" work="144000" start="20250117T000000Z" end="20250121T120000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
-      <task id="43" name="Extension" note="" work="230400" start="20250117T000000Z" end="20250122T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="43" name="Extension" note="" work="172800" start="20250117T000000Z" end="20250121T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
-      <task id="44" name="Impact &#xE9;nerg&#xE9;tique" note="" work="172800" start="20250117T000000Z" end="20250124T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="44" name="Impact &#xE9;nerg&#xE9;tique" note="" work="86400" start="20250117T000000Z" end="20250121T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
-      <task id="45" name="Bilan gestion de projet avant 9h" note="&#10;" work="115200" start="20250117T000000Z" end="20250122T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="45" name="Bilan gestion de projet" note="&#10;" work="86400" start="20250117T000000Z" end="20250121T170000Z" work-start="20250117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="must-start-on" time="20250117T000000Z"/>
       </task>
     </task>
-    <task id="46" name="Rendu Final avant 16h" note="" work="0" duration="0" start="20250120T000000Z" end="20250120T000000Z" work-start="20250120T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-duration">
+    <task id="46" name="Rendu Final" note="" work="0" duration="0" start="20250120T000000Z" end="20250120T000000Z" work-start="20250120T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-duration">
       <constraint type="must-start-on" time="20250120T000000Z"/>
     </task>
-    <task id="47" name="Soutenance &#xE0; 10h45" note="" work="0" start="20250124T000000Z" end="20250124T000000Z" work-start="20250124T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="47" name="Soutenance" note="" work="0" start="20250124T000000Z" end="20250124T000000Z" work-start="20250124T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20250124T000000Z"/>
     </task>
   </tasks>
