@@ -1,29 +1,57 @@
-#include "fonctions.deca"
 // Grenoble INP - Ensimag projet GL -*- mode: java -*-
 // Library for class Math of Deca, coded in Deca
 
 class Math {
-    OperationsMath op = new OperationsMath();
     int exponent;
     float absValue;
+    float pi = 3.1415926;
+    int res;
+    float resf;
+    int i;
+    float sign;
+    float x;
+    float fact_i;
+
+    float puissance(float x, int n) {
+        float resf = 1.0;
+
+        // Si l'exposant est négatif
+        if (n < 0) {
+            x = 1.0 / x; 
+            n = -n;      
+        }
+
+        while (n > 0) {
+            resf = resf * x; 
+            n = n - 1;              
+        }
+
+        return resf;
+    }
+
+    int fact(int n) {
+        res = 1;
+        if (n == 0 || n == 1) {
+            return res;
+        }
+
+        while (n > 1) {
+            res = res * n;
+            n = n - 1;
+        }
+        
+        return res;
+    }
+
+    float reduce(float f) {
+        while (f > pi) {
+            f = f - 2*pi;
+        }
+        while (f < -pi) {
+            f = f + 2*pi;
+        }
     
-    float ulp(float x) {
-        // Cas pour zéro : retourne la plus petite valeur positive sous-normalisée (2^-149)
-        if (x == 0.0f) {
-            return op.puissance(2.0, -149);
-        }
-
-        // Extraction de l’exposant « non biaisé »
-        exponent = getExponent(x);
-
-        // Sous-normal si exponent < -126
-        //   => renvoie la plus petite distance positive (2^-149)
-        if (exponent < -126) {
-            return op.puissance(2.0, -149);
-        }
-
-        // Sinon, c’est un nombre normal => ULP = 2^(exponent - 23)
-        return op.puissance(2.0, exponent - 23);
+        return f;
     }
 
     // Fonction auxiliaire : calcule l’exposant « non biaisé » d'un float
@@ -45,6 +73,54 @@ class Math {
 
         return exponent;
     }
+
+
+    float sinTaylor(float f, int order) {
+        f = reduce(f);
+        i = order;
+        resf = f;
+
+        
+        if (f == 0) {
+            return 0;
+        }
+
+
+        while (i > 0) {
+            sign = puissance(-1,i);
+            x = puissance(f,2*i+1);
+            fact_i = fact(2*i+1);
+
+            resf = resf + sign*x/fact_i;
+
+            i = i - 1;
+        }
+
+        return resf;
+    }
+
+    
+    
+    float ulp(float x) {
+        // Cas pour zéro : retourne la plus petite valeur positive sous-normalisée (2^-149)
+        if (x == 0.0f) {
+            return puissance(2.0, -149);
+        }
+
+        // Extraction de l’exposant « non biaisé »
+        exponent = getExponent(x);
+
+        // Sous-normal si exponent < -126
+        //   => renvoie la plus petite distance positive (2^-149)
+        if (exponent < -126) {
+            return puissance(2.0, -149);
+        }
+
+        // Sinon, c’est un nombre normal => ULP = 2^(exponent - 23)
+        return puissance(2.0, exponent - 23);
+    }
+
+    
 }
 
 
