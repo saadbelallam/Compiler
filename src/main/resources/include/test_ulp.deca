@@ -1,0 +1,47 @@
+#include "Math.decah"
+// Description : 
+//    Ce fichier teste la fonction `ulp` de la classe Math sur différents cas.
+//    Il inclut des cas pour des nombres normalisés, sous-normalisés, zéro, et infinis.
+//
+// Résultats : 
+//    Affiche les ULP attendues pour chaque cas.
+//
+// Historique : 
+//    Créé le 22/01/2025.
+
+{
+    Math m;
+    float ulpZero;
+    float ulpPositif;
+    float ulpNegatif;
+    float ulpSousNormal;
+    float ulpInfini;
+
+    // Test pour zéro
+    ulpZero = m.ulp(0.0);
+    print("ULP de 0.0 : ");
+    println(ulpZero);
+
+    // Test pour un nombre positif normalisé
+    ulpPositif = m.ulp(1.5);
+    print("ULP de 1.5 : ");
+    println(ulpPositif);
+
+    // Test pour un nombre négatif normalisé
+    ulpNegatif = m.ulp(-3.75);
+    print("ULP de -3.75 : ");
+    println(ulpNegatif);
+
+    // Test pour un nombre sous-normalisé
+    ulpSousNormal = m.ulp(1.0e-40);
+    print("ULP de 1.0e-40 : ");
+    println(ulpSousNormal);
+
+    // Test pour l'infini positif
+    ulpInfini = m.ulp(1.0e+38);
+    print("ULP de 1.0e+38 : ");
+    println(ulpInfini);
+
+    // Fin des tests
+    println("Tests terminés.");
+}
