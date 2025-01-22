@@ -35,7 +35,6 @@ public class Return extends AbstractInst {
         this.expr = expr;
     }
 
-
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType) throws ContextualError {
@@ -55,6 +54,14 @@ public class Return extends AbstractInst {
         if (actualType == null) {
             throw new ContextualError("Cannot determine type of return expression", getLocation());
         }
+
+        // Handle implicit conversion from int to float
+        if (returnType.isFloat() && actualType.isInt()) {
+            expr = new ConvFloat(expr);
+            expr.verifyExpr(compiler, localEnv, currentClass);
+            actualType = expr.getType();
+        }
+
         if (!compiler.getEnvironmentType().assignCompatible(returnType, actualType)) {
             throw new ContextualError(
                 "Incompatible return type: expected " + returnType.getName() + 
@@ -64,22 +71,16 @@ public class Return extends AbstractInst {
         setExpr(expr.verifyRValue(compiler, localEnv, currentClass, returnType));
     }
 
-    public AbstractExpr getexpr() {
-        return expr;
-    }
-
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-       
         if (expr != null) {
-            
+            // The ConvFloat will handle the conversion in codeGenVal if needed
             expr.codeGenVal(compiler, Register.R0);
         }
-    
+
         if (returnLabel != null) {
             compiler.addInstruction(new BRA(returnLabel));
         } else {
-           
             compiler.addInstruction(new RTS());
         }
     }

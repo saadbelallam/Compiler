@@ -2,13 +2,9 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.BOV;
-import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 
@@ -50,7 +46,7 @@ public class Divide extends AbstractOpArith {
         //Pas besoin de CMP
 
         //la division
-        if (getType().isFloat()) {
+        if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
             compiler.addInstruction(new DIV(Register.getR(0), register));
             //OV error handling for float
             addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());
@@ -84,7 +80,7 @@ public class Divide extends AbstractOpArith {
 
 
             //la division
-            if (getType().isFloat()) {
+            if (getLeftOperand().getType().isFloat() || getRightOperand().getType().isFloat()) {
                 compiler.addInstruction(new DIV(tempReg, register));
                 //OV error handling for float
                 addBOVinstruction(compiler, compiler.getMangerL().getOverflowLabel());

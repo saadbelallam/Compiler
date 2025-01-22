@@ -81,7 +81,7 @@ public class MethodBody extends AbstractMethodBody {
                 inst.codeGenInst(compiler);
             
         }}}
-
+        compiler.getMangerM().freeLocalVar();
         compiler.getMangerR().RestoreSavedRegisters(compiler);
     
     }

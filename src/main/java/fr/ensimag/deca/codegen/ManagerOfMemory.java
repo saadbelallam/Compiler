@@ -87,4 +87,10 @@ public class ManagerOfMemory {
     public int getTotalSpace() {
         return Math.abs(currentOffset - 1);
     }
+
+    public void freeLocalVar() {
+        currentOffsetLocalVar = 1;
+    }
+
+    
 }

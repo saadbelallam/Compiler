@@ -83,7 +83,10 @@ public class DeclVar extends AbstractDeclVar {
         
         if (initialization instanceof Initialization) {
             AbstractExpr initExpr = ((Initialization) initialization).getExpression();
-            
+            // Add explicit conversion if initializing float with int
+            if (type.getType().isFloat() && initExpr.getType().isInt()) {
+                initExpr = new ConvFloat(initExpr);
+            }
         
             GPRegister reg = compiler.getMangerR().allocateRegister();
             compiler.addComment("allocate R"+reg.getNumber());
