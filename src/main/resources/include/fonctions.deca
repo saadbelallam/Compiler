@@ -1,6 +1,6 @@
 class OperationsMath {
     // fonctions intermédiaires: max, min, puissance, factoriel et définition de pi à 10⁻7 près 
-
+    int resl;
     float max(float a, float b) {
         if (a > b) {
             return a;
@@ -48,17 +48,17 @@ class OperationsMath {
 }
 
 int fact(int n) {
-    int res = 1;
+    resl = 1;
     if (n == 0 || n == 1) {
-        return res;
+        return resl;
     }
 
     while (n > 1) {
-        res = res * n;
+        resl = resl * n;
         n = n - 1;
     }
     
-    return res;
+    return resl;
 }
 
 float PI() {

@@ -3,48 +3,50 @@
 // Library for class Math of Deca, coded in Deca
 
 class Math {
-    OperationsMath op;
-
-    float ulp(float x) {
+    OperationsMath op = new OperationsMath();
     int exponent;
+    float absValue;
+    
+    float ulp(float x) {
+        // Cas pour zéro : retourne la plus petite valeur positive sous-normalisée (2^-149)
+        if (x == 0.0f) {
+            return op.puissance(2.0, -149);
+        }
 
-    // Cas pour zéro : retourne la plus petite valeur positive sous-normalisée
-    if (x == 0.0) {
-        return op.puissance(2.0, -149);
+        // Extraction de l’exposant « non biaisé »
+        exponent = getExponent(x);
+
+        // Sous-normal si exponent < -126
+        //   => renvoie la plus petite distance positive (2^-149)
+        if (exponent < -126) {
+            return op.puissance(2.0, -149);
+        }
+
+        // Sinon, c’est un nombre normal => ULP = 2^(exponent - 23)
+        return op.puissance(2.0, exponent - 23);
     }
 
-    // Extraction de l'exposant biaisé
-    exponent = getExponent(x);
-
-    // Cas pour les nombres sous-normalisés
-    if (exponent == 0) {
-        return op.puissance(2.0, -149);
-    }
-
-    // Calcul de l'ULP pour les nombres normalisés : 2^(e - 23)
-    return op.puissance(2.0, exponent - 23);
-}
-
-    // Fonction auxiliaire : extrait l'exposant biaisé d'un flottant
+    // Fonction auxiliaire : calcule l’exposant « non biaisé » d'un float
+    // en ramenant sa valeur absolue dans l’intervalle [1,2[.
     int getExponent(float x) {
-    float absValue = op.abs(x);
-    int exponent = 0;
+        absValue = op.abs(x);
+        exponent = 0;
 
-    // Normalisation : ramène absValue dans l'intervalle [1, 2[
-    while (absValue >= 2.0) {
-        absValue = absValue / 2.0;
-        exponent = exponent + 1;
-    }
-    while (absValue < 1.0 && absValue > 0.0) {
-        absValue = absValue * 2.0;
-        exponent = exponent - 1;
-    }
+        // Normalisation vers le bas (si >= 2.0)
+        while (absValue >= 2.0) {
+            absValue = absValue / 2.0;
+            exponent = exponent + 1;
+        }
+        // Normalisation vers le haut (si < 1.0)
+        while (absValue < 1.0 && absValue > 0.0) {
+            absValue = absValue * 2.0;
+            exponent = exponent - 1;
+        }
 
-    // Ajouter le biais de 127 pour obtenir l'exposant biaisé
-    exponent = exponent + 127;
-    return exponent;
+        return exponent;
+    }
 }
-}
+
 
 
 // End of Deca Math library

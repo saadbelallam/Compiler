@@ -10,12 +10,11 @@
 //    Créé le 22/01/2025.
 
 {
-    Math m;
+    Math m = new Math();
     float ulpZero;
     float ulpPositif;
     float ulpNegatif;
     float ulpSousNormal;
-    float ulpInfini;
 
     // Test pour zéro
     ulpZero = m.ulp(0.0);
@@ -23,6 +22,8 @@
     println(ulpZero);
 
     // Test pour un nombre positif normalisé
+    ulpPositif = m.getExponent(1.5);
+    println(ulpPositif);
     ulpPositif = m.ulp(1.5);
     print("ULP de 1.5 : ");
     println(ulpPositif);
