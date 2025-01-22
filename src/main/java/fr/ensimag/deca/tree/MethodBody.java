@@ -37,13 +37,11 @@ public class MethodBody extends AbstractMethodBody {
             if (inst instanceof IfThenElse) {
                 for (AbstractInst inst1 : ((IfThenElse) inst).getThenBranch().getList()) {
                     if (inst1 instanceof Return) {
-                        this.setHasReturn(true);
-                    }
-                }
-                if (((IfThenElse) inst).getElseBranch() != null) {
-                    for (AbstractInst inst2 : ((IfThenElse) inst).getElseBranch().getList()) {
-                        if (inst2 instanceof Return) {
-                            this.setHasReturn(true);
+                        // on regarde sil existe un return dans le else branch
+                        for (AbstractInst inst2 : ((IfThenElse) inst).getElseBranch().getList()) {
+                            if (inst2 instanceof Return) {
+                                this.setHasReturn(true);
+                            }
                         }
                     }
                 }
