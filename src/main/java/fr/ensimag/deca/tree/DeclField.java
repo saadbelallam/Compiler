@@ -305,7 +305,6 @@ public class DeclField extends AbstractDeclField {
         s.print(" ");
         fieldName.decompile(s);
         initialization.decompile(s);
-        s.println(";");
     }
 
     @Override

@@ -142,7 +142,10 @@ public class MethodCall extends AbstractExpr {
         if (classM == null){
             classM = new This();
         }
-        classM.verifyExpr(compiler, localEnv, currentClass);
+        Type t = classM.verifyExpr(compiler, localEnv, currentClass);
+        if (t == null) {
+            throw new ContextualError("Method call '" + methodName.getName() + "' is not associated with any class", methodName.getLocation());
+        }
         Type typeClass = classM.getType();
 
         if (typeClass == null || !typeClass.isClass()) {

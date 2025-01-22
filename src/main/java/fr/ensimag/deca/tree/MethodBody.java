@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
@@ -29,32 +30,37 @@ public class MethodBody extends AbstractMethodBody {
         this.declVariables.verifyListDeclVariable(compiler, localEnv, currentClass);
         this.instructions.verifyListInst(compiler, localEnv, currentClass, returnType);
 
-        // check s'il y a un return
-        for (AbstractInst inst : instructions.getList()) {
+        // Vérifie si un "return" existe dans tous les chemins possibles
+        this.setHasReturn(verifyReturnInInstructions(this.instructions.getList()));
+    }
+
+    private boolean verifyReturnInInstructions(List<AbstractInst> instructions) {
+        boolean hasReturn = false;
+
+        for (AbstractInst inst : instructions) {
             if (inst instanceof Return) {
-                this.setHasReturn(true);
-            }
-            if (inst instanceof IfThenElse) {
-                for (AbstractInst inst1 : ((IfThenElse) inst).getThenBranch().getList()) {
-                    if (inst1 instanceof Return) {
-                        // on regarde sil existe un return dans le else branch
-                        for (AbstractInst inst2 : ((IfThenElse) inst).getElseBranch().getList()) {
-                            if (inst2 instanceof Return) {
-                                this.setHasReturn(true);
-                            }
-                        }
-                    }
+                // Si on trouve un "return", on arrête la recherche
+                return true;
+            } else if (inst instanceof IfThenElse) {
+                // Vérifie les deux branches du "if"
+                IfThenElse ifInst = (IfThenElse) inst;
+                boolean thenHasReturn = verifyReturnInInstructions(ifInst.getThenBranch().getList());
+                boolean elseHasReturn = verifyReturnInInstructions(ifInst.getElseBranch().getList());
+
+                // Il faut que les deux branches aient un "return"
+                if (thenHasReturn && elseHasReturn) {
+                    hasReturn = true;
                 }
-            }
-            if (inst instanceof While) {
-                for (AbstractInst inst1 : ((While) inst).getBody().getList()) {
-                    if (inst1 instanceof Return) {
-                        this.setHasReturn(true);
-                    }
-                }
+            } else if (inst instanceof While) {
+                // Vérifie le corps du "while"
+                While whileInst = (While) inst;
+                hasReturn = verifyReturnInInstructions(whileInst.getBody().getList());
             }
         }
+
+        return hasReturn;
     }
+
 
     @Override
     protected void codeGenBody(DecacCompiler compiler) {

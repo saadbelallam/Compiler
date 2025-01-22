@@ -17,6 +17,9 @@ public class This extends AbstractExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        if (currentClass == null) {
+            return null;
+        }
         Type type = currentClass.getType();
         this.setType(type);
         return type;
