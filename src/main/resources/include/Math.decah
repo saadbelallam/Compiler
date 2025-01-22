@@ -2,18 +2,10 @@
 // Library for class Math of Deca, coded in Deca
 
 class Math {
-    int exponent;
-    float absValue;
     float pi = 3.1415926;
-    int res;
-    float resf;
-    int i;
-    float sign;
-    float x;
-    float fact_i;
 
     float puissance(float x, int n) {
-        float resf = 1.0;
+        float res = 1.0;
 
         // Si l'exposant est négatif
         if (n < 0) {
@@ -22,15 +14,15 @@ class Math {
         }
 
         while (n > 0) {
-            resf = resf * x; 
+            res = res * x; 
             n = n - 1;              
         }
 
-        return resf;
+        return res;
     }
 
     int fact(int n) {
-        res = 1;
+        int res = 1;
         if (n == 0 || n == 1) {
             return res;
         }
@@ -54,6 +46,7 @@ class Math {
         return f;
     }
 
+
     // Fonction auxiliaire : calcule l’exposant « non biaisé » d'un float
     // en ramenant sa valeur absolue dans l’intervalle [1,2[.
     int getExponent(float x) {
@@ -76,27 +69,27 @@ class Math {
 
 
     float sinTaylor(float f, int order) {
-        f = reduce(f);
-        i = order;
-        resf = f;
+        float sign;
+        float x;
+        float fact_i;
+        int i = order;
+        float res = f;
 
+        f = reduce(f);
         
         if (f == 0) {
             return 0;
         }
 
-
         while (i > 0) {
             sign = puissance(-1,i);
             x = puissance(f,2*i+1);
             fact_i = fact(2*i+1);
-
-            resf = resf + sign*x/fact_i;
-
+            res = res + sign*x/fact_i;
             i = i - 1;
         }
-
-        return resf;
+        println(res);
+        return res;
     }
 
     
