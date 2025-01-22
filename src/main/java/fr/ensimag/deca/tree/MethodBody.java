@@ -64,6 +64,7 @@ public class MethodBody extends AbstractMethodBody {
 
     @Override
     protected void codeGenBody(DecacCompiler compiler) {
+      compiler.getMangerR().SaveRegIntoStack(compiler);
       if(declVariables != null){
          for (AbstractDeclVar var : declVariables.getList()) {
             if (var instanceof DeclVar) {
@@ -78,9 +79,12 @@ public class MethodBody extends AbstractMethodBody {
                     this.setHasReturn(true);
                 }
                 inst.codeGenInst(compiler);
-            }
-        }
-    }}
+            
+        }}}
+
+        compiler.getMangerR().RestoreSavedRegisters(compiler);
+    
+    }
 
 
 

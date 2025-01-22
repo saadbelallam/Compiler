@@ -26,10 +26,13 @@ public class ManagerOfMemory {
     private static final int WORD_SIZE = 1; // 32-bit words
     private static final int STACK_RESERVE = 16; // Reserve space for register spilling
     private int currentOffsetParam  = 0;
+    private int currentOffsetLocalVar  = 1;
     
+
 
     public ManagerOfMemory() {
         this.currentOffset = 1;
+        this.currentOffsetLocalVar  = 1;
     }
 
     public RegisterOffset allocateVariable() {
@@ -44,8 +47,8 @@ public class ManagerOfMemory {
         return location;
     }
     public RegisterOffset allocateLocalVariable(){
-        RegisterOffset location = new RegisterOffset(currentOffsetParam, Register.LB);
-        currentOffsetParam -= WORD_SIZE;
+        RegisterOffset location = new RegisterOffset(currentOffsetLocalVar, Register.LB);
+        currentOffsetLocalVar += WORD_SIZE;
         return location;
     }
     

@@ -67,7 +67,7 @@ public class MethodCall extends AbstractExpr {
         MethodDefinition methodDef = methodName.getMethodDefinition();
         int paramCount = listExpr.size() + 1;
 
-        compiler.addInstruction(new ADDSP(paramCount));
+        compiler.addInstruction(new ADDSP(paramCount ));
         
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         classM.codeGenVal(compiler, objReg);
