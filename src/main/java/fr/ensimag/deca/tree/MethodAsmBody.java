@@ -9,12 +9,16 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.InlinePortion;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 
 
 public class MethodAsmBody extends AbstractMethodBody {
  
     private final StringLiteral asmCode;
+    private boolean hashRet;
+
   
 
     public MethodAsmBody(StringLiteral asmCode) {
@@ -22,7 +26,8 @@ public class MethodAsmBody extends AbstractMethodBody {
     }
     
     @Override
-    protected  void codeGenBody(DecacCompiler compiler){
+    protected void codeGenBody(DecacCompiler compiler) {
+        // Clean up the assembly code string
         String code = asmCode.getValue();
         code = code.substring(1, code.length() - 1)  
                   .replace("\\\"", "\"")             
@@ -30,10 +35,17 @@ public class MethodAsmBody extends AbstractMethodBody {
                   .replace("\\t", "\t");             
         
         compiler.addComment("Begin assembly code");
+        
+        // Add the assembly code
         compiler.add(new InlinePortion(code));
+        
+        // For methods that return a value, ensure R1 contains the return value
+        if (hasReturn()) {
+            compiler.addInstruction(new LOAD(Register.R1, Register.R0));
+        }
+        
         compiler.addComment("End assembly code");
-    
-    }   
+    }
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
@@ -65,7 +77,12 @@ public class MethodAsmBody extends AbstractMethodBody {
 
     @Override
     public boolean hasReturn(){
-        return false;
+        return hashRet;
+    }
+
+    public void setHasReturnValue(boolean  ret){
+        this.hashRet = ret;
+
     }
 
     @Override

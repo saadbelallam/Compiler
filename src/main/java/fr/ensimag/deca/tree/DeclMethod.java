@@ -154,8 +154,11 @@ public class DeclMethod extends AbstractDeclMethod {
         LOG.debug("verify declMethodBody: start");
         EnvironmentExp envExpParams = listParams.verifyListParamBody(compiler, localEnv, currentClass);
         body.verifyMethodBody(compiler, envExpParams, currentClass, type.getType());  
-        if (!(type.getName() == compiler.createSymbol("void")) && !this.body.hasReturn()) {
-            throw new ContextualError("The method " + methodName + " must have a return statement in class : " + currentClass.getType(), this.getLocation());
+        
+        if (!(body instanceof MethodAsmBody)) {
+            if (!(type.getName() == compiler.createSymbol("void")) && !this.body.hasReturn()) {
+                throw new ContextualError("The method " + methodName + " must have a return statement in class : " + currentClass.getType(), this.getLocation());
+            }
         }
         LOG.debug("verify declMethodBody: end");
     }
