@@ -3,6 +3,8 @@
 
 class Math {
     float pi = 3.1415926;
+     // Facteur correctif du CORDIC (environ 1/K∞)
+    float CORDIC_GAIN_INV = 0.60725293f;
 
     float puissance(float x, int n) {
         float res = 1.0;
@@ -19,6 +21,15 @@ class Math {
         }
 
         return res;
+    }
+
+    float abs (float x) {
+        if (x > 0) {
+            return x;
+        }
+        else {
+            return -x;
+        }
     }
 
     int fact(int n) {
@@ -46,19 +57,14 @@ class Math {
         return f;
     }
 
-
-    // Fonction auxiliaire : calcule l’exposant « non biaisé » d'un float
-    // en ramenant sa valeur absolue dans l’intervalle [1,2[.
     int getExponent(float x) {
-        absValue = op.abs(x);
-        exponent = 0;
+        float absValue = abs(x);
+        int exponent = 0;
 
-        // Normalisation vers le bas (si >= 2.0)
         while (absValue >= 2.0) {
             absValue = absValue / 2.0;
             exponent = exponent + 1;
         }
-        // Normalisation vers le haut (si < 1.0)
         while (absValue < 1.0 && absValue > 0.0) {
             absValue = absValue * 2.0;
             exponent = exponent - 1;
@@ -66,7 +72,6 @@ class Math {
 
         return exponent;
     }
-
 
     float sinTaylor(float f, int order) {
         float sign;
@@ -92,30 +97,118 @@ class Math {
         return res;
     }
 
-    
-    
     float ulp(float x) {
-        // Cas pour zéro : retourne la plus petite valeur positive sous-normalisée (2^-149)
+        int exponent;
         if (x == 0.0f) {
             return puissance(2.0, -149);
         }
 
-        // Extraction de l’exposant « non biaisé »
         exponent = getExponent(x);
 
-        // Sous-normal si exponent < -126
-        //   => renvoie la plus petite distance positive (2^-149)
         if (exponent < -126) {
             return puissance(2.0, -149);
         }
 
-        // Sinon, c’est un nombre normal => ULP = 2^(exponent - 23)
         return puissance(2.0, exponent - 23);
     }
 
-    
+float atanValue(int i) {
+    if (i == 0) { return 0.785398163f; }  // ~ π/4
+    else if (i == 1) { return 0.463647609f; } 
+    else if (i == 2) { return 0.244978663f; }
+    else if (i == 3) { return 0.124354995f; }
+    else if (i == 4) { return 0.062418810f; }
+    else if (i == 5) { return 0.031239833f; }
+    else if (i == 6) { return 0.015623729f; }
+    else if (i == 7) { return 0.007812341f; }
+    else if (i == 8) { return 0.003906230f; }
+    else if (i == 9) { return 0.001953123f; }
+    else if (i == 10) { return 0.000976562f; }
+    else if (i == 11) { return 0.000488281f; }
+    else if (i == 12) { return 0.000244141f; }
+    else if (i == 13) { return 0.000122070f; }
+    else if (i == 14) { return 0.000061035f; }
+    else if (i == 15) { return 0.000030518f; }
+    else if (i == 16) { return 0.000015259f; }
+    else if (i == 17) { return 0.000007629f; }
+    else if (i == 18) { return 0.000003815f; }
+    else if (i == 19) { return 0.000001907f; }
+    else if (i == 20) { return 0.000000954f; }
+    else if (i == 21) { return 0.000000477f; }
+    else if (i == 22) { return 0.000000238f; }
+    else if (i == 23) { return 0.000000119f; }
+    return 0.0f; // Au-delà, on renvoie 0 => plus de rotation
 }
 
+float cordicSin(float angle, int iterations) {
+    float x = 1.0f;
+    float y = 0.0f;
+    float z = reduce(angle);      // Ramène l’angle dans [-π, π]
+    float powerOfTwo = 1.0f;
+    int i = 0;
+    float angleStep;
+    float x_new;
+    float y_new;
 
+    // On effectue jusqu'à 'iterations' rotations, mais max 24 (puisque atanValue() = 0 au-delà).
+    while ((i < iterations) && (i < 24)) {
+        angleStep = atanValue(i);
+
+        if (z < 0.0f) {
+            x_new = x + (y / powerOfTwo);
+            y_new = y - (x / powerOfTwo);
+            z = z + angleStep;
+        } else {
+            x_new = x - (y / powerOfTwo);
+            y_new = y + (x / powerOfTwo);
+            z = z - angleStep;
+        }
+
+        x = x_new;
+        y = y_new;
+
+        powerOfTwo = powerOfTwo * 2.0f;
+        i = i + 1;
+    }
+
+    // Compensation du gain CORDIC
+    return y * CORDIC_GAIN_INV;
+}
+
+float cordicCos(float angle, int iterations) {
+    float x = 1.0f;
+    float y = 0.0f;
+    float z = reduce(angle);
+    float powerOfTwo = 1.0f;
+    int i = 0;
+    float angleStep;
+    float x_new;
+    float y_new;
+
+    while ((i < iterations) && (i < 24)) {
+        angleStep = atanValue(i);
+
+        if (z < 0.0f) {
+            x_new = x + (y / powerOfTwo);
+            y_new = y - (x / powerOfTwo);
+            z = z + angleStep;
+        } else {
+            x_new = x - (y / powerOfTwo);
+            y_new = y + (x / powerOfTwo);
+            z = z - angleStep;
+        }
+
+        x = x_new;
+        y = y_new;
+
+        powerOfTwo = powerOfTwo * 2.0f;
+        i = i + 1;
+    }
+
+    // Compensation du gain CORDIC
+    return x * CORDIC_GAIN_INV;
+}
+}
 
 // End of Deca Math library
+
