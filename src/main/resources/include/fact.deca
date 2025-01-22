@@ -1,0 +1,46 @@
+#include "fonctions.deca"   
+// Description : 
+//    Teste la fonction `fact` pour différents cas, y compris les cas limites.
+//
+// Résultats : 
+//    Affiche les factorielles pour les entrées valides et les erreurs si les entrées sont invalides.
+//
+// Historique : 
+//    Créé le 22/01/2025.
+
+
+{
+    OperationsMath op = new OperationsMath();
+    int res;
+    println(op.puissance(2,-23));
+    println(op.abs(4));
+    println(op.abs(-4));
+
+    // Test pour 0! (cas limite)
+    res = op.fact(0);
+    print("Factorielle de 0 : ");
+    println(res);
+
+    // Test pour 1! (cas limite)
+    res = op.fact(1);
+    print("Factorielle de 1 : ");
+    println(res);
+
+    // Test pour 5!
+    res = op.fact(5);
+    print("Factorielle de 5 : ");
+    println(res);
+
+    // Test pour 10!
+    res = op.fact(10);
+    print("Factorielle de 10 : ");
+    println(res);
+
+    // Test pour un grand nombre
+    res = op.fact(12);
+    print("Factorielle de 12 : ");
+    println(res);
+
+    // Fin des tests
+    println("Tests terminés.");
+}
