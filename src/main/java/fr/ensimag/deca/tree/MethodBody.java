@@ -34,6 +34,27 @@ public class MethodBody extends AbstractMethodBody {
             if (inst instanceof Return) {
                 this.setHasReturn(true);
             }
+            if (inst instanceof IfThenElse) {
+                for (AbstractInst inst1 : ((IfThenElse) inst).getThenBranch().getList()) {
+                    if (inst1 instanceof Return) {
+                        this.setHasReturn(true);
+                    }
+                }
+                if (((IfThenElse) inst).getElseBranch() != null) {
+                    for (AbstractInst inst2 : ((IfThenElse) inst).getElseBranch().getList()) {
+                        if (inst2 instanceof Return) {
+                            this.setHasReturn(true);
+                        }
+                    }
+                }
+            }
+            if (inst instanceof While) {
+                for (AbstractInst inst1 : ((While) inst).getBody().getList()) {
+                    if (inst1 instanceof Return) {
+                        this.setHasReturn(true);
+                    }
+                }
+            }
         }
     }
 
