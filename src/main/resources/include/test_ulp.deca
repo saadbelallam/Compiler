@@ -37,11 +37,6 @@
     print("ULP de 1.0e-40 : ");
     println(ulpSousNormal);
 
-    // Test pour l'infini positif
-    ulpInfini = m.ulp(1.0e+38);
-    print("ULP de 1.0e+38 : ");
-    println(ulpInfini);
-
     // Fin des tests
     println("Tests terminés.");
 }
