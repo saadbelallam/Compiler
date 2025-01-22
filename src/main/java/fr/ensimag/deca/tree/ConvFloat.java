@@ -1,13 +1,14 @@
 package fr.ensimag.deca.tree;
 
+import org.apache.log4j.Logger;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.FLOAT;
-
-import org.apache.log4j.Logger;
 
 /**
  * Conversion of an int into a float. Used for implicit conversions.
@@ -23,15 +24,20 @@ public class ConvFloat extends AbstractUnaryExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) {
-        // throw new UnsupportedOperationException("not yet implemented");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify conv float: start");
-        Type type = compiler.environmentType.FLOAT;
-        this.setType(type);
+        Type operandType = getOperand().verifyExpr(compiler, localEnv, currentClass);
+        
+        // Verify operand is an int
+        if (!operandType.isInt()) {
+            throw new ContextualError("Cannot convert non-int type to float", getLocation());
+        }
+        
+        Type floatType = compiler.environmentType.FLOAT;
+        setType(floatType);
         LOG.debug("verify conv float: end");
-        return type;
+        return floatType;
     }
-
 
     @Override
     protected String getOperatorName() {
@@ -40,12 +46,9 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
-        
-       
-            getOperand().codeGenVal(compiler, destReg);
-            compiler.addInstruction(new FLOAT(destReg, destReg));
-    
-}
+        getOperand().codeGenVal(compiler, destReg);
+        compiler.addInstruction(new FLOAT(destReg, destReg));
+    }
 
 
 }

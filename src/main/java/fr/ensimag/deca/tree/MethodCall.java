@@ -66,9 +66,9 @@ public class MethodCall extends AbstractExpr {
     public void codeGenVal(DecacCompiler compiler, GPRegister destReg) {
         MethodDefinition methodDef = methodName.getMethodDefinition();
         int paramCount = listExpr.size() + 1;
-
-        compiler.addInstruction(new ADDSP(paramCount ));
-        
+        compiler.getMangerR().SaveRegIntoStack(compiler);
+        int savedReg =  compiler.getMangerR().getnbOfUsedRegisiters();
+        compiler.addInstruction(new ADDSP(paramCount +  savedReg + 1));
         GPRegister objReg = compiler.getMangerR().allocateRegister();
         classM.codeGenVal(compiler, objReg);
         compiler.addInstruction(new STORE(objReg, new RegisterOffset(0, Register.SP)));
@@ -90,12 +90,12 @@ public class MethodCall extends AbstractExpr {
     
         compiler.addInstruction(new LOAD(new RegisterOffset(0, objReg), objReg));
         compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, objReg)));
+        
+        compiler.addInstruction(new SUBSP(paramCount+savedReg + 1));
+        compiler.getMangerR().RestoreSavedRegisters(compiler);
         if (!methodName.getMethodDefinition().getType().isVoid()) {
             compiler.addInstruction(new LOAD(Register.R0, destReg));
         }
-    
-        compiler.addInstruction(new SUBSP(paramCount));
-        
         compiler.getMangerR().freeRegister(objReg);
     }
 
