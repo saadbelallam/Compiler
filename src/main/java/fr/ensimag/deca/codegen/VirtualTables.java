@@ -44,7 +44,7 @@ public class VirtualTables {
         
         RegisterOffset tableAddr = compiler.getMangerM().allocateVariable();
         compiler.addInstruction(new STORE(Register.R0, tableAddr));
-        compiler.getMangerR().addNbrStores();;
+        compiler.getMangerR().addNbrStores();
 
         classDef.setVMTableAddr(tableAddr);
 

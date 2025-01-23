@@ -6,7 +6,6 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
@@ -75,19 +74,13 @@ public class Cast extends AbstractExpr {
             
             GPRegister vtableReg = compiler.getMangerR().allocateRegister();
             compiler.addInstruction(new LOAD(new RegisterOffset(0, destReg), vtableReg));
-            ClassDefinition currentClass = ((ClassType)targetType).getDefinition();
+            ClassDefinition currentClass = (ClassDefinition) this.type.getDefinition();
+            // Compare with target class vtable
             
-            
-            /* // Compare with target class vtable
-            DAddr targetVTable = targetClass.getVMTablesAddr();
-            System.err.println("currentClass.getVMTablesAddr() = " + targetVTable);
-            System.err.println("currentClass = " + currentClass.getVMTablesAddr());
-            System.err.println("currentClass = " + currentClass);
-           
-            /* compiler.addInstruction(new LEA(currentClass.getVMTablesAddr(), Register.R0));
+            compiler.addInstruction(new LEA(currentClass.getVMTablesAddr(), Register.R0));
             compiler.addInstruction(new CMP(Register.R0, vtableReg));
             compiler.addInstruction(new BEQ(successLabel));
-              */
+            
             
             while (currentClass.getSuperClass() != null) {
                 currentClass = currentClass.getSuperClass();
