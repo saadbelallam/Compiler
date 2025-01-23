@@ -172,7 +172,10 @@ public class MethodCall extends AbstractExpr {
         methodName.verifyExpr(compiler, classDef.getMembers(), currentClass);
         Signature signature = methodName.getMethodDefinition().getSignature();
         int numParams = 0;
-
+        if (listExpr.size() != signature.size()) {
+            throw new ContextualError("Expecting " + signature.size() + " parameter(s), but found " + listExpr.size() 
+                                    + " parameter(s) in method : " + methodName + ", class : " + classM.getType(), classM.getLocation());
+        }
         for (AbstractExpr expr : listExpr.getList()) {
             if (numParams < signature.size()) {
                 listExpr.set(numParams, expr.verifyRValue(compiler, localEnv, currentClass, signature.paramNumber(numParams)));

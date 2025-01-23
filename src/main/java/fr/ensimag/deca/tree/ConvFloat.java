@@ -26,12 +26,12 @@ public class ConvFloat extends AbstractUnaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         LOG.debug("verify conv float: start");
-        Type operandType = getOperand().verifyExpr(compiler, localEnv, currentClass);
+        // Type operandType = getOperand().verifyExpr(compiler, localEnv, currentClass);
         
         // Verify operand is an int
-        if (!operandType.isInt()) {
-            throw new ContextualError("Cannot convert non-int type to float", getLocation());
-        }
+        // if (!getOperand().getType().isInt()) {
+        //     throw new ContextualError("Cannot convert non-int type to float", getLocation());
+        // }
         
         Type floatType = compiler.environmentType.FLOAT;
         setType(floatType);
