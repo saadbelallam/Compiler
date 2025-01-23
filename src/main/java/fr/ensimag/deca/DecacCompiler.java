@@ -361,6 +361,12 @@ public class DecacCompiler {
             addInstruction(new WSTR("Erreur : tas_plein"));
             addInstruction(new WNL());
             addInstruction(new ERROR());
+            
+            Label errorLabel = new Label("cast_error");
+            addLabel(errorLabel);
+            addInstruction(new WSTR("Error: Invalid cast"));
+            addInstruction(new WNL());
+            addInstruction(new ERROR());
 
         }
 
