@@ -1,0 +1,16 @@
+// Exemple d'utilisation
+{
+    Math m = new Math();
+    float arcsinValue;
+
+    // Test pour arcsin(0.5)
+    arcsinValue = m.cordicArcsin(0.5, 30);
+    print("arcsin(0.5) = ");
+    println(arcsinValue);
+
+
+    // Test pour arcsin(-0.7)
+    arcsinValue = m.cordicArcsin(-0.7, 30);
+    print("arcsin(-0.7) = ");
+    println(arcsinValue);
+}

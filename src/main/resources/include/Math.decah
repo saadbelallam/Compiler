@@ -60,6 +60,28 @@ class Math {
         return val;
     }
 
+    float reduce_cordic(float f) {
+    float val;
+    int q = ((int)(f / (2.0 * pi))); // Réduction mod 2π
+    val = fma(f, q, -(2.0 * pi));
+
+    // Réduction dans [-pi, pi]
+    if (val > pi) {
+        val = val - 2 * pi;
+    }
+    if (val < -pi) {
+        val = val + 2 * pi;
+    }
+
+    // Réduction dans [0, pi/2] (premier quadrant)
+    if (val > pi / 2) {
+        val = pi - val; // Translation dans le premier quadrant
+    } else if (val < -pi / 2) {
+        val = -pi - val; // Translation dans le premier quadrant
+    }
+
+    return val;
+}
 
     float reduce_sin(float f) {
         while (f > pi/2) {
@@ -318,7 +340,7 @@ class Math {
     float cordicSin(float angle, int iterations) {
         float x = 1.0f;
         float y = 0.0f;
-        float z = reduce(angle);      // Ramène l’angle dans [-π, π]
+        float z = reduce_cordic(angle);      // Ramène l’angle dans [-π, π]
         float powerOfTwo = 1.0f;
         int i = 0;
         float angleStep;
@@ -353,7 +375,7 @@ class Math {
     float cordicCos(float angle, int iterations) {
         float x = 1.0f;
         float y = 0.0f;
-        float z = reduce(angle);
+        float z = reduce_cordic(angle);
         float powerOfTwo = 1.0f;
         int i = 0;
         float angleStep;
