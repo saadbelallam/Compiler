@@ -55,15 +55,17 @@ float reduce(float f) {
         f = f + 2 * pi;
     }
 
-    // Ajustement pour placer l'angle dans [-pi/2, pi/2]
+    // Ajustement pour placer l'angle dans [0, pi/2] avec gestion des quadrants
     if (f > pi / 2) {
-        f = f - pi;
+        f = pi - f; // Translation dans le premier quadrant
     } else if (f < -pi / 2) {
-        f = f + pi;
+        f = -pi - f; // Translation dans le premier quadrant
     }
 
     return f;
 }
+
+
 
 
     int getExponent(float x) {
@@ -177,52 +179,23 @@ float atanValue(int i) {
 
 
 
-
 float cordicSin(float angle, int iterations) {
     float x = 1.0f;
     float y = 0.0f;
-    float z = reduce(angle);      // Ramène l’angle dans [-π, π]
+    float z = reduce(angle);      // Réduit dans [0, pi/2]
     float powerOfTwo = 1.0f;
     int i = 0;
     float angleStep;
     float x_new;
     float y_new;
 
-    // On effectue jusqu'à 'iterations' rotations, mais max 24 (puisque atanValue() = 0 au-delà).
-    while ((i < iterations) && (i < 50)) {
-        angleStep = atanValue(i);
-
-        if (z < 0.0f) {
-            x_new = x + (y / powerOfTwo);
-            y_new = y - (x / powerOfTwo);
-            z = z + angleStep;
-        } else {
-            x_new = x - (y / powerOfTwo);
-            y_new = y + (x / powerOfTwo);
-            z = z - angleStep;
-        }
-
-        x = x_new;  
-        y = y_new;
-
-        powerOfTwo = powerOfTwo * 2.0f;
-        i = i + 1;
+    // Identifier le quadrant d'origine
+    boolean isNegativeSin = false;
+    if ((angle > pi / 2 && angle <= pi) || (angle > -pi && angle <= -pi / 2)) {
+        isNegativeSin = true;
     }
 
-    // Compensation du gain CORDIC
-    return y * CORDIC_GAIN_INV;
-}
-
-float cordicCos(float angle, int iterations) {
-    float x = 1.0f;
-    float y = 0.0f;
-    float z = reduce(angle);
-    float powerOfTwo = 1.0f;
-    int i = 0;
-    float angleStep;
-    float x_new;
-    float y_new;
-
+    // Boucle CORDIC
     while ((i < iterations) && (i < 50)) {
         angleStep = atanValue(i);
 
@@ -244,8 +217,65 @@ float cordicCos(float angle, int iterations) {
     }
 
     // Compensation du gain CORDIC
-    return x * CORDIC_GAIN_INV;
+    y = y * CORDIC_GAIN_INV;
+
+    // Appliquer la réflexion si nécessaire
+    if (isNegativeSin) {
+        y = -y;
+    }
+
+    return y; // Le sinus correspond à la coordonnée Y
 }
+
+float cordicCos(float angle, int iterations) {
+    float x = 1.0f;
+    float y = 0.0f;
+    float z = reduce(angle);      // Réduit dans [0, pi/2]
+    float powerOfTwo = 1.0f;
+    int i = 0;
+    float angleStep;
+    float x_new;
+    float y_new;
+
+    // Identifier le quadrant d'origine
+    boolean isNegativeCos = false;
+    if ((angle > pi / 2 && angle <= pi) || (angle > -pi / 2 && angle < -pi)) {
+        isNegativeCos = true;
+    }
+
+    // Boucle CORDIC
+    while ((i < iterations) && (i < 50)) {
+        angleStep = atanValue(i);
+
+        if (z < 0.0f) {
+            x_new = x + (y / powerOfTwo);
+            y_new = y - (x / powerOfTwo);
+            z = z + angleStep;
+        } else {
+            x_new = x - (y / powerOfTwo);
+            y_new = y + (x / powerOfTwo);
+            z = z - angleStep;
+        }
+
+        x = x_new;
+        y = y_new;
+
+        powerOfTwo = powerOfTwo * 2.0f;
+        i = i + 1;
+    }
+
+    // Compensation du gain CORDIC
+    x = x * CORDIC_GAIN_INV;
+
+    // Appliquer la réflexion si nécessaire
+    if (isNegativeCos) {
+        x = -x;
+    }
+
+    return x; // Le cosinus correspond à la coordonnée X
+}
+
+
 }
 
 // End of Deca Math library
