@@ -1,0 +1,81 @@
+// Description : 
+//    Ce fichier teste les fonctions `cordicSin` et `cordicCos` de la classe Math.
+//    Il inclut des cas de tests pour des angles variés et un nombre d'itérations différent.
+//
+// Résultats : 
+//    Affiche les valeurs du sinus et du cosinus calculées pour chaque angle.
+//
+// Historique : 
+//    Créé le 22/01/2025.
+
+#include "Math.decah"
+
+{
+    Math m = new Math();
+    int iterations;
+    float angle;
+    float sinValue;
+    float cosValue;
+
+    // Test pour angle = 0
+    iterations = 50;
+    angle = 0.0;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(0.0) = ");
+    println(sinValue);
+    print("Cos(0.0) = ");
+    println(cosValue);
+
+    // Test pour angle = PI/4
+    iterations = 50;
+    angle = m.pi / 4;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(PI/4) = ");
+    println(sinValue);
+    print("Cos(PI/4) = ");
+    println(cosValue);
+
+    // Test pour angle = PI/2
+    iterations = 50;
+    angle = m.pi/2;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(PI/2) = ");
+    println(sinValue);
+    print("Cos(PI/2) = ");
+    println(cosValue);
+
+    // Test pour angle = -PI/4
+    iterations = 50;
+    angle = -m.pi / 4;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(-PI/4) = ");
+    println(sinValue);
+    print("Cos(-PI/4) = ");
+    println(cosValue);
+
+    // Test pour un angle > PI (réduction d'intervalle)
+    iterations = 50;
+    angle = 3 * m.pi / 2;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(3*PI/2) = ");
+    println(sinValue);
+    print("Cos(3*PI/2) = ");
+    println(cosValue);
+
+    iterations = 31;
+    angle = -m.pi;
+    sinValue = m.cordicSin(angle, iterations);
+    cosValue = m.cordicCos(angle, iterations);
+    print("Sin(PI) = ");
+    println(sinValue);
+    print("Cos(PI) = ");
+    println(cosValue);
+
+    // Fin des tests
+    println("Tests terminés.");
+}
