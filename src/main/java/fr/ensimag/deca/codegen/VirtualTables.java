@@ -68,21 +68,23 @@ public class VirtualTables {
             // get existing offset if method is overridden, otherwise use new offset
             int offset = classDef.getMethodOffset(methodName) != null ? 
                         classDef.getMethodOffset(methodName) : 
-                        sortedMethods.size() + 1;
+                        sortedMethods.size() + 1 ;
             
             classDef.addMethod(methodName, methodLabel, offset);
             
             // Update 
             sortedMethods.put(offset, new AbstractMap.SimpleEntry<>(methodName, methodLabel));
+            declMethod.getDefinitionMethod().setOffsetIndex(offset);
         }
         
         for (Map.Entry<Integer, Map.Entry<String, Label>> entry : sortedMethods.entrySet()) {
             Label methodLabel = entry.getValue().getValue();
-        
+            
             compiler.addInstruction(new LOAD(new LabelOperand(methodLabel), Register.R0));
             compiler.addInstruction(new STORE(Register.R0, compiler.getMangerM().allocateVariable()));
             compiler.getMangerR().addNbrStores();
         }
+
     }
     public void codeGenVMTforObject(DecacCompiler compiler) {
          compiler.addComment("--------------------------------------------------");

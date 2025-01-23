@@ -89,8 +89,12 @@ public class MethodCall extends AbstractExpr {
         compiler.addInstruction(new BEQ(nullError));
     
         compiler.addInstruction(new LOAD(new RegisterOffset(0, objReg), objReg));
-        compiler.addInstruction(new BSR(new RegisterOffset(methodDef.getIndex() + 1, objReg)));
-        
+        int index = methodDef.getOffset();
+        /* if(methodName.getName().getName().equals("equals")){
+            index = 1;
+        } */
+        compiler.addInstruction(new BSR(new RegisterOffset(index, objReg)));
+        //System.err.println("methoddef="+methodDef.getType() + "index= "+ methodDef.getIndex());
         compiler.addInstruction(new SUBSP(paramCount+savedReg + 1));
         compiler.getMangerR().RestoreSavedRegisters(compiler);
         if (!methodName.getMethodDefinition().getType().isVoid()) {

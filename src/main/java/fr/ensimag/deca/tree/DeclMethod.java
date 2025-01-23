@@ -195,6 +195,10 @@ public class DeclMethod extends AbstractDeclMethod {
     public String getName() {
         return methodName.getName().getName();
         }
+    public MethodDefinition getDefinitionMethod(){
+        return methodName.getMethodDefinition();
+
+    }
 
     /* @Override
     protected void codeGenMethod(DecacCompiler compiler) {

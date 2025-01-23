@@ -1,8 +1,9 @@
 package fr.ensimag.deca.context;
 
+import org.apache.commons.lang.Validate;
+
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.ima.pseudocode.Label;
-import org.apache.commons.lang.Validate;
 
 /**
  * Definition of a method
@@ -11,6 +12,7 @@ import org.apache.commons.lang.Validate;
  * @date 01/01/2025
  */
 public class MethodDefinition extends ExpDefinition {
+    
 
     @Override
     public boolean isMethod() {
@@ -41,6 +43,8 @@ public class MethodDefinition extends ExpDefinition {
 
     private final Signature signature;
     private Label label;
+
+    private int offsetIndex;
     
     /**
      * 
@@ -53,6 +57,14 @@ public class MethodDefinition extends ExpDefinition {
         super(type, location);
         this.signature = signature;
         this.index = index;
+    }
+    public void setOffsetIndex(int Index){
+        this.offsetIndex = Index;
+
+    }
+
+    public int getOffset(){
+        return offsetIndex;
     }
 
     public Signature getSignature() {
