@@ -46,27 +46,49 @@ class Math {
         return res;
     }
 
-float reduce(float f) {
-    // Réduction dans l'intervalle [-pi, pi]
-    while (f > pi) {
-        f = f - 2 * pi;
-    }
-    while (f < -pi) {
-        f = f + 2 * pi;
-    }
 
-    // Ajustement pour placer l'angle dans [0, pi/2] avec gestion des quadrants
-    if (f > pi / 2) {
-        f = pi - f; // Translation dans le premier quadrant
-    } else if (f < -pi / 2) {
-        f = -pi - f; // Translation dans le premier quadrant
+    float reduce(float f) {
+        float val;
+        int q = ((int)(f / (2.0 * pi)));
+        val = fma(f, q , -(2.0 * pi));
+        if (val > pi) {
+            val = val - 2 * pi;
+        }
+        if (val < -pi) {
+            val = val + 2 * pi;
+        }
+        return val;
     }
 
-    return f;
-}
 
+    float reduce_sin(float f) {
+        while (f > pi/2) {
+            f = pi - f;
+        }
+        while (f < -pi/2) {
+            f = -(f + pi);
+        }
+    
+        return f;
+    }
 
+    
+    float reduce_cos(float f) {
+        if (f < 0) {
+            f = -f;
+        }
+        return f;
+    }
 
+    // a + b*c
+    float fma(float a, float b, float c) asm (
+        "LOAD -3(LB), R1    
+         LOAD -4(LB), R2     
+         LOAD -5(LB), R3     
+         FMA R2, R3    
+         LOAD R3, R0
+         RTS"               
+    );
 
     int getExponent(float x) {
         float absValue = abs(x);
@@ -84,6 +106,7 @@ float reduce(float f) {
         return exponent;
     }
 
+
     float sinTaylor(float f, int order) {
         float sign;
         float x;
@@ -92,6 +115,8 @@ float reduce(float f) {
         float res = f;
 
         f = reduce(f);
+        f = reduce_sin(f);
+        res = f;
         
         if (f == 0) {
             return 0;
@@ -101,12 +126,122 @@ float reduce(float f) {
             sign = puissance(-1,i);
             x = puissance(f,2*i+1);
             fact_i = fact(2*i+1);
-            res = res + sign*x/fact_i;
+            // res = res + sign*x/fact_i;
+            res = fma(res, sign, x/fact_i );
             i = i - 1;
         }
-        println(res);
         return res;
     }
+
+
+    float cosTaylor(float f, int order) {
+        float sign;
+        float x;
+        float fact_j;
+        int j = order;
+        float res = 1;
+
+        f = reduce(f);
+        f = reduce_cos(f);
+        
+        if (f == 0) {
+            return 1;
+        }
+
+        while (j > 0) {
+            sign = puissance(-1,j);
+            x = puissance(f,2*j);
+            fact_j = fact(2*j);
+            // res = res + sign*x/fact_j;
+            res = fma(res, sign, x/fact_j);
+            j = j - 1;
+
+        }
+        return res;
+    }
+
+    float sinCosTaylor(float f) {
+        return -cosTaylor(f + pi/2, 4);
+    }
+
+    float cosSinTaylor(float f) {
+        return sinTaylor(f + pi/2, 4);
+    }
+
+    float asinTaylor(float f, int order) {
+        float x;
+        float fact_num;
+        float fact_den;
+        float res = f;
+        float a;
+        float b;
+
+        if (f > 1.0 || f < -1.0) {
+            println("asin(",f,") : f doit être compris entre -1 et 1");
+            return 0;
+        }
+
+        if (f == 0) {
+            return 0;
+        }
+        if (f == 1) {
+            return pi/2;
+        }
+        if (f == -1) {
+            return -pi/2;
+        }
+
+        while (order > 0) {
+            fact_num = fact(2*order);
+            a = fact(order);
+            b = puissance(2,order);
+            fact_den = puissance(a*b,2);
+            x = puissance(f, 2*order + 1);
+            res = res + (x*fact_num)/(fact_den*(2*order + 1));
+            order = order - 1;
+        }
+        return res;
+    }
+
+    float atanTaylor(float f, int order) {
+        float sign;
+        float x;
+        float res;
+        float a;
+        float b;
+        boolean inv = false;
+
+        if (f == 0) {
+            return 0;
+        }
+
+        if (f == 1) {
+            return pi/4;
+        }
+
+        if (f == -1) {
+            return -pi/4;
+        }
+
+        if (f > 1 || f < -1) {
+            inv = true;
+            f = 1/f;
+        }
+        
+        res = f;
+        while (order > 0) {
+            sign = puissance(-1, order);
+            x = puissance(f, 2*order + 1);
+            res = res + sign*x/(2*order + 1);
+            order = order - 1;
+        }
+        
+        if (inv) {
+            return pi/2 - res;
+        }
+        return res;
+    }
+
 
     float ulp(float x) {
         int exponent;
@@ -123,159 +258,181 @@ float reduce(float f) {
         return puissance(2.0, exponent - 23);
     }
 
-float atanValue(int i) {
-    if (i == 0) { return 0.785398163f; }  // ~ π/4
-    else if (i == 1) { return 0.463647609f; }
-    else if (i == 2) { return 0.244978663f; }
-    else if (i == 3) { return 0.124354995f; }
-    else if (i == 4) { return 0.062418810f; }
-    else if (i == 5) { return 0.031239833f; }
-    else if (i == 6) { return 0.015623729f; }
-    else if (i == 7) { return 0.007812341f; }
-    else if (i == 8) { return 0.003906230f; }
-    else if (i == 9) { return 0.001953123f; }
-    else if (i == 10) { return 0.000976562f; }
-    else if (i == 11) { return 0.000488281f; }
-    else if (i == 12) { return 0.000244141f; }
-    else if (i == 13) { return 0.000122070f; }
-    else if (i == 14) { return 0.000061035f; }
-    else if (i == 15) { return 0.000030518f; }
-    else if (i == 16) { return 0.000015259f; }
-    else if (i == 17) { return 0.000007629f; }
-    else if (i == 18) { return 0.000003815f; }
-    else if (i == 19) { return 0.000001907f; }
-    else if (i == 20) { return 0.000000954f; }
-    else if (i == 21) { return 0.000000477f; }
-    else if (i == 22) { return 0.000000238f; }
-    else if (i == 23) { return 0.000000119f; }
-    else if (i == 24) { return 0.000000059f; }
-    else if (i == 25) { return 0.000000030f; }
-    else if (i == 26) { return 0.000000015f; }
-    else if (i == 27) { return 0.000000007f; }
-    else if (i == 28) { return 0.000000003f; }
-    else if (i == 29) { return 0.0000000015f; }
-    else if (i == 30) { return 0.0000000007f; }
-    else if (i == 31) { return 0.00000000035f; }
-    else if (i == 32) { return 0.00000000017f; }
-    else if (i == 33) { return 0.000000000087f; }
-    else if (i == 34) { return 0.000000000043f; }
-    else if (i == 35) { return 0.000000000021f; }
-    else if (i == 36) { return 0.000000000010f; }
-    else if (i == 37) { return 0.000000000005f; }
-    else if (i == 38) { return 0.0000000000025f; }
-    else if (i == 39) { return 0.0000000000012f; }
-    else if (i == 40) { return 0.0000000000006f; }
-    else if (i == 41) { return 0.0000000000003f; }
-    else if (i == 42) { return 0.00000000000015f; }
-    else if (i == 43) { return 0.00000000000007f; }
-    else if (i == 44) { return 0.000000000000035f; }
-    else if (i == 45) { return 0.000000000000017f; }
-    else if (i == 46) { return 0.000000000000008f; }
-    else if (i == 47) { return 0.000000000000004f; }
-    else if (i == 48) { return 0.000000000000002f; }
-    else if (i == 49) { return 0.000000000000001f; }
-    return 0.0f; // Au-delà, on renvoie 0
-}
-
-
-
-float cordicSin(float angle, int iterations) {
-    float x = 1.0f;
-    float y = 0.0f;
-    float z = reduce(angle);      // Réduit dans [0, pi/2]
-    float powerOfTwo = 1.0f;
-    int i = 0;
-    float angleStep;
-    float x_new;
-    float y_new;
-
-    // Identifier le quadrant d'origine
-    boolean isNegativeSin = false;
-    if ((angle > pi / 2 && angle <= pi) || (angle > -pi && angle <= -pi / 2)) {
-        isNegativeSin = true;
+    float atanValue(int i) {
+        if (i == 0) { return 0.785398163f; }  // ~ π/4
+        else if (i == 1) { return 0.463647609f; }
+        else if (i == 2) { return 0.244978663f; }
+        else if (i == 3) { return 0.124354995f; }
+        else if (i == 4) { return 0.062418810f; }
+        else if (i == 5) { return 0.031239833f; }
+        else if (i == 6) { return 0.015623729f; }
+        else if (i == 7) { return 0.007812341f; }
+        else if (i == 8) { return 0.003906230f; }
+        else if (i == 9) { return 0.001953123f; }
+        else if (i == 10) { return 0.000976562f; }
+        else if (i == 11) { return 0.000488281f; }
+        else if (i == 12) { return 0.000244141f; }
+        else if (i == 13) { return 0.000122070f; }
+        else if (i == 14) { return 0.000061035f; }
+        else if (i == 15) { return 0.000030518f; }
+        else if (i == 16) { return 0.000015259f; }
+        else if (i == 17) { return 0.000007629f; }
+        else if (i == 18) { return 0.000003815f; }
+        else if (i == 19) { return 0.000001907f; }
+        else if (i == 20) { return 0.000000954f; }
+        else if (i == 21) { return 0.000000477f; }
+        else if (i == 22) { return 0.000000238f; }
+        else if (i == 23) { return 0.000000119f; }
+        else if (i == 24) { return 0.000000059f; }
+        else if (i == 25) { return 0.000000030f; }
+        else if (i == 26) { return 0.000000015f; }
+        else if (i == 27) { return 0.000000007f; }
+        else if (i == 28) { return 0.000000003f; }
+        else if (i == 29) { return 0.0000000015f; }
+        else if (i == 30) { return 0.0000000007f; }
+        else if (i == 31) { return 0.00000000035f; }
+        else if (i == 32) { return 0.00000000017f; }
+        else if (i == 33) { return 0.000000000087f; }
+        else if (i == 34) { return 0.000000000043f; }
+        else if (i == 35) { return 0.000000000021f; }
+        else if (i == 36) { return 0.000000000010f; }
+        else if (i == 37) { return 0.000000000005f; }
+        else if (i == 38) { return 0.0000000000025f; }
+        else if (i == 39) { return 0.0000000000012f; }
+        else if (i == 40) { return 0.0000000000006f; }
+        else if (i == 41) { return 0.0000000000003f; }
+        else if (i == 42) { return 0.00000000000015f; }
+        else if (i == 43) { return 0.00000000000007f; }
+        else if (i == 44) { return 0.000000000000035f; }
+        else if (i == 45) { return 0.000000000000017f; }
+        else if (i == 46) { return 0.000000000000008f; }
+        else if (i == 47) { return 0.000000000000004f; }
+        else if (i == 48) { return 0.000000000000002f; }
+        else if (i == 49) { return 0.000000000000001f; }
+        return 0.0f; // Au-delà, on renvoie 0
     }
 
-    // Boucle CORDIC
-    while ((i < iterations) && (i < 50)) {
-        angleStep = atanValue(i);
 
-        if (z < 0.0f) {
-            x_new = x + (y / powerOfTwo);
-            y_new = y - (x / powerOfTwo);
-            z = z + angleStep;
-        } else {
-            x_new = x - (y / powerOfTwo);
-            y_new = y + (x / powerOfTwo);
-            z = z - angleStep;
+
+
+    float cordicSin(float angle, int iterations) {
+        float x = 1.0f;
+        float y = 0.0f;
+        float z = reduce(angle);      // Ramène l’angle dans [-π, π]
+        float powerOfTwo = 1.0f;
+        int i = 0;
+        float angleStep;
+        float x_new;
+        float y_new;
+
+        // On effectue jusqu'à 'iterations' rotations, mais max 24 (puisque atanValue() = 0 au-delà).
+        while ((i < iterations) && (i < 50)) {
+            angleStep = atanValue(i);
+
+            if (z < 0.0f) {
+                x_new = x + (y / powerOfTwo);
+                y_new = y - (x / powerOfTwo);
+                z = z + angleStep;
+            } else {
+                x_new = x - (y / powerOfTwo);
+                y_new = y + (x / powerOfTwo);
+                z = z - angleStep;
+            }
+
+            x = x_new;  
+            y = y_new;
+
+            powerOfTwo = powerOfTwo * 2.0f;
+            i = i + 1;
         }
 
-        x = x_new;
-        y = y_new;
-
-        powerOfTwo = powerOfTwo * 2.0f;
-        i = i + 1;
+        // Compensation du gain CORDIC
+        return y * CORDIC_GAIN_INV;
     }
 
-    // Compensation du gain CORDIC
-    y = y * CORDIC_GAIN_INV;
+    float cordicCos(float angle, int iterations) {
+        float x = 1.0f;
+        float y = 0.0f;
+        float z = reduce(angle);
+        float powerOfTwo = 1.0f;
+        int i = 0;
+        float angleStep;
+        float x_new;
+        float y_new;
 
-    // Appliquer la réflexion si nécessaire
-    if (isNegativeSin) {
-        y = -y;
-    }
+        while ((i < iterations) && (i < 50)) {
+            angleStep = atanValue(i);
 
-    return y; // Le sinus correspond à la coordonnée Y
-}
+            if (z < 0.0f) {
+                x_new = x + (y / powerOfTwo);
+                y_new = y - (x / powerOfTwo);
+                z = z + angleStep;
+            } else {
+                x_new = x - (y / powerOfTwo);
+                y_new = y + (x / powerOfTwo);
+                z = z - angleStep;
+            }
 
-float cordicCos(float angle, int iterations) {
-    float x = 1.0f;
-    float y = 0.0f;
-    float z = reduce(angle);      // Réduit dans [0, pi/2]
-    float powerOfTwo = 1.0f;
-    int i = 0;
-    float angleStep;
-    float x_new;
-    float y_new;
+            x = x_new;
+            y = y_new;
 
-    // Identifier le quadrant d'origine
-    boolean isNegativeCos = false;
-    if ((angle > pi / 2 && angle <= pi) || (angle > -pi / 2 && angle < -pi)) {
-        isNegativeCos = true;
-    }
-
-    // Boucle CORDIC
-    while ((i < iterations) && (i < 50)) {
-        angleStep = atanValue(i);
-
-        if (z < 0.0f) {
-            x_new = x + (y / powerOfTwo);
-            y_new = y - (x / powerOfTwo);
-            z = z + angleStep;
-        } else {
-            x_new = x - (y / powerOfTwo);
-            y_new = y + (x / powerOfTwo);
-            z = z - angleStep;
+            powerOfTwo = powerOfTwo * 2.0f;
+            i = i + 1;
         }
 
-        x = x_new;
-        y = y_new;
-
-        powerOfTwo = powerOfTwo * 2.0f;
-        i = i + 1;
+        // Compensation du gain CORDIC
+        return x * CORDIC_GAIN_INV;
     }
 
-    // Compensation du gain CORDIC
-    x = x * CORDIC_GAIN_INV;
 
-    // Appliquer la réflexion si nécessaire
-    if (isNegativeCos) {
-        x = -x;
+    float sine(float x) {
+        float p11; 
+        float p9 ; 
+        float p7 ; 
+        float p5 ; 
+        float p3 ; 
+        float p1 ; 
+        // Coefficients de la série de Taylor (ordre élevé pour précision)
+        float coeff11 = 0.00000000013291342;
+        float coeff9  = -0.000000023317787;
+        float coeff7  = 0.0000025222919;
+        float coeff5  = -0.00017350505;
+        float coeff3  = 0.0066208798;
+        float coeff1  = -0.10132118;
+
+        // Valeurs de pi avec une précision étendue
+        float pi_major = 3.1415927;
+        float pi_minor = -0.00000008742278;
+        float x2 ;
+        x = reduce(x);
+        // Calcul des puissances de x
+        x2 = x * x;
+
+        // Méthode de Horner pour évaluer le polynôme
+        p11 = coeff11;
+        p9  = p11 * x2 + coeff9;
+        p7  = p9  * x2 + coeff7;
+        p5  = p7  * x2 + coeff5;
+        p3  = p5  * x2 + coeff3;
+        p1  = p3  * x2 + coeff1;
+
+        // Calcul final de sin(x)
+        return (x - pi_major - pi_minor) * (x + pi_major + pi_minor) * p1 * x;
     }
+    
 
-    return x; // Le cosinus correspond à la coordonnée X
-}
-
-
+    float cosine(float x) {
+        // Décalage de π/2 pour transformer sin en cos
+        // cos(x) = sin(x + π/2)
+        float piHalf_major = 1.5707963;   // π/2 partie majeure
+        float piHalf_minor = -0.00000004371139;  // π/2 partie mineure
+        
+        // Ajouter π/2 à x
+        float adjustedX = x + piHalf_major + piHalf_minor;
+        
+        // Utiliser la fonction sine existante
+        return sine(adjustedX);
+    }
 }
 
 // End of Deca Math library
