@@ -1,0 +1,57 @@
+class Matière {
+    int num;
+    float note;
+    int coef;
+
+    void setNum(int n) {
+        this.num = n;
+    }
+
+    void setNote(float n) {
+        this.note = n;
+    }
+
+    void setCoef(int c) {
+        this.coef = c;
+    }
+
+}
+
+class Etudiant {
+    int numero;
+    Matiere m;
+    protected float moy;
+
+    void setNumero(int n) {
+        this.numero = n;
+    }
+
+    void setMatiere(Matiere mat) {
+        this.m = mat;
+    }
+
+    float moyenneMatiere() {
+        this.moy = m.note * m.coef;
+        return this.moy;
+    }
+
+}
+
+{
+    Matiere m = new Matiere();
+    Etudiant e = new Etudiant();
+
+    m.setNum(1);
+    m.setNote(12);
+    m.setCoef(2);
+
+    println("Matiere numero " + m.num , " note " , m.note , " coef " , m.coef);
+
+    e.setNumero(1);
+    // e.setMatiere(m);
+
+    e.moyenneMatiere();
+
+    println("Etudiant numero " , e.numero , " moyenne " , e.moy);
+    
+}
