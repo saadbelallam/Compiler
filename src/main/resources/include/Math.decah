@@ -423,11 +423,11 @@ float _cordicSin(float angle, int iterations) {
 
         // Méthode de Horner pour évaluer le polynôme
         p11 = coeff11;
-        p9  = p11 * x2 + coeff9;
-        p7  = p9  * x2 + coeff7;
-        p5  = p7  * x2 + coeff5;
-        p3  = p5  * x2 + coeff3;
-        p1  = p3  * x2 + coeff1;
+        p9 = _fma(coeff9, p11, x2);
+        p7 = _fma(coeff7, p9, x2);  
+        p5 = _fma(coeff5, p7, x2);
+        p3 = _fma(coeff3, p5, x2);
+        p1 = _fma(coeff1, p3, x2);
 
         // Calcul final de sin(x)
         return (x - pi_major - pi_minor) * (x + pi_major + pi_minor) * p1 * x;
