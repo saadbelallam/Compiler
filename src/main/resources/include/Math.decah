@@ -60,13 +60,11 @@ class Math {
         return val;
     }
 
-float reduce_cordic(float val) {
-    float twoPi = 2.0 * pi;
-    if (val > pi) {
-        val = val - twoPi;
-    }
-    if (val < -pi) {
-        val = val + twoPi;
+    float reduce_cordic(float val) {
+    if (val > pi / 2) {
+        val = pi - val;
+    } else if (val < -pi / 2) {
+        val = -pi - val;
     }
 
     return val;
