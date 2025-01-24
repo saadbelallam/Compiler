@@ -1,10 +1,10 @@
-// Exemple d'utilisation
+/* // Exemple d'utilisation
 {
     Math m = new Math();
     float arcsinValue;
 
     // Test pour arcsin(0.5)
-    arcsinValue = m.cordicArcsin(0.5, 30);
+    arcsinValue = m.(0.5, 30);
     print("arcsin(0.5) = ");
     println(arcsinValue);
 
@@ -14,3 +14,4 @@
     print("arcsin(-0.7) = ");
     println(arcsinValue);
 }
+ *////// +======================= IL N Y A PAS DE cordicArcsin !!!!!!!! + ==========

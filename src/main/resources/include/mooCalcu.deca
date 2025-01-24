@@ -1,0 +1,210 @@
+// Grenoble INP - Ensimag projet GL -*- mode: java -*-
+// Interactive Calculator Program in Deca
+#include "math.decah"
+
+class Calculator {
+    Math m = new Math();
+    
+    void main() {
+        // Variable declarations
+        boolean exit;
+        int choice;
+        float a;
+        float b;
+        int n,order;
+        float result;
+        
+        exit = false;
+
+        // User interface loop
+        while (!exit) {
+            // Display the menu
+            println("  ________________________________");
+            println("  |           ^__^                |");
+            println("  |           (oo)\\_______       |");
+            println("  |   Mooooo  (__)\\       )\\/\\ |");
+            println("  |   Mooooo      ||----w |       |");
+            println("  |               ||     ||       |");
+            println("  |_______________________________|");
+            println("       ______________________");
+            println("      /                      \\");
+            println("     /                        \\");
+            println("    /      CALCULATOR         \\");
+            println("   /      gl24 THE KILLERS     \\");
+            println("  /_____________________________\\");
+            println("  |                             |");
+            println("  |  1. Add                    |");
+            println("  |  2. Subtract               |");
+            println("  |  3. Multiply               |");
+            println("  |  4. Divide                 |");
+            println("  |  5. Power                  |");
+            println("  |  6. Factorial              |");
+            println("  |  7. Sine                   |");
+            println("  |  8. Cosine                 |");
+            println("  |  9. Hyperbolic Arcsine     |");
+            println("  |     with Taylor (asinTaylor)|");
+            println("  | 10. Hyperbolic Arctangent  |");
+            println("  |     with Taylor (atanTaylor)|");
+            println("  | 11. sin with the Cordic    |");
+            println("  |     Method (cordicSin)     |");
+            println("  | 12. cos with the Cordic    |");
+            println("  |     Method (cordicCos)     |");
+            println("  | 13. Exit                   |");
+            println("  |_____________________________|");
+            println("           ||       ||");
+            println("           ||       ||");
+            println("           /\\______/\\");
+            print("Enter your choice: ");
+            // Read the user's choice
+            choice = readInt();
+
+            // Perform the corresponding operation
+            if (choice == 1) {
+                // Addition
+                println("Enter two numbers to add:");
+                print("Number 1: ");
+                a = readFloat();
+                print("Number 2: ");
+                b = readFloat();
+                result = a + b;
+                println("Result: ", result);
+
+            } else if (choice == 2) {
+                // Subtraction
+                println("Enter two numbers to subtract:");
+                print("Number 1: ");
+                a = readFloat();
+                print("Number 2: ");
+                b = readFloat();
+                result = a - b;
+                println("Result: ", result);
+
+            } else if (choice == 3) {
+                // Multiplication
+                println("Enter two numbers to multiply:");
+                print("Number 1: ");
+                a = readFloat();
+                print("Number 2: ");
+                b = readFloat();
+                result = a * b;
+                println("Result: ", result);
+
+            } else if (choice == 4) {
+              
+                println("Enter two numbers to divide (Float):");
+                print("Numerator: ");
+                a = readFloat();
+                print("Denominator (Float): ");
+                b = readFloat();
+                if (b == 0.0) {
+                    println("Error: Division by zero is undefined!");
+                } else {
+                    result = a / b;
+                    println("Result: ", result);
+                }
+
+            } else if (choice == 5) {
+
+                println("Enter the base and exponent (Float) :");
+                print("Base: ");
+                a = readFloat();
+                print("Exponent: (Int) ");
+                n = readInt();
+                result = m.puissance(a, n);
+                println("Result: ", result);
+
+            } else if (choice == 6) {
+
+                println("Enter a non-negative integer:");
+                print("Number: ");
+                n = readInt();
+                if (n < 0) {
+                    println("Error: Factorial is undefined for negative numbers!");
+                } else {
+                    println("Result: ", (int) (m.fact(n)));
+                }
+
+            } else if (choice == 7) {
+ 
+                println("Enter the angle in radians (Float) :");
+                print("Angle: ");
+                a = readFloat();
+                result = m.sine(a);
+                println("Result: sin(", a, ") = ", result);
+
+            } else if (choice == 8) {
+                // Cosine
+                println("Enter the angle in radians (Float):");
+                print("Angle: ");
+                a = readFloat();
+                result = m.cosine(a);
+                println("Result: cos(", a, ") = ", result);
+
+            } else if (choice == 10) {
+                // Tangent
+                println("Enter the angle in radians (Float) :");
+                print("Angle: ");
+                a = readFloat();
+                println("Enter the order :");
+                order = readInt();
+                result = m.atanTaylor(a,order); // Assuming `tan` is implemented in the Math class
+                println("Result: atanTaylor(", a ,") = ", result);
+
+            } else if (choice == 9) {
+                // Hyperbolic Arcsine (asinh)
+                println("Enter a number to calculate asinh :");
+                print("Number (Float) :  ");
+                a = readFloat();
+                println("Enter the order :");
+                order = readInt();
+                result = m.asinTaylor(a,order); // Assuming `asinh` is implemented in the Math class
+                println("Result: asinTaylor(", a, ") = ", result);
+
+            }else if (choice == 11) {
+                // Hyperbolic Arcsine (asinh)
+                println("Enter a number to calculate sin:");
+                print("Number (Float) : ");
+                a = readFloat();
+                println("Enter the order :");
+                order = readInt();
+                result = m.cordicSin(a,order); // Assuming `asinh` is implemented in the Math class
+                println("Result: cordicSin(", a, ") = ", result);
+            }else if (choice == 12) {
+                // Hyperbolic Arcsine (asinh)
+                println("Enter a number to calculate cos:");
+                print("Number (Float) : ");
+                a = readFloat();
+                println("Enter the order :");
+                order = readInt();
+                result = m.cordicCos(a,order); // Assuming `asinh` is implemented in the Math class
+                println("Result: cordicCos(", a, ") = ", result);
+
+            } else if (choice == 13) {
+                // Exit
+                println("Exiting the calculator. Mooooo Moooooo!");
+                exit = true;
+
+            } else {
+                // Invalid choice
+                println("Invalid choice! Please enter a number between 1 and 13.");
+            }
+
+            // Aesthetic spacing for clarity
+            println();
+        }
+    }
+}
+
+// Main program
+{
+    Calculator c = new Calculator();
+    c.main();
+    println("  ________________________________");
+    println("  |           ^__^                |");
+    println("  |           (xx)\\_______       |");
+    println("  |   X_x     (__)\\       )\\/\\ |");
+    println("  |               ||----w |       |");
+    println("  |               ||     ||       |");
+    println("  |_______________________________|");
+
+}
