@@ -6,7 +6,7 @@ class Math {
      // Facteur correctif du CORDIC (environ 1/K∞)
     float CORDIC_GAIN_INV = 0.60725293f;
 
-    float puissance(float x, int n) {
+    float _puissance(float x, int n) {
         float res = 1.0;
 
         // Si l'exposant est négatif
@@ -23,7 +23,7 @@ class Math {
         return res;
     }
 
-    float abs (float x) {
+    float _abs(float x) {
         if (x > 0) {
             return x;
         }
@@ -32,7 +32,7 @@ class Math {
         }
     }
 
-    int fact(int n) {
+    int _fact(int n) {
         int res = 1;
         if (n == 0 || n == 1) {
             return res;
@@ -47,10 +47,10 @@ class Math {
     }
 
 
-    float reduce(float f) {
+    float _reduce(float f) {
         float val;
         int q = ((int)(f / (2.0 * pi)));
-        val = fma(f, q , -(2.0 * pi));
+        val = _fma(f, q , -(2.0 * pi));
         if (val > pi) {
             val = val - 2 * pi;
         }
@@ -60,7 +60,7 @@ class Math {
         return val;
     }
 
-    float reduce_cordic(float val) {
+    float _reduce_cordic(float val) {
     if (val > pi / 2) {
         val = pi - val;
     } else if (val < -pi / 2) {
@@ -72,7 +72,7 @@ class Math {
 
 
 
-    float reduce_sin(float f) {
+    float _reduce_sin(float f) {
         while (f > pi/2) {
             f = pi - f;
         }
@@ -84,7 +84,7 @@ class Math {
     }
 
     
-    float reduce_cos(float f) {
+    float _reduce_cos(float f) {
         if (f < 0) {
             f = -f;
         }
@@ -92,7 +92,7 @@ class Math {
     }
 
     // a + b*c
-    float fma(float a, float b, float c) asm (
+    float _fma(float a, float b, float c) asm (
         "LOAD -3(LB), R1    
          LOAD -4(LB), R2     
          LOAD -5(LB), R3     
@@ -101,8 +101,8 @@ class Math {
          RTS"               
     );
 
-    int getExponent(float x) {
-        float absValue = abs(x);
+    int _getExponent(float x) {
+        float absValue = _abs(x);
         int exponent = 0;
 
         while (absValue >= 2.0) {
@@ -118,15 +118,15 @@ class Math {
     }
 
 
-    float sinTaylor(float f, int order) {
+    float _sinTaylor(float f, int order) {
         float sign;
         float x;
         float fact_i;
         int i = order;
         float res = f;
 
-        f = reduce(f);
-        f = reduce_sin(f);
+        f = _reduce(f);
+        f = _reduce_sin(f);
         res = f;
         
         if (f == 0) {
@@ -134,52 +134,45 @@ class Math {
         }
 
         while (i > 0) {
-            sign = puissance(-1,i);
-            x = puissance(f,2*i+1);
-            fact_i = fact(2*i+1);
+            sign = _puissance(-1,i);
+            x = _puissance(f,2*i+1);
+            fact_i = _fact(2*i+1);
             // res = res + sign*x/fact_i;
-            res = fma(res, sign, x/fact_i );
+            res = _fma(res, sign, x/fact_i );
             i = i - 1;
         }
         return res;
     }
 
 
-    float cosTaylor(float f, int order) {
+    float _cosTaylor(float f, int order) {
         float sign;
         float x;
         float fact_j;
         int j = order;
         float res = 1;
 
-        f = reduce(f);
-        f = reduce_cos(f);
+        f = _reduce(f);
+        f = _reduce_cos(f);
         
         if (f == 0) {
             return 1;
         }
 
         while (j > 0) {
-            sign = puissance(-1,j);
-            x = puissance(f,2*j);
-            fact_j = fact(2*j);
+            sign = _puissance(-1,j);
+            x = _puissance(f,2*j);
+            fact_j = _fact(2*j);
             // res = res + sign*x/fact_j;
-            res = fma(res, sign, x/fact_j);
+            res = _fma(res, sign, x/fact_j);
             j = j - 1;
 
         }
         return res;
     }
 
-    float sinCosTaylor(float f) {
-        return -cosTaylor(f + pi/2, 4);
-    }
 
-    float cosSinTaylor(float f) {
-        return sinTaylor(f + pi/2, 4);
-    }
-
-    float asinTaylor(float f, int order) {
+    float _asinTaylor(float f, int order) {
         float x;
         float fact_num;
         float fact_den;
@@ -203,18 +196,18 @@ class Math {
         }
 
         while (order > 0) {
-            fact_num = fact(2*order);
-            a = fact(order);
-            b = puissance(2,order);
-            fact_den = puissance(a*b,2);
-            x = puissance(f, 2*order + 1);
+            fact_num = _fact(2*order);
+            a = _fact(order);
+            b = _puissance(2,order);
+            fact_den = _puissance(a*b,2);
+            x = _puissance(f, 2*order + 1);
             res = res + (x*fact_num)/(fact_den*(2*order + 1));
             order = order - 1;
         }
         return res;
     }
 
-    float atanTaylor(float f, int order) {
+    float _atanTaylor(float f, int order) {
         float sign;
         float x;
         float res;
@@ -247,8 +240,8 @@ class Math {
         
         res = f;
         while (order > 0) {
-            sign = puissance(-1, order);
-            x = puissance(f, 2*order + 1);
+            sign = _puissance(-1, order);
+            x = _puissance(f, 2*order + 1);
             res = res + sign*x/(2*order + 1);
             order = order - 1;
         }
@@ -266,22 +259,7 @@ class Math {
     }
 
 
-    float ulp(float x) {
-        int exponent;
-        if (x == 0.0f) {
-            return puissance(2.0, -149);
-        }
-
-        exponent = getExponent(x);
-
-        if (exponent < -126) {
-            return puissance(2.0, -149);
-        }
-
-        return puissance(2.0, exponent - 23);
-    }
-
-    float atanValue(int i) {
+    float _atanValue(int i) {
         if (i == 0) { return 0.785398163f; }  // ~ π/4
         else if (i == 1) { return 0.463647609f; }
         else if (i == 2) { return 0.244978663f; }
@@ -320,11 +298,11 @@ class Math {
 
 
 
-float cordicSin(float angle, int iterations) {
+float _cordicSin(float angle, int iterations) {
     float x = 1.0;
     float y = 0.0;
-    float angl = reduce(angle);
-    float z = reduce_cordic(angl);  // Réduction de l'angle
+    float angl = _reduce(angle);
+    float z = _reduce_cordic(angl);  // Réduction de l'angle
     float powerOfTwo = 1.0;
     int i = 0;
     float angleStep;
@@ -338,7 +316,7 @@ float cordicSin(float angle, int iterations) {
 
     // Algorithme CORDIC
     while (i < iterations && i < 50) {
-        angleStep = atanValue(i);
+        angleStep = _atanValue(i);
 
         if (z < 0.0) {
             x_new = x + (y / powerOfTwo);
@@ -369,11 +347,11 @@ float cordicSin(float angle, int iterations) {
 }
 
 
- float cordicCos(float angle, int iterations) {
+ float _cordicCos(float angle, int iterations) {
     float x = 1.0;
     float y = 0.0;
-    float angl = reduce(angle);
-    float z = reduce_cordic(angl);  // Réduction de l'angle
+    float angl = _reduce(angle);
+    float z = _reduce_cordic(angl);  // Réduction de l'angle
     float powerOfTwo = 1.0;
     int i = 0;
     float angleStep;
@@ -388,7 +366,7 @@ float cordicSin(float angle, int iterations) {
 
     // Algorithme CORDIC
     while (i < iterations && i < 50) {
-        angleStep = atanValue(i);
+        angleStep = _atanValue(i);
 
         if (z < 0.0) {
             x_new = x + (y / powerOfTwo);
@@ -420,7 +398,7 @@ float cordicSin(float angle, int iterations) {
 
 
 
-    float sine(float x) {
+    float sin(float x) {
         float p11; 
         float p9 ; 
         float p7 ; 
@@ -439,7 +417,7 @@ float cordicSin(float angle, int iterations) {
         float pi_major = 3.1415927;
         float pi_minor = -0.00000008742278;
         float x2 ;
-        x = reduce(x);
+        x = _reduce(x);
         // Calcul des puissances de x
         x2 = x * x;
 
@@ -456,7 +434,7 @@ float cordicSin(float angle, int iterations) {
     }
     
 
-    float cosine(float x) {
+    float cos(float x) {
         // Décalage de π/2 pour transformer sin en cos
         // cos(x) = sin(x + π/2)
         float piHalf_major = 1.5707963;   // π/2 partie majeure
@@ -466,7 +444,30 @@ float cordicSin(float angle, int iterations) {
         float adjustedX = x + piHalf_major + piHalf_minor;
         
         // Utiliser la fonction sine existante
-        return sine(adjustedX);
+        return sin(adjustedX);
+    }
+
+    float asin(float x) {
+        return _asinTaylor(x, 5);
+    }
+
+    float atan(float x) {
+        return _atanTaylor(x, 5);
+    }
+
+    float ulp(float x) {
+        int exponent;
+        if (x == 0.0f) {
+            return _puissance(2.0, -149);
+        }
+
+        exponent = _getExponent(x);
+
+        if (exponent < -126) {
+            return _puissance(2.0, -149);
+        }
+
+        return _puissance(2.0, exponent - 23);
     }
 }
 
