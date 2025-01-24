@@ -1,5 +1,5 @@
 // Description : 
-//    Ce fichier teste et compare les fonctions `cordicSin`, `sinTaylor`, et `sine` de la classe Math.
+//    Ce fichier teste et compare les fonctions cordicSin, sinTaylor, et sine de la classe Math.
 //    Il inclut des cas de tests pour des angles variés avec des itérations différentes, ainsi que des tests pour des nombres extrêmes.
 //
 // Résultats : 
@@ -21,9 +21,22 @@
     // Test pour angle = 0
     angle = 0.0;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10); // Ordre 10 pour sinTaylor
+    sinTaylor = m.sinTaylor(angle, 9); // Ordre 10 pour sinTaylor
     sinDirect = m.sine(angle);
     print("Angle: 0.0 | cordicSin: ");
+    print(sinCordic);
+    print(" | sinTaylor: ");
+    print(sinTaylor);
+    print(" | sine: ");
+    print(sinDirect);
+    println("");
+
+    // Test pour angle = PI
+    angle = m.pi;
+    sinCordic = m.cordicSin(angle, iterations);
+    sinTaylor = m.sinTaylor(angle, 9); // Ordre 10 pour sinTaylor
+    sinDirect = m.sine(angle);
+    print("Angle: PI | cordicSin: ");
     print(sinCordic);
     print(" | sinTaylor: ");
     print(sinTaylor);
@@ -34,7 +47,7 @@
     // Test pour angle = PI/6
     angle = m.pi / 6;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: PI/6 | cordicSin: ");
     print(sinCordic);
@@ -47,7 +60,7 @@
     // Test pour angle = PI/4
     angle = m.pi / 4;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: PI/4 | cordicSin: ");
     print(sinCordic);
@@ -60,7 +73,7 @@
     // Test pour angle = PI/2
     angle = m.pi / 2;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: PI/2 | cordicSin: ");
     print(sinCordic);
@@ -73,35 +86,9 @@
     // Test pour angle = -PI/4
     angle = -m.pi / 4;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: -PI/4 | cordicSin: ");
-    print(sinCordic);
-    print(" | sinTaylor: ");
-    print(sinTaylor);
-    print(" | sine: ");
-    print(sinDirect);
-    println("");
-
-    // Test pour un angle très grand (exemple : 2^15)
-    angle = m.puissance(2, 15); // Très grand angle
-    sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
-    sinDirect = m.sine(angle);
-    print("Angle: 2^15 | cordicSin: ");
-    print(sinCordic);
-    print(" | sinTaylor: ");
-    print(sinTaylor);
-    print(" | sine: ");
-    print(sinDirect);
-    println("");
-
-    // Test pour un angle très petit (exemple : 2^-15)
-    angle = m.puissance(2, -15); // Très petit angle
-    sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
-    sinDirect = m.sine(angle);
-    print("Angle: 2^-15 | cordicSin: ");
     print(sinCordic);
     print(" | sinTaylor: ");
     print(sinTaylor);
@@ -112,7 +99,7 @@
     // Test pour angle = 3*PI/2
     angle = 3 * m.pi / 2;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: 3*PI/2 | cordicSin: ");
     print(sinCordic);
@@ -125,9 +112,35 @@
     // Test pour angle = -3*PI/2
     angle = -3 * m.pi / 2;
     sinCordic = m.cordicSin(angle, iterations);
-    sinTaylor = m.sinTaylor(angle, 10);
+    sinTaylor = m.sinTaylor(angle, 9);
     sinDirect = m.sine(angle);
     print("Angle: -3*PI/2 | cordicSin: ");
+    print(sinCordic);
+    print(" | sinTaylor: ");
+    print(sinTaylor);
+    print(" | sine: ");
+    print(sinDirect);
+    println("");
+
+    // Test pour un angle très grand (exemple : 2^15)
+    angle = m.puissance(2, 15); // Très grand angle
+    sinCordic = m.cordicSin(angle, iterations);
+    sinTaylor = m.sinTaylor(angle, 9);
+    sinDirect = m.sine(angle);
+    print("Angle: 2^15 | cordicSin: ");
+    print(sinCordic);
+    print(" | sinTaylor: ");
+    print(sinTaylor);
+    print(" | sine: ");
+    print(sinDirect);
+    println("");
+
+    // Test pour un angle très petit (exemple : 2^-15)
+    angle = m.puissance(2, -15); // Très petit angle
+    sinCordic = m.cordicSin(angle, iterations);
+    sinTaylor = m.sinTaylor(angle, 9);
+    sinDirect = m.sine(angle);
+    print("Angle: 2^-15 | cordicSin: ");
     print(sinCordic);
     print(" | sinTaylor: ");
     print(sinTaylor);
