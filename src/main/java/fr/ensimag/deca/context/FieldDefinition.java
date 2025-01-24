@@ -1,5 +1,6 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tree.AbstractInitialization;
 import fr.ensimag.deca.tree.Location;
 import fr.ensimag.deca.tree.Visibility;
 
@@ -23,6 +24,7 @@ public class FieldDefinition extends ExpDefinition {
 
     private final Visibility visibility;
     private final ClassDefinition containingClass;
+    private AbstractInitialization init;
     
     public FieldDefinition(Type type, Location location, Visibility visibility,
             ClassDefinition memberOf, int index) {
@@ -56,4 +58,13 @@ public class FieldDefinition extends ExpDefinition {
         return true;
     }
 
+
+    public void setInti(AbstractInitialization init){
+        this.init = init;
+
+    }
+    public AbstractInitialization getIni(){
+        return  init;
+    }
+ 
 }

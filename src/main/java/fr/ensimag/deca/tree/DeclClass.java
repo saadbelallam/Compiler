@@ -1,21 +1,30 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.deca.tools.SymbolTable;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
 
 /**
@@ -153,43 +162,22 @@ public class DeclClass extends AbstractDeclClass {
         Label initLabel = new Label("init." + name.getName().getName());
         compiler.addLabel(initLabel);
         
-
-        compiler.getMangerR().SaveRegIntoStack(compiler);
+           
         
-
-        for (AbstractDeclField field : fields.getList()) {
-            DeclField f = (DeclField) field;
-            f.setFieldOffset(fieldOffset++);
-        }
-        
-
-        GPRegister thisReg = compiler.getMangerR().allocateRegister();
-        try {
-
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), thisReg));
-            
-
-            fields.codeGenListField(compiler);
-            
-
+            compiler.addInstruction(new ADDSP(compiler.getMangerR().getnbOfUsedRegisiters() + 1));
             if (superClass != null && !superClass.getName().getName().equals("Object")) {
-    
-                compiler.addInstruction(new PUSH(thisReg));
-                
-             
+                compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+                initTrap(compiler, false,false,false);
+                compiler.addInstruction(new PUSH(Register.R1));
                 compiler.addInstruction(new BSR(new Label("init." + superClass.getName().getName())));
-                
-       
-                compiler.addInstruction(new SUBSP(1));
+                compiler.addInstruction(new POP(Register.R1));
+                compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+                initTrap(compiler, true, false, true);
+            }else{
+                compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+                initTrap(compiler,true, true,false);
             }
-        } finally {
-            compiler.getMangerR().freeRegister(thisReg);
-        }
-        
-
-        compiler.getMangerR().RestoreSavedRegisters(compiler);
-        
-
+        compiler.addInstruction(new SUBSP(compiler.getMangerR().getnbOfUsedRegisiters() + 1));
         compiler.addInstruction(new RTS());
     }
 
@@ -199,6 +187,93 @@ public class DeclClass extends AbstractDeclClass {
         }
     }
 
+    public void initTrap(DecacCompiler compiler, boolean jump,boolean  locker, boolean isSuper){
+
+        ClassDefinition ClassDef = (ClassDefinition) compiler.environmentType.defOfType(name.getName());
+        ClassDefinition superClassDef = (ClassDefinition) compiler.environmentType.defOfType(superClass.getName());
+
+        for (Map.Entry<SymbolTable.Symbol, ExpDefinition> entry : ClassDef.getMembers().getCurrent().entrySet()) {
+               if(isSuper){
+                if (entry.getValue().isField()  &&  superClassDef.getMembers().getCurrent().containsKey(entry.getKey())) {
+                    
+                    FieldDefinition fieldDef = (FieldDefinition) entry.getValue();
+                    AbstractInitialization init = fieldDef.getIni();
+                    compiler.addComment("Default initialization of field " + ClassDef.getType().getName() + "." + fieldDef.getIndex());
+
+                    if(jump){
+                        intializationTrapExpL(compiler,init, fieldDef,locker);
+                    }
+                    else{
+                        defaultInitalisation(compiler, fieldDef);
+                }
+
+               }}
+               else{
+
+                if (entry.getValue().isField()) {
+                    
+                    FieldDefinition fieldDef = (FieldDefinition) entry.getValue();
+                    AbstractInitialization init = fieldDef.getIni();
+                    compiler.addComment("Default initialization of field " + ClassDef.getType().getName() + "." + fieldDef.getIndex());
+
+                    if(jump){
+                        intializationTrapExpL(compiler,init, fieldDef,locker);
+                    }
+                    else{
+                        defaultInitalisation(compiler, fieldDef);
+                }
+
+                
+               }
+               
+               
+               }}}
+
+
+    public void intializationTrapExpL(DecacCompiler compiler,AbstractInitialization init , FieldDefinition Feilddef,boolean locker){
+
+        if(init instanceof  Initialization){
+            compiler.addInstruction(new PUSH(Register.R1));
+            ((Initialization) init).getExpression().codeGenVal(compiler,Register.R0);
+            compiler.addInstruction(new POP(Register.R1));
+
+        }else{
+            if(locker){
+                defaultInitalisation(compiler,Feilddef);
+            }
+        }
+        RegisterOffset storingReg = new RegisterOffset(Feilddef.getIndex(), Register.R1);
+        compiler.addInstruction(new STORE(Register.R0,storingReg));
+    }
+
+
+    public void defaultInitalisation(DecacCompiler compiler, FieldDefinition feildDef){
+
+             switch (feildDef.getType().getName().getName()) {
+                case "int":
+                    // Initialize integers to 0
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0), Register.R0));
+                    break;
+                case "float":
+                    // Initialize floats to 0.0
+                    compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R0));
+                    break;
+                case "boolean":
+                    // Initialize booleans to false (0)
+                    compiler.addInstruction(new LOAD(new ImmediateInteger(0),Register.R0));
+                    break;
+                default:
+                    // Initialize objects (references) to null
+                    compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
+                    break;
+                    
+
+
+    }
+    RegisterOffset storingReg = new RegisterOffset(feildDef.getIndex(), Register.R1);
+    compiler.addInstruction(new STORE(Register.R0,storingReg));
+
+    }
 
    /*  @Override
     protected void codeGenInit(DecacCompiler compiler) {

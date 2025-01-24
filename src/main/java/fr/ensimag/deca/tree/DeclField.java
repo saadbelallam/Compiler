@@ -15,13 +15,6 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.NullOperand;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 public class DeclField extends AbstractDeclField {
 
@@ -90,20 +83,22 @@ public class DeclField extends AbstractDeclField {
 } */
 
     @Override
-    protected void codeGenField(DecacCompiler compiler) {
-        // Allocate registers for object address and value
-        GPRegister objReg = compiler.getMangerR().allocateRegister();
-        GPRegister valueReg = compiler.getMangerR().allocateRegister();
-        
+    protected void codeGenField(DecacCompiler compiler,GPRegister valueReg,GPRegister objeReg) {
+       /*  // Allocate registers for object address and value
+        /* GPRegister objReg = compiler.getMangerR().allocateRegister();
+        GPRegister valueReg = compiler.getMangerR().allocateRegister(); 
+         ClassDefinition ClassDef = (ClassDefinition) compiler.environmentType.defOfType(type.getName());
+            ClassDefinition superClassDef = (ClassDefinition) compiler.environmentType.defOfType(superClass.getName());
         try {
             // Get object address from parameter (-2(LB))
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), objReg));
+           
             
             if (initialization != null) {
                 // If there's an initialization expression, evaluate it
                 if (initialization instanceof Initialization) {
                     AbstractExpr expr = ((Initialization)initialization).getExpression();
                     expr.codeGenVal(compiler, valueReg);
+                    
                 } else {
                      switch (type.getName().getName()) {
                 case "int":
@@ -124,16 +119,17 @@ public class DeclField extends AbstractDeclField {
                     break;
             }
                 }
-                
+                 compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), objeReg));
                 // Store the value in the field
-                compiler.addInstruction(new STORE(valueReg, 
-                    new RegisterOffset(fieldName.getFieldDefinition().getIndex(), objReg)));
                 setFieldOffset(fieldOffset);
+                compiler.addInstruction(new STORE(valueReg, 
+                    new RegisterOffset(fieldName.getFieldDefinition().getIndex(), objeReg)));
+                
             }
         } finally {
-            compiler.getMangerR().freeRegister(valueReg);
-            compiler.getMangerR().freeRegister(objReg);
-        }
+             compiler.getMangerR().freeRegister(valueReg);
+            compiler.getMangerR().freeRegister(objReg); 
+        } */
     }
 
 
@@ -152,6 +148,10 @@ public class DeclField extends AbstractDeclField {
 
     public AbstractIdentifier getFieldName() {
         return fieldName;
+    }
+
+    public int getFieldIndex() {
+        return fieldName.getFieldDefinition().getIndex();
     }
 
     public AbstractIdentifier getType() {
@@ -280,6 +280,7 @@ public class DeclField extends AbstractDeclField {
         FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass, currentClass.getNumberOfFields());
         fieldName.setDefinition(fieldDef);
         fieldName.setType(fieldType);
+        fieldDef.setInti(initialization);
         try {
             currentClass.getMembers().declare(fieldName.getName(), fieldDef);
         } catch (DoubleDefException e) {

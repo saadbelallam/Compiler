@@ -8,13 +8,6 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.ImmediateFloat;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.NullOperand;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.RegisterOffset;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -80,17 +73,17 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         // Allocate registers for object address and value
          compiler.getMangerR().SaveRegIntoStack(compiler);
 
-        GPRegister objReg = compiler.getMangerR().allocateRegister();
-        GPRegister valueReg = compiler.getMangerR().allocateRegister();
+        GPRegister objReg = compiler.getMangerR().getScratchRegister(1);
+        GPRegister valueReg = compiler.getMangerR().getScratchRegister(0);
         
-        try {
+      
             // Get object address from parameter (-2(LB))
-            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), objReg));
+          
             
             // First initialize all fields to default values
-            for (AbstractDeclField field : getList()) {
+           /*  for (AbstractDeclField field : getList()) {
                 DeclField f = (DeclField)field;
-                int fieldOffset = f.getFieldOffset();
+                int fieldOffset = f.getFieldIndex();
                 
                 // Load appropriate default value based on type
                 switch (f.getFieldName().getType().getName().getName()) {
@@ -111,16 +104,16 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
                 // Store default value
                 compiler.addInstruction(new STORE(valueReg, 
                     new RegisterOffset(fieldOffset, objReg)));
-            }
+            } */
             
             // Then handle explicit initializations
             for (AbstractDeclField field : getList()) {
-                field.codeGenField(compiler);
+                field.codeGenField(compiler,valueReg,objReg);
             }
-        } finally {
-            compiler.getMangerR().freeRegister(valueReg);
-            compiler.getMangerR().freeRegister(objReg);
-        }
+       
+            /* compiler.getMangerR().freeRegister(valueReg);
+            compiler.getMangerR().freeRegister(objReg); */
+        
 
          /* compiler.addInstruction(new POP(Register.getR(15)));
          compiler.addInstruction(new POP(Register.getR(14)));

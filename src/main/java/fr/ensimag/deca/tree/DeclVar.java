@@ -15,7 +15,9 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -98,7 +100,15 @@ public class DeclVar extends AbstractDeclVar {
                 compiler.addComment("release R"+reg.getNumber());
                 compiler.getMangerR().freeRegister(reg);
             }
-        }}
+        }else{
+            if(varName.getType().isClassOrNull()){
+            GPRegister reg = compiler.getMangerR().allocateRegister();
+            compiler.addInstruction(new LOAD(new NullOperand(),reg));
+            compiler.addInstruction(new STORE(reg, address));
+            compiler.getMangerR().freeRegister(reg);
+            }
+        }
+        }
 
     @Override
     protected void codeGenLocalVar(DecacCompiler compiler){
