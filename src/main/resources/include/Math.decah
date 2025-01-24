@@ -221,6 +221,7 @@ class Math {
         float a;
         float b;
         boolean inv = false;
+        boolean neg = false;
 
         if (f == 0) {
             return 0;
@@ -234,7 +235,12 @@ class Math {
             return -pi/4;
         }
 
-        if (f > 1 || f < -1) {
+        if (f < -1) {
+            neg = true;
+            f = -f;
+        }
+
+        if (f > 1) {
             inv = true;
             f = 1/f;
         }
@@ -246,11 +252,17 @@ class Math {
             res = res + sign*x/(2*order + 1);
             order = order - 1;
         }
-        
+
         if (inv) {
-            return pi/2 - res;
+            res = pi/2 - res;
         }
+
+        if (neg) {
+            res = -res;
+        }
+
         return res;
+
     }
 
 
