@@ -53,10 +53,14 @@ public class StringLiteral extends AbstractStringLiteral {
     
 
 
-    @Override
+   @Override
     protected void codeGenPrint(DecacCompiler compiler) {
+        value = value.substring(1, value.length() - 1) 
+            .replace("\\\"", "\"")  
+            .replace("\\\\", "\\"); 
         compiler.addInstruction(new WSTR(new ImmediateString(value)));
     }
+
 
     // For printx / printlnx
     @Override
