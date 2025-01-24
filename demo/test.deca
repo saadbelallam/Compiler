@@ -1,0 +1,35 @@
+// test pour les classes
+// et les cases mémoires
+// résultats attendus 
+// 0
+// 1
+// 1
+
+class A{
+    int x;
+    int y;
+}
+
+class B{
+    A a = new A();
+    float z;
+}
+
+{   
+    B b = new B();
+    B field = new B();
+
+    // field non initialisé
+    // donc initialisé à 0
+    println(b.a.x);
+
+    b.a.x = 1;
+
+    println(field.a.x);
+
+    field = b;
+
+    println(field.a.x);
+
+    
+}
