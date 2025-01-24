@@ -59,6 +59,6 @@ public class JavaMathSinTest {
     }
 
     private static void printResult(String angleLabel, double sinValue) {
-        System.out.printf("Angle: %s | Math.sin: %.15f%n", angleLabel, sinValue);
+        System.out.printf("Angle: %s | Math.sin: %.5e%n", angleLabel, sinValue);
     }
 }
